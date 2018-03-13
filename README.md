@@ -1,4 +1,5 @@
 # progarkprosjekt
 Prosjekt i Programvareutvikling
  
- Hei på deg
+ # setup
+ use android studio 2.3
