@@ -1,5 +1,5 @@
 # progarkprosjekt
 Prosjekt i Programvareutvikling
  
- # setup
- use android studio 2.3
+ # Setup
+ use android studio 2.3 or gradle version 3.3
