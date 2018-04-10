@@ -26,7 +26,7 @@ public class DrawView extends View {
 
     private Stack<Dots> drawing;
     private float current_radius = 5.0f;
-    private Color current_color = Color.CYAN;
+    private Color current_color = new Color(224.0f/256, 224.0f/256, 224.0f/256, 1);
 
     /**
      * A drawing consists of a stack of colored circles (Dots)
@@ -108,7 +108,7 @@ public class DrawView extends View {
 
     @Override
     public void render(float delta){
-        Gdx.gl.glClearColor(0.2f, 0, 0, 1);
+        Gdx.gl.glClearColor(41.0f/256, 45.0f/256, 50.0f/256, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
