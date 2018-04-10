@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.SketchyGame;
@@ -17,13 +18,18 @@ public class LobbyView extends View {
     TextButton startGame;
     float remaining = 5;
     boolean startGame_r = false;
+    int playerCount = 0;
+    Label numberOfPlayers;
+    Table buttonTable;
+
 
     public LobbyView(SketchyGame game) {
         this.game = game;
 
-        Label header = new Label("Lobby", uiSkin);
-        Label gameidLabel = new Label("GameID", uiSkin);
-        Label gameID = new Label("1337", uiSkin); // TODO assign game id
+        // Hardcoded numbers, should be given by serverside
+        String lobbyID = "1337";
+
+        Label gameidLabel = new Label("LobbyID:"+" "+lobbyID, uiSkin);
         startGame = new TextButton("Start Game", uiSkin);
 
         // Todo: obtain from Model
@@ -31,19 +37,23 @@ public class LobbyView extends View {
         players.add("some_dude");
         players.add("random");
         players.add("TDT4240slayer");
+        playerCount = playerCount+players.size();
+        numberOfPlayers = new Label(playerCount+"/8", uiSkin);
 
-        table.add(header);
-        table.row();
         table.add(gameidLabel);
-        table.row();
-        table.add(gameID);
         table.row();
 
         for (String player : players) {
             addPerson(player);
         }
+        buttonTable = new Table();
+        buttonTable.setPosition(screenWidth/2, screenHeight*0.1f);
+        table.setFillParent(true);
+        stage.addActor(buttonTable);
 
-        table.add(startGame);
+        buttonTable.add(startGame);
+        buttonTable.row();
+        buttonTable.add(numberOfPlayers);
 
         startGame.addListener(new ChangeListener() {
             @Override
@@ -77,6 +87,8 @@ public class LobbyView extends View {
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.A)){
             addPerson("foo");
+            playerCount = playerCount+1;
+            numberOfPlayers.setText(playerCount+"/8");
         }
 
         // Countdown. Todo: Move to startGameCounter
