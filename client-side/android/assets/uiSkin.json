@@ -1,0 +1,125 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	xkcd: {
+		file: xkcd.fnt
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	blue: {
+		r: 0.21568628
+		g: 0.3647059
+		b: 0.5568628
+		a: 1
+	}
+	green: {
+		r: 0.2784314
+		g: 0.61960787
+		b: 0.28235295
+		a: 1
+	}
+	blue-light: {
+		r: 0.8235294
+		g: 0.88884306
+		b: 1
+		a: 1
+	}
+	green-light: {
+		r: 0.77272147
+		g: 0.99333334
+		b: 0.771489
+		a: 1
+	}
+	orange: {
+		r: 0.9764706
+		g: 0.6117647
+		b: 0.14901961
+		a: 1
+	}
+	orange-light: {
+		r: 0.9666667
+		g: 0.8284197
+		b: 0.65411115
+		a: 1
+	}
+	red: {
+		r: 0.7647059
+		g: 0.21176471
+		b: 0.20784314
+		a: 1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+	button-orange: {
+		name: rect1337
+		color: orange
+	}
+	text4508-light-blue: {
+		name: text4508
+		color: blue-light
+	}
+	button-down-orange: {
+		name: button-down
+		color: orange
+	}
+	button-down-blue: {
+		name: button-down
+		color: blue
+	}
+	button-down-green: {
+		name: button-down
+		color: green
+	}
+	button-up-blue: {
+		name: rect1337
+		color: blue
+	}
+	button-up-green: {
+		name: rect1337
+		color: green
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: button-blue
+		down: button-green
+		pressedOffsetX: 4
+		pressedOffsetY: 5
+		unpressedOffsetY: 12
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: xkcd
+		fontColor: orange
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: {
+		font: xkcd
+		fontColor: blue-light
+		downFontColor: green-light
+		up: button-up-blue
+		down: button-down-green
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+	default: {
+		font: xkcd
+		fontColor: orange-light
+		focusedFontColor: orange-light
+		disabledFontColor: blue-light
+		background: button-orange
+		focusedBackground: button-down-orange
+		disabledBackground: button-blue
+		cursor: text4508-light-blue
+		selection: button-blue
+		messageFont: xkcd
+		messageFontColor: red
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+}
