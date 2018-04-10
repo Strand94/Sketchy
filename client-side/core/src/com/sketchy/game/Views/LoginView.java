@@ -11,7 +11,7 @@ import com.sketchy.game.SketchyGame;
 public class LoginView extends View{
     final SketchyGame game;
 
-    public LoginView(SketchyGame game){
+    public LoginView(final SketchyGame game){
         this.game = game;
 
         // Header
@@ -51,6 +51,7 @@ public class LoginView extends View{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("Create Game");
+                game.setScreen(new LobbyView(game));
             }
         });
     }
