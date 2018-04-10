@@ -1,3 +1,5 @@
+const io = require("socket.io");
+
 class Communicator {
     constructor(gameController, lobbyController) {
         this.gameController = gameController;
