@@ -126,3 +126,8 @@ typings/
 
 
 # End of https://www.gitignore.io/api/node,jetbrains+iml
+
+
+# vs code 
+.vscode 
+
