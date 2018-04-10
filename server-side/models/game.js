@@ -1,9 +1,11 @@
-var Game = function () {
-    this.counter = 0;
-    this.notepads = [];
-};
-Game.prototype.abortGame = function () {};
-Game.prototype.nextStep = function () {};
-Game.prototype.endGame = function () {};
+class Game {
+    constructor() {
+        this.counter = 0;
+        this.notepads = [];
+    }
+    abortGame() { }
+    nextStep() { }
+    endGame() { }
+}
 
-module.exports = Game;
+export default Game;

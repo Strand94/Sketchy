@@ -1,13 +1,18 @@
-var Sheet = require('./sheet');
+import Sheet, { prototype } from "./sheet";
 
-var Drawing = function () {
-    this.player = null;
-    this.drawingObjective = null;
-    this.answer = null;
-};
-Drawing.prototype = Object.create(Sheet.prototype);
-Drawing.prototype.getPlayer = function () {
-    return this.player;
-};
+class Drawing {
+    constructor() {
+        this.player = null;
+        this.drawingObjective = null;
+        this.answer = null;
+    }
+    getPlayer() {
+        return this.player;
+    }
+}
 
-module.exports = Drawing;
+var sheet = Sheet();
+
+Drawing.prototype = Object.create(prototype);
+
+export default Drawing;

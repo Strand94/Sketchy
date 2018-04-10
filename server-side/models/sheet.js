@@ -1,6 +1,8 @@
-var Sheet = function () {};
-Sheet.prototype.getPlayer = function () {
-    return null;
-};
+class Sheet {
+    constructor() { }
+    getPlayer() {
+        return null;
+    }
+}
 
-module.exports = Sheet;
+export default Sheet;

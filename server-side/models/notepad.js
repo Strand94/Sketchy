@@ -1,3 +1,3 @@
 var Notepad = function () {};
 
-module.exports = Notepad;
+export default Notepad;
