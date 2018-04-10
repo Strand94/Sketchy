@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.sketchy.game.SketchyGame;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
@@ -18,11 +19,6 @@ public class DrawView extends View {
 
     // Rendering
     private ShapeRenderer shapeRenderer;
-
-    //Text
-    private String draw = "Draw View", guessWord;
-    private GlyphLayout draw_layout;
-    private GlyphLayout guessWord_layout;
 
     private Stack<Dots> drawing;
     private float current_radius = 5.0f;
@@ -58,12 +54,12 @@ public class DrawView extends View {
 
         this.loadAssets();
 
+        Label guessWord = new Label("Elephant", uiSkin);
+        table.add(guessWord).top().expand().padTop(20);
+
         // Camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false, screenWidth, screenHeight);
-
-        // Text initialization
-        draw_layout = new GlyphLayout(game.font, draw);
 
         // Drawing initialization
         drawing = new Stack<Dots>();
@@ -94,13 +90,6 @@ public class DrawView extends View {
         }
     }
 
-    /**
-     * Renders ALL the text!
-     */
-    private void RenderText(){
-        game.font.draw(game.batch, draw, (screenWidth-draw_layout.width)*0.5f, screenHeight * (1-0.1f));
-    }
-
     @Override
     public void show(){
 
@@ -108,8 +97,8 @@ public class DrawView extends View {
 
     @Override
     public void render(float delta){
+        super.render(delta);
         Gdx.gl.glClearColor(41.0f/256, 45.0f/256, 50.0f/256, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -118,7 +107,6 @@ public class DrawView extends View {
 
         game.batch.begin();
         RenderDrawing();
-        RenderText();
         game.batch.end();
     }
 
