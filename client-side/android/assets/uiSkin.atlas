@@ -1,0 +1,48 @@
+
+uiSkin.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+button-blue
+  rotate: false
+  xy: 1, 72
+  size: 86, 34
+  orig: 86, 34
+  offset: 0, 0
+  index: -1
+button-down
+  rotate: false
+  xy: 515, 622
+  size: 185, 78
+  orig: 185, 78
+  offset: 0, 0
+  index: -1
+button-green
+  rotate: false
+  xy: 188, 152
+  size: 86, 34
+  orig: 86, 34
+  offset: 0, 0
+  index: -1
+rect1337
+  rotate: false
+  xy: 1, 108
+  size: 185, 78
+  orig: 185, 78
+  offset: 0, 0
+  index: -1
+text4508
+  rotate: false
+  xy: 515, 594
+  size: 5, 26
+  orig: 5, 26
+  offset: 0, 0
+  index: -1
+xkcd
+  rotate: false
+  xy: 1, 188
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
