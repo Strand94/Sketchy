@@ -1,10 +1,12 @@
-var Communicator = function (gameController, lobbyController) {
-    this.gameController = gameController;
-    this.lobbyController = lobbyController;
-};
-Communicator.prototype.updateView = function (playerAddress) {};
-Communicator.prototype.ping = function (playerAddress) {};
-Communicator.prototype.beginRound = function (playerAddress, sheet) {};
-Communicator.prototype.getAnswer = function (playerAddress) {};
+class Communicator {
+    constructor(gameController, lobbyController) {
+        this.gameController = gameController;
+        this.lobbyController = lobbyController;
+    }
+    updateView(playerAddress) { }
+    ping(playerAddress) { }
+    beginRound(playerAddress, sheet) { }
+    getAnswer(playerAddress) { }
+}
 
-module.exports = Communicator;
+export default Communicator;

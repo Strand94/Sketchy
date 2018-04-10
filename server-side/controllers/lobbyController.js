@@ -1,27 +1,29 @@
-var config = require('../config');
+import { lobbiesCapacity } from "../config";
 
-var LobbyController = function () {
-    this.lobbies = new Array(config.lobbiesCapacity);
-};
-LobbyController.prototype.hasLobby = function (lobbyId) {
-    return this.lobbies.hasOwnProperty(lobbyId);
-};
-LobbyController.prototype.startGame = function (lobbyId) {
-    if (this.hasLobby(lobbyId)) {
-        this.lobbies[lobbyId].startGame();
-        return true;
+class LobbyController {
+    constructor() {
+        this.lobbies = new Array(lobbiesCapacity);
     }
-    return false;
-};
-LobbyController.prototype.joinLobby = function (lobbyId, player) {
-    if (this.hasLobby(lobbyId)) {
-        this.lobbies[lobbyId].addPlayer(player);
-        return true;
+    hasLobby(lobbyId) {
+        return this.lobbies.hasOwnProperty(lobbyId);
     }
-    return false;
-};
-LobbyController.prototype.createLobby = function (lobbyMaster) {
-};
+    startGame(lobbyId) {
+        if (this.hasLobby(lobbyId)) {
+            this.lobbies[lobbyId].startGame();
+            return true;
+        }
+        return false;
+    }
+    joinLobby(lobbyId, player) {
+        if (this.hasLobby(lobbyId)) {
+            this.lobbies[lobbyId].addPlayer(player);
+            return true;
+        }
+        return false;
+    }
+    createLobby(lobbyMaster) {
+    }
+}
 
 
-module.exports = LobbyController;
+export default LobbyController;

@@ -1,13 +1,15 @@
-var Sheet = require('./sheet');
+import { prototype } from "./sheet";
 
-var Guess = function () {
-    this.player = null;
-    this.guessingObjective = null;
-    this.answer = null;
-};
-Guess.prototype = Object.create(Sheet.prototype);
-Guess.prototype.getPlayer = function () {
-    return this.player;
-};
+class Guess {
+    constructor() {
+        this.player = null;
+        this.guessingObjective = null;
+        this.answer = null;
+    }
+    getPlayer() {
+        return this.player;
+    }
+}
+Guess.prototype = Object.create(prototype);
 
-module.exports = Guess;
+export default Guess;

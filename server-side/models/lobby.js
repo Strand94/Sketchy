@@ -1,24 +1,26 @@
-var Game = require('./game');
+import Game from "./game";
 
-var Lobby = function (lobbyId, lobbyMaster) {
-    this.lobbyId = lobbyId;
-    this.players = [];
-    this.currentGame = null;
-    this.lobbyMaster = lobbyMaster;
-};
-Lobby.prototype.addPlayer = function (player) {
-    this.players.push(player);
-};
-Lobby.prototype.removePlayer = function (player) {
-    var index = this.players.indexOf(player);
-    if (index < 0) {
-        this.players.splice(index, 1);
-        return true;
+class Lobby {
+    constructor(lobbyId, lobbyMaster) {
+        this.lobbyId = lobbyId;
+        this.players = [];
+        this.currentGame = null;
+        this.lobbyMaster = lobbyMaster;
     }
-    return false;
-};
-Lobby.prototype.startGame = function () {
-    this.currentGame = new Game(this.players.length);
-};
+    addPlayer(player) {
+        this.players.push(player);
+    }
+    removePlayer(player) {
+        var index = this.players.indexOf(player);
+        if (index < 0) {
+            this.players.splice(index, 1);
+            return true;
+        }
+        return false;
+    }
+    startGame() {
+        this.currentGame = new Game(this.players.length);
+    }
+}
 
-module.exports = Lobby;
+export default Lobby;
