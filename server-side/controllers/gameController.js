@@ -7,4 +7,4 @@ class GameController {
     }
 }
 
-export default GameController;
+module.exports = GameController;

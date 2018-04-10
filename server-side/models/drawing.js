@@ -1,4 +1,4 @@
-import Sheet, { prototype } from "./sheet";
+const Sheet = require("./sheet");
 
 class Drawing {
     constructor() {
@@ -15,4 +15,4 @@ var sheet = Sheet();
 
 Drawing.prototype = Object.create(prototype);
 
-export default Drawing;
+module.exports = Drawing;

@@ -1,1 +1,3 @@
-export const lobbiesCapacity = 100000;
+module.exports = {
+	lobbiesCapacity: 100000,
+};

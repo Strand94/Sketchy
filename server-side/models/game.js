@@ -8,4 +8,4 @@ class Game {
     endGame() { }
 }
 
-export default Game;
+module.exports = Game;

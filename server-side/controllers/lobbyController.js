@@ -1,4 +1,4 @@
-import { lobbiesCapacity } from "../config";
+const lobbiesCapacity = require("../config");
 
 class LobbyController {
     constructor() {
@@ -26,4 +26,4 @@ class LobbyController {
 }
 
 
-export default LobbyController;
+module.exports = LobbyController;

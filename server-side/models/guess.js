@@ -1,4 +1,4 @@
-import { prototype } from "./sheet";
+const Sheet = require("./sheet");
 
 class Guess {
     constructor() {
@@ -12,4 +12,4 @@ class Guess {
 }
 Guess.prototype = Object.create(prototype);
 
-export default Guess;
+module.exports = Guess;

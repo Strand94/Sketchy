@@ -1,4 +1,4 @@
-import Game from "./game";
+const Game = require("./game");
 
 class Lobby {
     constructor(lobbyId, lobbyMaster) {
@@ -23,4 +23,4 @@ class Lobby {
     }
 }
 
-export default Lobby;
+module.exports = Lobby;
