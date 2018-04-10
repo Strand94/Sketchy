@@ -4,28 +4,80 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sketchy.game.SketchyGame;
 
 public class LoginView extends View{
     final SketchyGame game;
-    private OrthographicCamera camera;
 
-    // Text
-    private String title = "Sketchy", main_menu = "Main Menu", click_to_play = "Click To Play";
-    private GlyphLayout title_layout, main_menu_layout, click_to_play_layout;
-
+    Table table;
+    Stage stage;
 
     public LoginView(SketchyGame game){
         this.game = game;
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, screenWidth, screenHeight);
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
 
-        //Can be used to get font width (or height)
-        title_layout = new GlyphLayout(game.font, title);
-        main_menu_layout = new GlyphLayout(game.font, main_menu);
-        click_to_play_layout = new GlyphLayout(game.font, click_to_play);
+        // Table for keeping track of position of UI elements
+        table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+
+        // UI skin
+        Skin uiSkin = new Skin(Gdx.files.internal("uiSkin.json"));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("uiSkin.atlas"));
+        uiSkin.addRegions(atlas);
+
+        // Header
+        Label header = new Label("Sketchy", uiSkin);
+
+        // Buttons
+        TextButton create = new TextButton("Create Game", uiSkin);
+        TextButton join = new TextButton("Join Game", uiSkin);
+
+        // TextFields
+        final TextField nameField = new TextField("Your Name", uiSkin);
+
+        // Labels
+        Label nameLabel = new Label("Name:", uiSkin);
+
+        // Add elements to table
+        table.pad(10);
+        table.add(header).width(100).top().center().colspan(2);
+        table.row();
+        table.add(nameLabel).width(100);
+        table.add(nameField);
+        table.row();
+        table.add(create).center().colspan(2);
+        table.row();
+        table.add(join).center().colspan(2);
+
+        // Listeners
+        join.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Join Game");
+                System.out.println(nameField.getText());
+            }
+        });
+
+        create.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Create Game");
+            }
+        });
+
 
     }
 
@@ -36,30 +88,26 @@ public class LoginView extends View{
 
     @Override
     public void render(float delta){
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClearColor(68.0f/256, 117.0f/256, 180.0f/256, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+        stage.act(delta);
+        stage.draw();
 
-        game.batch.begin();
+    }
 
-        game.font.draw(game.batch, main_menu, screenWidth * 0.1f, screenHeight * (1-0.2f));
-        game.font.draw(game.batch, title , (screenWidth-title_layout.width)*0.5f, screenHeight * (1-0.1f));
-        game.font.draw(game.batch, click_to_play, screenWidth * 0.1f, screenHeight * (1-0.23f));
+    @Override
+    public void resize(int width, int height) {
 
-        game.batch.end();
+        //resize cam viewport
+        stage.getCamera().viewportWidth = Gdx.graphics.getWidth();
+        stage.getCamera().viewportHeight = Gdx.graphics.getHeight();
 
-        if(Gdx.input.isTouched()){
-            game.setScreen(new DrawView(game));
-            dispose();
-        }
     }
 
     @Override
     public void dispose(){
-        // TODO Auto-generated method stub
-
+        stage.dispose();
     }
 
 }
