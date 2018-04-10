@@ -5,4 +5,4 @@ class Sheet {
     }
 }
 
-export default Sheet;
+module.exports = Sheet;

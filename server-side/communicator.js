@@ -9,4 +9,4 @@ class Communicator {
     getAnswer(playerAddress) { }
 }
 
-export default Communicator;
+module.exports = Communicator;
