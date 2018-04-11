@@ -17,7 +17,7 @@ server.listen(8080, function(){
 	console.log("Server is now running...");
 });
 
-io.on('connection', function(socket) {
+io.addListener('connection', function(socket) {
     console.log("Player Connected!");
 	socket.emit('socketID', { id: socket.id });
 });

@@ -2,8 +2,11 @@ package com.sketchy.game;
 
 import com.sketchy.game.Models.Player;
 
+import org.json.JSONObject;
+
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 import static com.sketchy.game.Config.SERVER_ADDRESS;
 
@@ -18,6 +21,19 @@ public class Communicator {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void test() {
+        // test-funksjon som blir kalt når desktopLauncher kjøres
+
+        // ta imot et json object fra eventet "socketID", som blir sendt fra server ved connection
+        socket.on("socketID", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject obj = (JSONObject)args[0];
+                System.out.println(obj);
+            }
+        });
     }
 
     public void endGame(){
