@@ -34,6 +34,20 @@ public class Communicator {
                 System.out.println(obj);
             }
         });
+
+        socket.on("ping", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    System.out.println("ping");
+                    JSONObject obj = new JSONObject();
+                    obj.put("id", socket.id());
+                    socket.emit("pingOK", obj);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void endGame(){
