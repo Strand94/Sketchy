@@ -8,7 +8,11 @@ server.listen(8080, function () {
 
 io.on('connection', function (socket) {
     console.log('Player connected!');
-    socket.on('disconnect', function () {
-        console.log('Player disconnected!');
-    });
+    socket
+        .on('disconnect', function () {
+            console.log('Player disconnected!');
+        })
+        .on('create-lobby', function () {
+            console.log('Hello world!');
+        })
 });
