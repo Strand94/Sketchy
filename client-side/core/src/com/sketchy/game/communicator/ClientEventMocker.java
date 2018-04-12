@@ -1,9 +1,8 @@
 package com.sketchy.game.communicator;
 
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
-import static com.sketchy.game.communicator.Events.*;
+import static com.sketchy.game.communicator.Event.*;
 
 public class ClientEventMocker {
     private static class MockCommunicator extends Communicator {
@@ -17,21 +16,16 @@ public class ClientEventMocker {
         MockCommunicator communicator = new MockCommunicator();
         communicator.connect();
         Scanner scanner = new Scanner(System.in);
-        Pattern eventPattern = Pattern.compile("[a-z-]{3,}");
 
         String eventName;
         System.out.print("Input event name: ");
         while (scanner.hasNext()) {
             eventName = scanner.nextLine().trim();
-            if (!eventPattern.matcher(eventName).matches()) {
-                System.out.println(String.format("'%s' is not a valid event name.", eventName));
-                continue;
-            }
             try {
-                Event event = Events.get(eventName);
+                Event event = Event.get(eventName);
                 communicator.emit(event);
                 System.out.println(String.format("Event '%s' emitted.", eventName));
-            } catch (Events.NoSuchEvent e) {
+            } catch (Event.NoSuchEvent e) {
                 System.out.println("No such event exists");
             }
             System.out.print("Input event name: ");
