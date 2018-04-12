@@ -9,6 +9,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		new LwjglApplication(new SketchyGame(), config);
+		config.width = 720/2;
+		config.height = 1280/2;
 
 		try {
 			Communicator communicator = new Communicator();

@@ -1,21 +1,59 @@
 package com.sketchy.game.Views;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.SketchyGame;
 
-public class LoginView implements Screen {
+public class LoginView extends View{
     final SketchyGame game;
 
-    private OrthographicCamera camera;
-
-    public LoginView(SketchyGame game){
+    public LoginView(final SketchyGame game){
         this.game = game;
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 600);
+        // Header
+        Label header = new Label("Sketchy", uiSkin);
+
+        // Buttons
+        TextButton create = new TextButton("Create Game", uiSkin);
+        TextButton join = new TextButton("Join Game", uiSkin);
+
+        // TextFields
+        final TextField nameField = new TextField("Your Name", uiSkin);
+
+        // Labels
+        Label nameLabel = new Label("Name:", uiSkin);
+
+        // Add elements to table
+        table.pad(10);
+        table.add(header).width(100).top().center().colspan(2);
+        table.row();
+        table.add(nameLabel).width(100);
+        table.add(nameField);
+        table.row();
+        table.add(create).center().colspan(2);
+        table.row();
+        table.add(join).center().colspan(2);
+
+        // Listeners
+        join.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Join Game");
+                System.out.println(nameField.getText());
+            }
+        });
+
+        create.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Create Game");
+                game.setScreen(new LobbyView(game));
+            }
+        });
     }
 
     @Override
@@ -25,53 +63,18 @@ public class LoginView implements Screen {
 
     @Override
     public void render(float delta){
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-
-        game.batch.begin();
-        game.font.draw(game.batch, "Main Menu", 20, 550);
-        game.font.draw(game.batch, "Sketchy", 250, 550);
-        game.font.draw(game.batch, "Click to play!", 20, 525);
-        game.batch.end();
-
-        if(Gdx.input.isTouched()){
-            System.out.print("Test");
-            game.setScreen(new DrawView(game));
-            dispose();
-        }
+        super.render(delta);
+        Gdx.gl.glClearColor(68.0f/256, 117.0f/256, 180.0f/256, 1);
     }
 
     @Override
-    public void resize(int width, int height){
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void pause(){
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void resume(){
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void hide(){
-        // TODO Auto-generated method stub
-
+    public void resize(int width, int height) {
+        super.resize(width, height);
     }
 
     @Override
     public void dispose(){
-        // TODO Auto-generated method stub
-
+        super.dispose();
     }
 
 }
