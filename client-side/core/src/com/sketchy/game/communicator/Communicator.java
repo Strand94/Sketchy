@@ -36,6 +36,8 @@ public class Communicator {
         }
     }
 
+    // Receive events from server:
+
     private void populateServerEventMap() {
         serverEventMap = new HashMap<>();
         serverEventMap.put(START_GAME, new Listener() {
@@ -85,6 +87,36 @@ public class Communicator {
         System.out.println(obj);
     }
 
+    // Send events to server:
+
+    static private class Emit {
+        private final String event;
+        private final JSONObject obj;
+        private Socket socket;
+        private Emit(String eventName) {
+            this.event = eventName;
+            obj = new JSONObject();
+        }
+        static Emit event(Event event) {
+            return new Emit(event.toString());
+        }
+        Emit to(Socket socket) {
+            this.socket = socket;
+            return Emit.this;
+        }
+        Emit with(String name, int value) throws JSONException {
+            obj.put(name, value);
+            return Emit.this;
+        }
+        Emit with(String name, String value) throws JSONException {
+            obj.put(name, value);
+            return Emit.this;
+        }
+        void send() {
+            socket.emit(event, obj);
+        }
+    }
+
     public void endGame() {
 
     }
@@ -94,22 +126,28 @@ public class Communicator {
     }
 
     public void joinLobby(int lobbyId, String playerName){
-        JSONObject obj = new JSONObject();
         try {
-            obj.put("lobbyId", lobbyId);
-            obj.put("playerName", playerName);
-            socket.emit("join-lobby", obj);
+            Emit
+                    .event(JOIN_LOBBY)
+                    .to(socket)
+                    .with("lobbyId", lobbyId)
+                    .with("playerName", playerName)
+                    .send();
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void createLobby() {
-
-    }
-
-    protected void emit(Event event) {
-        socket.emit(event.toString());
+    public void createLobby(String playerName) {
+        try {
+            Emit
+                    .event(CREATE_LOBBY)
+                    .to(socket)
+                    .with("playerName", playerName)
+                    .send();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }
