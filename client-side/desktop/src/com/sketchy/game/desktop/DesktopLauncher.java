@@ -14,7 +14,6 @@ public class DesktopLauncher {
 
 		try {
 			Communicator communicator = new Communicator();
-			communicator.connect();
 			communicator.test();
 			communicator.joinLobby(1337, "hans gregor");
 		} catch (Exception e) {
