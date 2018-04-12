@@ -18,7 +18,11 @@ public class SketchyGame extends Game {
         batch = new SpriteBatch();
         communicator = new Communicator();
         clientController = new ClientController(this);
-        this.setScreen(new LoginView(this));
+
+        LoginView loginView = new LoginView(this);
+        this.setScreen(loginView);
+        clientController.view = loginView;
+
     }
 
     @Override

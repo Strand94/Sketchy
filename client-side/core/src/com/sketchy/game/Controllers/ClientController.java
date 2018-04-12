@@ -40,6 +40,7 @@ public class ClientController {
 
     public void setView(View view){
         game.setScreen(view);
+        this.view.dispose();
         this.view = view;
         System.out.println("SetView:" + game.clientController.view);
 
