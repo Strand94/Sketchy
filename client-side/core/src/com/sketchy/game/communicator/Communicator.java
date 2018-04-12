@@ -1,24 +1,47 @@
 package com.sketchy.game.communicator;
 
-import com.sketchy.game.Models.Player;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
+import io.socket.emitter.Emitter.Listener;
 
-import static com.sketchy.game.communicator.Events.*;
+import static com.sketchy.game.communicator.Event.*;
 
 import static com.sketchy.game.Config.SERVER_ADDRESS;
 
 public class Communicator {
-    /*
-    todo: hvor i coden skal socket.on være?
-     */
-
     private Socket socket;
+    private HashMap<Event, Listener> serverEventMap;
+
+    public Communicator() {
+        populateServerEventMap();
+    }
+
+    private void populateServerEventMap() {
+        serverEventMap = new HashMap<>();
+        serverEventMap.put(START_GAME, new Listener() {
+            @Override
+            public void call(Object... args) {
+                onStartGame();
+            }
+        });
+        serverEventMap.put(PING, new Listener() {
+            @Override
+            public void call(Object... args) {
+                onPing();
+            }
+        });
+        serverEventMap.put(SOCKET_ID, new Listener() {
+            @Override
+            public void call(Object... args) {
+                onSocketId((JSONObject) args[0]);
+            }
+        });
+    }
 
     public void connect() {
         try {
@@ -30,31 +53,34 @@ public class Communicator {
     }
 
     public void test() {
-        // test-funksjon som blir kalt når desktopLauncher kjøres
+        startListening(SOCKET_ID, PING);
+    }
 
-        // ta imot et json object fra eventet "socketID", som blir sendt fra server ved connection
-        on(SOCKET_ID, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject obj = (JSONObject)args[0];
-                System.out.println(obj);
-            }
-        });
+    private void startListening(Event... events) {
+        for (Event event : events) socket.on(event.toString(), serverEventMap.get(event));
+    }
 
-        on(PING, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                try {
-                    System.out.println("ping");
-                    JSONObject obj = new JSONObject();
-                    obj.put("id", socket.id());
-                    socket.emit("pingOK", obj);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    private void stopListening(Event... events) {
+        for (Event event : events) socket.off(event.toString());
+    }
 
+    private void onPing() {
+        try {
+            System.out.println("ping");
+            JSONObject obj = new JSONObject();
+            obj.put("id", socket.id());
+            socket.emit("pingOK", obj);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onStartGame() {
+
+    }
+
+    private void onSocketId(JSONObject... obj) {
+        System.out.println(obj);
     }
 
     public void endGame() {
@@ -82,10 +108,6 @@ public class Communicator {
 
     protected void emit(Event event) {
         socket.emit(event.toString());
-    }
-
-    protected void on(Event event, Emitter.Listener fn) {
-        socket.on(event.toString(), fn);
     }
 
 }
