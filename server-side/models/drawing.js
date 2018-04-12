@@ -1,7 +1,8 @@
 const Sheet = require("./sheet");
 
-class Drawing {
+class Drawing extends Sheet {
     constructor() {
+        super();
         this.player = null;
         this.drawingObjective = null;
         this.answer = null;
@@ -10,9 +11,5 @@ class Drawing {
         return this.player;
     }
 }
-
-var sheet = Sheet();
-
-Drawing.prototype = Object.create(prototype);
 
 module.exports = Drawing;
