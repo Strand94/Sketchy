@@ -2,6 +2,7 @@ package com.sketchy.game.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -22,23 +23,24 @@ public class LobbyView extends View {
     Label numberOfPlayers;
     Table buttonTable;
 
+    //TODO: hardcoded should be fetched from server!
+    int lobbyID = 1337;
+    int maxPlayers = 8;
+
 
     public LobbyView(SketchyGame game) {
         this.game = game;
 
-        // Hardcoded numbers, should be given by serverside
-        String lobbyID = "1337";
-
         Label gameidLabel = new Label("LobbyID:"+" "+lobbyID, uiSkin);
+        gameidLabel.setColor(Color.CYAN);
         startGame = new TextButton("Start Game", uiSkin);
 
         // Todo: obtain from Model
         Stack<String> players = new Stack<String>();
-        players.add("some_dude");
-        players.add("random");
-        players.add("TDT4240slayer");
+        players.add(LoginView.playername);
         playerCount = playerCount+players.size();
-        numberOfPlayers = new Label(playerCount+"/8", uiSkin);
+        numberOfPlayers = new Label(playerCount+"/"+maxPlayers, uiSkin);
+        numberOfPlayers.setColor(Color.CYAN);
 
         table.add(gameidLabel);
         table.row();
@@ -66,6 +68,7 @@ public class LobbyView extends View {
 
     private void addPerson(String name){
         Label playerName = new Label(name, uiSkin);
+        playerName.setColor(Color.CYAN);
         table.add(playerName);
         table.row();
     }
@@ -89,6 +92,9 @@ public class LobbyView extends View {
             addPerson("foo");
             playerCount = playerCount+1;
             numberOfPlayers.setText(playerCount+"/8");
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
+            game.setScreen(new LoginView(game));
         }
 
         // Countdown. Todo: Move to startGameCounter
