@@ -14,7 +14,10 @@ class LobbyController {
         }
         return false;
     }
-    joinLobby(lobbyId, player) {
+    joinLobby(lobbyId, playerName, playerAdress) {
+        // todo: create and add a player
+        console.log("join lobby running");
+
         if (this.hasLobby(lobbyId)) {
             this.lobbies[lobbyId].addPlayer(player);
             return true;

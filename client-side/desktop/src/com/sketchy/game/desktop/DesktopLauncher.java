@@ -14,6 +14,7 @@ public class DesktopLauncher {
 			Communicator communicator = new Communicator();
 			communicator.connect();
 			communicator.test();
+			communicator.joinLobby(1337, "hans gregor");
 		} catch (Exception e) {
 			System.out.println("Can't connect to server");
 		}
