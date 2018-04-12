@@ -1,8 +1,11 @@
 package com.sketchy.game.communicator;
 
+import com.sketchy.game.Config;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import io.socket.client.IO;
@@ -11,14 +14,26 @@ import io.socket.emitter.Emitter.Listener;
 
 import static com.sketchy.game.communicator.Event.*;
 
-import static com.sketchy.game.Config.SERVER_ADDRESS;
-
 public class Communicator {
     private Socket socket;
     private HashMap<Event, Listener> serverEventMap;
 
     public Communicator() {
+        connect();
         populateServerEventMap();
+    }
+
+    public void test() {
+        startListening(PING, SOCKET_ID);
+    }
+
+    private void connect() {
+        try {
+            socket = IO.socket(Config.SERVER_ADDRESS);
+            socket.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     private void populateServerEventMap() {
@@ -68,13 +83,6 @@ public class Communicator {
 
     private void onSocketId(JSONObject... obj) {
         System.out.println(obj);
-    }
-
-    public void connect() {
-    }
-
-    public void test() {
-
     }
 
     public void endGame() {
