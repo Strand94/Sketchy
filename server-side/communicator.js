@@ -9,9 +9,12 @@ var events = {
     END_GAME: "end-game",
     JOIN_LOBBY: "join-lobby",
     CREATE_LOBBY: "create-lobby",
-    SOCKET_ID: "socketID",
+    UPDATE_VIEW: "update-view",
+    BEGIN_ROUND: "begin-round",
+    GET_ANSWER: "get-answer",
     PING: "ping",
-    PING_OK: "pingOK"
+    PING_OK: "pingOK",
+    SOCKET_ID: "socketID"
 }
 
 
@@ -30,28 +33,46 @@ class Communicator {
 
             socket
                 .on(events.JOIN_LOBBY, (obj) => {
-                    var lobbyId = obj.lobbyId;
-                    var playerName = obj.playerName;
-                    var playerAddress = socket.id;
-
-                    connections[playerAddress] = socket; 
-        
-                    lobbyController.joinLobby(lobbyId, playerName, playerAddress);
+                    connections[socket.id] = socket; 
+                    lobbyController.joinLobby(obj.lobbyId, obj.playerName, socket.id);
                 })
                 .on(events.CREATE_LOBBY, (obj) => {
+                    connections[socket.id] = socket;
+                    lobbyController.createLobby(obj.playerName);
+                })
+                .on(events.START_GAME, (obj) => {
+                    lobbyController.startGame(obj.lobbyId);
+                })
+                .on(events.END_GAME, (obj) => {
+                    gameController.endGame(obj.lobbyId);
+                })
+                .on(events.GET_ANSWER, (obj) => {
 
                 })
 
         });
     }
     
-    updateView(playerAddress) { }
+    updateView(playerAddress) {
+        connections[playerAddress].emit(events.UPDATE_VIEW);
+    };
 
-    ping(playerAddress) { }
+    ping(playerAddress) {
+        connections[playerAddress].emit(events.PING);
+    };
 
-    beginRound(playerAddress, sheet) { }
+    beginRound(playerAddress, sheet) {
+        connections[playerAddress].emit(events.BEGIN_ROUND, sheet);
+    };
 
-    getAnswer(playerAddress) { }
+    getAnswer(playerAddress) {
+        // todo: return the sheet
+        connections[playerAddress].emit(events.getAnswer);
+        connections[playerAddress].on(events.GET_ANSWER, (sheet) => {
+            
+        });
+        
+    };
 }
 
 module.exports = Communicator;
