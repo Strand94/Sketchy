@@ -3,7 +3,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.sketchy.game.Views.LoginView;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 311eb47caad85253fa38dd9771c3e224e03110bc
 public class SketchyGame extends Game {
 
    public SpriteBatch batch;
