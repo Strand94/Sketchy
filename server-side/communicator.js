@@ -26,7 +26,7 @@ class Communicator {
         io.on('connection', function(socket) {
             console.log("Player Connected!");
             
-            socket.emit(events);
+            socket.emit(events);    // todo: handle on java side
 
             socket
                 .on(events.JOIN_LOBBY, (obj) => {
