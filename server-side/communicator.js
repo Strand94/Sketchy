@@ -4,6 +4,16 @@ const io = require("socket.io").listen(server);
 
 connections = {};
 
+var events = {
+    START_GAME: "start-game",
+    END_GAME: "end-game",
+    JOIN_LOBBY: "join-lobby",
+    CREATE_LOBBY: "create-lobby",
+    SOCKET_ID: "socketID",
+    PING: "ping",
+    PING_OK: "pingOK"
+}
+
 
 class Communicator {
     constructor(gameController, lobbyController) {
@@ -16,8 +26,10 @@ class Communicator {
         io.on('connection', function(socket) {
             console.log("Player Connected!");
             
+            socket.emit(events);
+
             socket
-                .on('join-lobby', function(obj) {
+                .on(events.JOIN_LOBBY, (obj) => {
                     var lobbyId = obj.lobbyId;
                     var playerName = obj.playerName;
                     var playerAddress = socket.id;
@@ -25,6 +37,9 @@ class Communicator {
                     connections[playerAddress] = socket; 
         
                     lobbyController.joinLobby(lobbyId, playerName, playerAddress);
+                })
+                .on(events.CREATE_LOBBY, (obj) => {
+
                 })
 
         });
