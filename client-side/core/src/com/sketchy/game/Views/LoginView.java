@@ -51,7 +51,7 @@ public class LoginView extends View{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("Create Game");
-                game.setScreen(new LobbyView(game));
+                game.clientController.setView(new LobbyView(game));
             }
         });
     }

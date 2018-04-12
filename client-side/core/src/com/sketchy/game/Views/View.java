@@ -73,6 +73,7 @@ public class View implements Screen{
 
     @Override
     public void dispose(){
+        System.out.println("Dispose: " + this);
         stage.dispose();
     }
 

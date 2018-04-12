@@ -96,7 +96,7 @@ public class LobbyView extends View {
             float deltaTime = Gdx.graphics.getDeltaTime();
             remaining -= deltaTime;
             startGame.setText(String.format("Start in %.0fs", remaining));
-            game.setScreen(new DrawView(game));
+            game.clientController.setView(new DrawView(game));
         }
     }
 
