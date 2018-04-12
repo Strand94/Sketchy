@@ -2,7 +2,7 @@ package com.sketchy.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.sketchy.game.Communicator;
+import com.sketchy.game.communicator.Communicator;
 import com.sketchy.game.SketchyGame;
 
 public class DesktopLauncher {

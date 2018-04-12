@@ -1,6 +1,6 @@
-const gameController = require('./controllers/gameController');
-const lobbyController = require('./controllers/lobbyController');
-const communicatorClass = require('./communicator');
-const communicator = new communicatorClass(gameController, lobbyController);
+const GameController = require('./controllers/gameController');
+const LobbyController = require('./controllers/lobbyController');
+const Communicator = require('./communicator');
+const communicator = new Communicator(new GameController(), new LobbyController());
 
 communicator.ping("tempParam");

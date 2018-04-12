@@ -3,11 +3,13 @@ package com.sketchy.game.communicator;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import static com.sketchy.game.communicator.Events.*;
+
 public class ClientEventMocker {
-    private static class MockCommunicator extends com.sketchy.game.communicator.Communicator {
+    private static class MockCommunicator extends Communicator {
         @Override
         public void createLobby() {
-            emit(Event.CREATE_LOBBY);
+            emit(CREATE_LOBBY);
         }
     }
 
@@ -18,21 +20,21 @@ public class ClientEventMocker {
         Pattern eventPattern = Pattern.compile("[a-z-]{3,}");
 
         String eventName;
-        System.out.print("Which event to mock? ");
+        System.out.print("Input event name: ");
         while (scanner.hasNext()) {
-            eventName = scanner.nextLine();
+            eventName = scanner.nextLine().trim();
             if (!eventPattern.matcher(eventName).matches()) {
                 System.out.println(String.format("'%s' is not a valid event name.", eventName));
                 continue;
             }
             try {
-                com.sketchy.game.communicator.Event event = com.sketchy.game.communicator.Event.get(eventName);
+                Event event = Events.get(eventName);
                 communicator.emit(event);
                 System.out.println(String.format("Event '%s' emitted.", eventName));
-            } catch (com.sketchy.game.communicator.Event.NoSuchEvent e) {
+            } catch (Events.NoSuchEvent e) {
                 System.out.println("No such event exists");
             }
-            System.out.print("Which event to mock? ");
+            System.out.print("Input event name: ");
         }
     }
 }
