@@ -1,8 +1,8 @@
 const app = require('express')();
 const server = require('http').createServer(app);
 const io = require("socket.io").listen(server);
-users = [];
-connections = [];
+
+connections = {};
 
 
 class Communicator {
@@ -14,30 +14,26 @@ class Communicator {
         this.lobbyController = lobbyController;
 
         io.on('connection', function(socket) {
-            connections.push(socket);
             console.log("Player Connected!");
-            socket.emit('socketID', { id: socket.id });
-        });
-        
-        io.on('joinLobby', function(socket) {
-            lobbyId = socket.lobbyId;
-            playerName = socket.playerName;
-            playerAddress = socket.id;
+            
+            socket
+                .on('join-lobby', function(obj) {
+                    var lobbyId = obj.lobbyId;
+                    var playerName = obj.playerName;
+                    var playerAddress = socket.id;
 
-            lobbyController.joinLobby(lobbyId, playerName, playerAddress);
-        });
+                    connections[playerAddress] = socket; 
         
-        io.on('pingOK', function(socket) {
-            console.log("ping");
+                    lobbyController.joinLobby(lobbyId, playerName, playerAddress);
+                })
+
         });
     }
     
     updateView(playerAddress) { }
 
-    ping(playerAddress) {
-        io.emit('ping', { });
-        console.log("ping started");
-     }
+    ping(playerAddress) { }
+
     beginRound(playerAddress, sheet) { }
 
     getAnswer(playerAddress) { }

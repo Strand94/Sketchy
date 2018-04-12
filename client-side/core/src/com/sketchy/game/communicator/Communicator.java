@@ -20,19 +20,14 @@ public class Communicator {
 
     private Socket socket;
 
-    public void connect() {
+    public Communicator() {
         try {
             socket = IO.socket(SERVER_ADDRESS);
             socket.connect();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
 
-    public void test() {
-        // test-funksjon som blir kalt når desktopLauncher kjøres
-
-        // ta imot et json object fra eventet "socketID", som blir sendt fra server ved connection
         on(SOCKET_ID, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -57,6 +52,13 @@ public class Communicator {
 
     }
 
+    public void connect() {
+    }
+
+    public void test() {
+
+    }
+
     public void endGame() {
 
     }
@@ -70,7 +72,7 @@ public class Communicator {
         try {
             obj.put("lobbyId", lobbyId);
             obj.put("playerName", playerName);
-            socket.emit("joinLobby", obj);
+            socket.emit("join-lobby", obj);
         } catch (JSONException e) {
             e.printStackTrace();
         }
