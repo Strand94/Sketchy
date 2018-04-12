@@ -18,14 +18,13 @@ var events = {
 class Communicator {
     constructor(gameController, lobbyController) {
         server.listen(8080);
-        console.log("Server running..")
+        console.log("Server running..");
 
         this.gameController = gameController;
         this.lobbyController = lobbyController;
 
         io.on('connection', function(socket) {
             console.log("Player Connected!");
-            
             socket.emit(events);    // todo: handle on java side
 
             socket

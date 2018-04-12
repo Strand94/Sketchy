@@ -13,18 +13,22 @@ public enum Event {
     PING_OK("pingOK");
 
 
-    private static final Map<String, Event> fromString;
+    private static final Map<String, Event> fromStringMap;
 
+    // Maps event names to Event objects
     public static class NoSuchEvent extends IllegalArgumentException {}
-
     static {
-        fromString = new HashMap<String, Event>(values().length);
-        for (Event event : values()) fromString.put(event.toString(), event);
+        fromStringMap = new HashMap<String, Event>(values().length);
+        for (Event event : values()) fromStringMap.put(event.toString(), event);
     }
 
-    public static Event get(String event) {
-        if (!fromString.containsKey(event)) throw new NoSuchEvent();
-        return fromString.get(event);
+    public static Event fromString(String event) {
+        if (!fromStringMap.containsKey(event)) throw new NoSuchEvent();
+        return fromStringMap.get(event);
+    }
+
+    public static boolean exists(String event) {
+        return fromStringMap.containsKey(event);
     }
 
     public final String name;
