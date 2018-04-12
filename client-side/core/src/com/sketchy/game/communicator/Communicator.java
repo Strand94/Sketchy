@@ -2,6 +2,7 @@ package com.sketchy.game.communicator;
 
 import com.sketchy.game.Models.Player;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.socket.client.IO;
@@ -13,6 +14,9 @@ import static com.sketchy.game.communicator.Events.*;
 import static com.sketchy.game.Config.SERVER_ADDRESS;
 
 public class Communicator {
+    /*
+    todo: hvor i coden skal socket.on være?
+     */
 
     private Socket socket;
 
@@ -50,6 +54,7 @@ public class Communicator {
                 }
             }
         });
+
     }
 
     public void endGame() {
@@ -60,8 +65,15 @@ public class Communicator {
 
     }
 
-    public void joinLobby(int lobbyId, Player player) {
-
+    public void joinLobby(int lobbyId, String playerName){
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("lobbyId", lobbyId);
+            obj.put("playerName", playerName);
+            socket.emit("joinLobby", obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createLobby() {
