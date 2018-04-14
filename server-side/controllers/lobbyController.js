@@ -10,7 +10,7 @@ class LobbyController {
 
         // make unique id's
         var idStack = new Array();
-        for (i=1000; i<10000; i++) {
+        for (let i=1000; i<10000; i++) {
             idStack.push(i);
         }
     }

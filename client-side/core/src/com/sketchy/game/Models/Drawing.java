@@ -1,4 +1,4 @@
-package com.sketchy.game.Models.Should_this_even_be_here_qm;
+package com.sketchy.game.Models;
 
 import com.sketchy.game.Models.Player;
 
