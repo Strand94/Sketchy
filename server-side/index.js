@@ -3,4 +3,3 @@ const LobbyController = require('./controllers/lobbyController');
 const Communicator = require('./communicator');
 const communicator = new Communicator(new GameController(), new LobbyController());
 
-communicator.ping("tempParam");

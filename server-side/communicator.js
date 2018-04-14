@@ -4,7 +4,7 @@ const io = require("socket.io").listen(server);
 
 connections = {};
 
-var events = {
+const events = {
     START_GAME: "start-game",
     END_GAME: "end-game",
     JOIN_LOBBY: "join-lobby",
