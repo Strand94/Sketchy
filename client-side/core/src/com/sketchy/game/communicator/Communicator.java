@@ -1,6 +1,7 @@
 package com.sketchy.game.communicator;
 
 import com.sketchy.game.Config;
+import com.sketchy.game.Controllers.ClientController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,14 +18,12 @@ import static com.sketchy.game.communicator.Event.*;
 public class Communicator {
     private Socket socket;
     private HashMap<Event, Listener> serverEventMap;
+    private ClientController clientController;
 
     public Communicator() {
+        clientController = new ClientController();
         connect();
         populateServerEventMap();
-    }
-
-    public void test() {
-        startListening(PING, SOCKET_ID);
     }
 
     private void connect() {
@@ -46,6 +45,48 @@ public class Communicator {
                 onStartGame();
             }
         });
+        serverEventMap.put(END_GAME, new Listener() {
+            @Override
+            public void call(Object... args) {
+                onEndGame();
+            }
+        });
+        serverEventMap.put(JOIN_LOBBY, new Listener() {
+            @Override
+            public void call(Object... args) {
+                onJoinLobby();
+            }
+        });
+        serverEventMap.put(CREATE_LOBBY, new Listener() {
+            @Override
+            public void call(Object... args) {
+                onCreateLobby();
+            }
+        });
+        serverEventMap.put(UPDATE_VIEW, new Listener() {
+            @Override
+            public void call(Object... args) {
+                onUpdateView();
+            }
+        });
+        serverEventMap.put(UPDATE_LOBBY, new Listener() {
+            @Override
+            public void call(Object... args) {
+                onUpdateLobby();
+            }
+        });
+        serverEventMap.put(BEGIN_ROUND, new Listener() {
+            @Override
+            public void call(Object... args) {
+                onBeginRound();
+            }
+        });
+        serverEventMap.put(GET_ANSWER, new Listener() {
+            @Override
+            public void call(Object... args) {
+                onGetAnswer();
+            }
+        });
         serverEventMap.put(PING, new Listener() {
             @Override
             public void call(Object... args) {
@@ -60,12 +101,37 @@ public class Communicator {
         });
     }
 
+
     private void startListening(Event... events) {
         for (Event event : events) socket.on(event.toString(), serverEventMap.get(event));
     }
 
     private void stopListening(Event... events) {
         for (Event event : events) socket.off(event.toString());
+    }
+
+    private void onStartGame() {
+        clientController.startGame();
+    }
+
+    private void onEndGame() {
+        clientController.endGame();
+    }
+
+    private void onUpdateView() {
+        clientController.updateLobby();
+    }
+
+    private void onUpdateLobby() {
+        clientController.updateLobby();
+    }
+
+    private void onBeginRound() {
+        clientController.beginRound();
+    }
+
+    private void onGetAnswer() {
+
     }
 
     private void onPing() {
@@ -77,10 +143,6 @@ public class Communicator {
         } catch(Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void onStartGame() {
-
     }
 
     private void onSocketId(JSONObject... obj) {
@@ -117,12 +179,28 @@ public class Communicator {
         }
     }
 
-    public void endGame() {
-
+    public void endGame(int lobbyId) {
+        try {
+            Emit
+                    .event(END_GAME)
+                    .to(socket)
+                    .with("lobbyId", lobbyId)
+                    .send();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void startGame(int lobbyId) {
-
+        try {
+            Emit
+                    .event(START_GAME)
+                    .to(socket)
+                    .with("lobbyId", lobbyId)
+                    .send();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void joinLobby(int lobbyId, String playerName){

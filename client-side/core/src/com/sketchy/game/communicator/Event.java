@@ -8,9 +8,14 @@ public enum Event {
     END_GAME("end-game"),
     JOIN_LOBBY("join-lobby"),
     CREATE_LOBBY("create-lobby"),
+    UPDATE_VIEW("update-view"),
+    UPDATE_LOBBY("update-lobby"),
+    BEGIN_ROUND("begin-round"),
+    GET_ANSWER("get-answer"),
     SOCKET_ID("socketID"),
     PING("ping"),
     PING_OK("pingOK");
+
 
 
     private static final Map<String, Event> fromStringMap;

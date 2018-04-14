@@ -11,7 +11,19 @@ public class ClientController {
     Player player;
     View view;
 
+    public void startGame() {
+
+    }
+
+    public void endGame() {
+
+    }
+
     public void goToLobby(int lobbyId){
+
+    }
+
+    public void updateView() {
 
     }
 

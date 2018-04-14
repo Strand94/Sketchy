@@ -2,7 +2,7 @@ const app = require('express')();
 const server = require('http').createServer(app);
 const io = require("socket.io").listen(server);
 
-connections = {};
+connections = {};   // maps socket.id to socket
 
 const events = {
     START_GAME: "start-game",
@@ -10,6 +10,7 @@ const events = {
     JOIN_LOBBY: "join-lobby",
     CREATE_LOBBY: "create-lobby",
     UPDATE_VIEW: "update-view",
+    UPDATE_LOBBY: "update-lobby",
     BEGIN_ROUND: "begin-round",
     GET_ANSWER: "get-answer",
     PING: "ping",
@@ -28,9 +29,14 @@ class Communicator {
 
         io.on('connection', function(socket) {
             console.log("Player Connected!");
-            socket.emit(events);    // todo: handle on java side
+            socket.emit(events);    // TODO: handle on java side
 
             socket
+                .on('disconnect', () => {
+                    lobbyController.playerDisconnected(socket.id);
+                    delete connections[socket.id];
+                    console.log("Player disconnected");
+                })
                 .on(events.JOIN_LOBBY, (obj) => {
                     connections[socket.id] = socket; 
                     lobbyController.joinLobby(obj.lobbyId, obj.playerName, socket.id);
@@ -51,6 +57,14 @@ class Communicator {
 
         });
     }
+
+    startGame(playerAddress) {
+        connections[playerAddress].emit(events.START_GAME);
+    }
+
+    endGame(playerAddress) {
+        connections[playerAddress].emit(events.END_GAME);
+    }
     
     updateView(playerAddress) {
         connections[playerAddress].emit(events.UPDATE_VIEW);
@@ -65,7 +79,7 @@ class Communicator {
     };
 
     getAnswer(playerAddress) {
-        // todo: return the sheet
+        // TODO: figure out logic and return the sheet
         connections[playerAddress].emit(events.getAnswer);
         connections[playerAddress].on(events.GET_ANSWER, (sheet) => {
             
