@@ -9,9 +9,9 @@ class LobbyController {
         this.lobbies = new Array(lobbiesCapacity);  // lobbyId -> lobby
 
         // make unique id's
-        var idStack = new Array();
-        for (let i=1000; i<10000; i++) {
-            idStack.push(i);
+        this.idStack = new Array();
+        for (let i=9999; i>999; i--) {
+            this.idStack.push(i);
         }
     }
     hasLobby(lobbyId) {
@@ -34,40 +34,40 @@ class LobbyController {
         return false;
     }
     createLobby(playerName, playerAdress) {
-        if (idStack.length > 0) {
+        if (this.idStack.length > 0) {
             var player = new Player(playerName, playerAdress);
-            var lobbyId = idStack.pop();
+            var lobbyId = this.idStack.pop();
             var lobby = new Lobby(lobbyId, player);
 
             this.lobbies[lobbyId] = lobby;
             this.playerinLobby[player] = lobbyId;
             this.players[playerAdress] = player;
+
+            console.log("Lobby %d created", lobbyId);
         } 
     }
     closeLobby(lobbyId) {
         var players = this.lobbies[lobbyId].getPlayers();
-        for (player in players) {
+        for (let player in players) {
             delete this.playerinLobby[player];
             delete this.players[player.adress];
         }
         delete this.lobbies[lobbyId];
-        idStack.push(lobbyId);
+        this.idStack.push(lobbyId);
     }
     playerDisconnected(playerAdress) {
-        var lobby = [this.lobbies[
-            this.playerinLobby[
-                this.players[playerAdress]
-            ]
-        ]];
+        var player = this.players[playerAdress];
+        var lobby = this.lobbies[this.playerinLobby[player]];
 
-        if (lobby.getPlayers() < 2) {       // last member of lobby left
+        if (lobby.getPlayers().length <= 2) {       // last member of lobby left
             delete this.lobbies[lobby.lobbyId];
+            console.log("Lobby %d closed", lobby.lobbyId);
         } else {
             lobby.removePlayer(player);     // lobby kept alive
         }
 
         delete this.playerinLobby[player];
-        delete this.players[player.adress];
+        delete this.players[playerAdress];
 
     }
 }
