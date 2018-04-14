@@ -54,13 +54,16 @@ class LobbyController {
         idStack.push(lobbyId);
     }
     playerDisconnected(playerAdress) {
-        var player = this.players[playerAdress];
-        var lobby = this.lobbies[this.playerinLobby[player]];
+        var lobby = [this.lobbies[
+            this.playerinLobby[
+                this.players[playerAdress]
+            ]
+        ]];
 
-        if (lobby.getPlayers < 2) {     // last member of lobby left
+        if (lobby.getPlayers() < 2) {       // last member of lobby left
             delete this.lobbies[lobby.lobbyId];
         } else {
-            lobby.removePlayer(player); // lobby kept alive
+            lobby.removePlayer(player);     // lobby kept alive
         }
 
         delete this.playerinLobby[player];
