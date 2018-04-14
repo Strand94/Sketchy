@@ -1,5 +1,5 @@
-class GameController(game) {
-    constructor() {
+class GameController {
+    constructor(game) {
         this.game = game;
     }
     endGame() {

@@ -2,12 +2,14 @@ package com.sketchy.game.communicator;
 
 import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
+import com.sketchy.game.Models.Sheet;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -51,18 +53,6 @@ public class Communicator {
                 onEndGame();
             }
         });
-        serverEventMap.put(JOIN_LOBBY, new Listener() {
-            @Override
-            public void call(Object... args) {
-                onJoinLobby();
-            }
-        });
-        serverEventMap.put(CREATE_LOBBY, new Listener() {
-            @Override
-            public void call(Object... args) {
-                onCreateLobby();
-            }
-        });
         serverEventMap.put(UPDATE_VIEW, new Listener() {
             @Override
             public void call(Object... args) {
@@ -72,13 +62,14 @@ public class Communicator {
         serverEventMap.put(UPDATE_LOBBY, new Listener() {
             @Override
             public void call(Object... args) {
-                onUpdateLobby();
+                onUpdateLobby((List<String>) args[0]);
             }
         });
         serverEventMap.put(BEGIN_ROUND, new Listener() {
             @Override
             public void call(Object... args) {
-                onBeginRound();
+                Sheet sheet = (Sheet) args[0];
+                onBeginRound(sheet);
             }
         });
         serverEventMap.put(GET_ANSWER, new Listener() {
@@ -119,15 +110,15 @@ public class Communicator {
     }
 
     private void onUpdateView() {
-        clientController.updateLobby();
+        clientController.updateView();
     }
 
-    private void onUpdateLobby() {
-        clientController.updateLobby();
+    private void onUpdateLobby(List<String> members) {
+        clientController.updateLobby(members);
     }
 
-    private void onBeginRound() {
-        clientController.beginRound();
+    private void onBeginRound(Sheet sheet) {
+        clientController.beginRound(sheet);
     }
 
     private void onGetAnswer() {

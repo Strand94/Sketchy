@@ -2,7 +2,7 @@ package com.sketchy.game.Controllers;
 
 import com.sketchy.game.Models.Player;
 import com.sketchy.game.Views.View;
-import com.sketchy.game.Models.Should_this_even_be_here_qm.Sheet;
+import com.sketchy.game.Models.Sheet;
 
 import java.util.List;
 
