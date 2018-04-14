@@ -28,30 +28,44 @@ class LobbyController {
         if (this.hasLobby(lobbyId)) {
             var player = new Player(playerName, playerAdress)
             this.lobbies[lobbyId].addPlayer(player);
-            this.playersLobby[playerAdress] = lobbyId;
+            this.playerinLobby[player] = lobbyId;
             return true;
         }
         return false;
     }
-    createLobby(lobbyMaster) {
+    createLobby(playerName, playerAdress) {
         if (idStack.length > 0) {
-            var lobby = new Lobby(idStack.pop, lobbyMaster);
+            var player = new Player(playerName, playerAdress);
+            var lobbyId = idStack.pop();
+            var lobby = new Lobby(lobbyId, player);
+
+            this.lobbies[lobbyId] = lobby;
+            this.playerinLobby[player] = lobbyId;
+            this.players[playerAdress] = player;
         } 
     }
     closeLobby(lobbyId) {
-        idStack.push(lobbyId);
         var players = this.lobbies[lobbyId].getPlayers();
         for (player in players) {
             delete this.playerinLobby[player];
             delete this.players[player.adress];
         }
+        delete this.lobbies[lobbyId];
+        idStack.push(lobbyId);
     }
     playerDisconnected(playerAdress) {
         var player = this.players[playerAdress];
+        var lobby = this.lobbies[this.playerinLobby[player]];
 
-        this.lobbies[this.playerinLobby[player]].removePlayer(player);
+        if (lobby.getPlayers < 2) {     // last member of lobby left
+            delete this.lobbies[lobby.lobbyId];
+        } else {
+            lobby.removePlayer(player); // lobby kept alive
+        }
+
         delete this.playerinLobby[player];
         delete this.players[player.adress];
+
     }
 }
 

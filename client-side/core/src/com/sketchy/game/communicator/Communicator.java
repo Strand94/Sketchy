@@ -24,16 +24,31 @@ public class Communicator {
 
     public Communicator() {
         clientController = new ClientController();
-        connect();
+        connect(false);
         populateServerEventMap();
     }
 
-    private void connect() {
-        try {
-            socket = IO.socket(Config.SERVER_ADDRESS);
-            socket.connect();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+    public Communicator(boolean local) {
+        clientController = new ClientController();
+        connect(local);
+        populateServerEventMap();
+    }
+
+    private void connect(boolean local) {
+        if (local) {
+            try {
+                socket = IO.socket(Config.LOCAL_PORT);  // TODO: broken for some reason
+                socket.connect();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                socket = IO.socket(Config.SERVER_ADDRESS);
+                socket.connect();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         }
     }
 
