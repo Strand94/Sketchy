@@ -48,9 +48,8 @@ class LobbyController {
     }
     playerDisconnected(playerAdress) {
         var player = this.players[playerAdress];
-        var lobby = this.lobbies[player];
-        
-        lobby.removePlayer(player);
+
+        this.lobbies[player].removePlayer(player);
         delete this.playerinLobby[player];
         delete this.players[player.adress];
     }
