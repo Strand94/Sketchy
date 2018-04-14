@@ -56,18 +56,21 @@ class LobbyController {
         this.idStack.push(lobbyId);
     }
     playerDisconnected(playerAdress) {
-        var player = this.players[playerAdress];
-        var lobby = this.lobbies[this.playerinLobby[player]];
-
-        if (lobby.getPlayers().length <= 2) {       // last member of lobby left
-            delete this.lobbies[lobby.lobbyId];
-            console.log("Lobby %d closed", lobby.lobbyId);
-        } else {
-            lobby.removePlayer(player);     // lobby kept alive
+        if (this.players.hasOwnProperty(playerAdress)) {  // player has joined a lobby
+            var player = this.players[playerAdress];
+            var lobby = this.lobbies[this.playerinLobby[player]];
+    
+            if (lobby.getPlayers().length < 2) {       // last member of lobby left
+                delete this.lobbies[lobby.lobbyId];
+                console.log("Lobby %d closed", lobby.lobbyId);
+            } else {
+                lobby.removePlayer(player);     // lobby kept alive
+            }
+    
+            delete this.playerinLobby[player];
+            delete this.players[playerAdress];
+            
         }
-
-        delete this.playerinLobby[player];
-        delete this.players[playerAdress];
 
     }
 }
