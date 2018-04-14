@@ -1,6 +1,6 @@
-class GameController {
+class GameController(game) {
     constructor() {
-        this.game = null;
+        this.game = game;
     }
     endGame() {
         this.game.abortGame();
