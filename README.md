@@ -15,6 +15,7 @@ Steps:
 ## Server-side
 Launch server locally: heroku local web
 deploy to heroku: git push heroku <branch-name>:master
+https://dashboard.heroku.com/apps/aqueous-bayou-42621/deploy/heroku-git
 
 Requirements
 * nodeJS

@@ -4,9 +4,9 @@ const Lobby = require("../models/lobby");
 
 class LobbyController {
     constructor() {
-        this.lobbies = new Array(lobbiesCapacity);  
-        this.playerinLobby = {};    // maps player to lobby
         this.players = {};          // maps playerAdress to Player
+        this.playerinLobby = {};    // maps player to lobbyId
+        this.lobbies = new Array(lobbiesCapacity);  // lobbyId -> lobby
 
         // make unique id's
         var idStack = new Array();
@@ -49,7 +49,7 @@ class LobbyController {
     playerDisconnected(playerAdress) {
         var player = this.players[playerAdress];
 
-        this.lobbies[player].removePlayer(player);
+        this.lobbies[this.playerinLobby[player]].removePlayer(player);
         delete this.playerinLobby[player];
         delete this.players[player.adress];
     }
