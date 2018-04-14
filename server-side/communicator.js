@@ -20,7 +20,7 @@ const events = {
 
 class Communicator {
     constructor(gameController, lobbyController) {
-        server.listen(8080);
+        server.listen(process.env.PORT || 5000);
         console.log("Server running..");
 
         this.gameController = gameController;

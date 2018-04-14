@@ -13,8 +13,13 @@ Steps:
 
 
 ## Server-side
+Launch server locally: heroku local web
+deploy to heroku: git push heroku <branch-name>:master
+
 Requirements
-* Install nodeJS
+* nodeJS
+* socket.io
+* express
   
 Steps:
 1. Clone repository
