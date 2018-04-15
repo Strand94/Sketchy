@@ -13,10 +13,11 @@ import java.util.List;
 
 public class ClientController {
 
-    private SketchyGame game;
     private Player player;
-    private Communicator communicator;
     private View view;
+    private int lobbyId;
+    private Communicator communicator;
+    private SketchyGame game;
 
     public int getPlayerCount() {
         return playerCount;
