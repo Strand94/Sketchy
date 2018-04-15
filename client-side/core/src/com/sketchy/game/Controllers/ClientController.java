@@ -15,7 +15,7 @@ public class ClientController {
 
     private Player player;
     private View view;
-    private int lobbyId;
+    private int lobbyId = 1337; // Get from communicator
     private Communicator communicator;
     private SketchyGame game;
 
@@ -84,14 +84,14 @@ public class ClientController {
         communicator.createLobby(playername);
 
         //Todo: Check if it's OK to change view
-        game.getClientController().setView(new LobbyView(game, 1337));
+        game.getClientController().setView(new LobbyView(game, this.lobbyId));
     }
 
     public void JoinLobby(int lobbyId, String playername){
         communicator.joinLobby(lobbyId, playername);
 
         //Todo: Check if it's OK to change view
-        game.setScreen(new LobbyView(game, 1337));
+        game.setScreen(new LobbyView(game, this.lobbyId));
     }
 
     public SketchyGame getGame() {
