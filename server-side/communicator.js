@@ -72,6 +72,8 @@ class Communicator {
     };
 
     updateLobby(playerAddress, playerList) {
+        console.log("connections: " + connections);
+        console.log("connections[playerAddress]: " + connections[playerAddress]);
         connections[playerAddress].emit(events.UPDATE_LOBBY, playerList);
     }
 
