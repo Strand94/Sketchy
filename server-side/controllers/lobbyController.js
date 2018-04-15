@@ -1,4 +1,4 @@
-const lobbiesCapacity = require("../config");
+const config = require("../config");
 const Player = require("../models/player");
 const Lobby = require("../models/lobby");
 const Game = require("../models/game");
@@ -8,7 +8,7 @@ class LobbyController {
     constructor() {
         this.players = {};          // maps playerAdress to Player
         this.playerinLobby = {};    // maps player to lobbyId
-        this.lobbies = new Array(lobbiesCapacity);  // lobbyId -> lobby
+        this.lobbies = new Array(config.lobbiesCapacity);  // lobbyId -> lobby
         this.communicator = new Communicator(this);
 
         // make unique id's
