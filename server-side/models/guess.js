@@ -1,7 +1,8 @@
 const Sheet = require("./sheet");
 
-class Guess {
+class Guess extends Sheet{
     constructor() {
+        super();
         this.player = null;
         this.guessingObjective = null;
         this.answer = null;
@@ -10,6 +11,5 @@ class Guess {
         return this.player;
     }
 }
-Guess.prototype = Object.create(prototype);
 
 module.exports = Guess;

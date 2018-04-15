@@ -3,7 +3,7 @@ const Game = require("./game");
 class Lobby {
     constructor(lobbyId, lobbyMaster) {
         this.lobbyId = lobbyId;
-        this.players = [];
+        this.players = [lobbyMaster];
         this.currentGame = null;
         this.lobbyMaster = lobbyMaster;
     }
@@ -20,6 +20,9 @@ class Lobby {
     }
     startGame() {
         this.currentGame = new Game(this.players.length);
+    }
+    getPlayers() {
+        return this.players;
     }
 }
 

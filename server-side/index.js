@@ -1,14 +1,5 @@
-var app = require('express')();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+const GameController = require('./controllers/gameController');
+const LobbyController = require('./controllers/lobbyController');
+const Communicator = require('./communicator');
+const communicator = new Communicator(new GameController(), new LobbyController());
 
-server.listen(8080, function () {
-    console.log('Server is now running...');
-});
-
-io.on('connection', function (socket) {
-    console.log('Player connected!');
-    socket.on('disconnect', function () {
-        console.log('Player disconnected!');
-    });
-});

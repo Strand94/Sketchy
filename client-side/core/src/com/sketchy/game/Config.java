@@ -1,5 +1,6 @@
 package com.sketchy.game;
 
 public class Config {
-    public static final String SERVER_ADDRESS = "http://localhost:8080";
+    public static final String SERVER_ADDRESS = "https://aqueous-bayou-42621.herokuapp.com/";
+    public static final String LOCAL_PORT = "5000";
 }

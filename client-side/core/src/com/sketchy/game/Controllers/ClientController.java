@@ -5,7 +5,7 @@ import com.sketchy.game.SketchyGame;
 import com.sketchy.game.Views.LobbyView;
 import com.sketchy.game.Views.LoginView;
 import com.sketchy.game.Views.View;
-import com.sketchy.game.Models.Should_this_even_be_here_qm.Sheet;
+import com.sketchy.game.Models.Sheet;
 
 import java.util.List;
 
@@ -19,7 +19,19 @@ public class ClientController {
         this.game = game;
     }
 
+    public void startGame() {
+
+    }
+
+    public void endGame() {
+
+    }
+
     public void goToLobby(int lobbyId){
+
+    }
+
+    public void updateView() {
 
     }
 

@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Views.LoginView;
+import com.sketchy.game.communicator.Communicator;
+
 public class SketchyGame extends Game {
 
     public SpriteBatch batch;
