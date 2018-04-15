@@ -2,6 +2,7 @@ package com.sketchy.game.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,57 +15,41 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.sketchy.game.SketchyGame;
 
-public class LoginView extends View{
+public class JoinView extends View{
     final SketchyGame game;
-    static String playername;
+    private static String lobbyID;
 
-    public LoginView(final SketchyGame game){
+    public JoinView(final SketchyGame game){
         this.game = game;
 
         // Header
-        Image imageLogo = new Image();
-        imageLogo.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sketchy_logo.png")))));
-        imageLogo.setScaling(Scaling.fit);
+        Label header = new Label("Insert LobbyID:", uiSkin);
+        header.setColor(Color.RED);
 
-        // Buttons
-        TextButton create = new TextButton("Create Game", uiSkin);
-        TextButton join = new TextButton("Join Game", uiSkin);
 
         // TextFields
-        final TextField nameField = new TextField(playername, uiSkin);
+        final TextField lobbyField = new TextField("", uiSkin);
+        lobbyField.setColor(Color.CORAL);
 
-        // Labels
-        final Label nameLabel = new Label("Name:", uiSkin);
+        // Buttons
+        TextButton join = new TextButton("Join Lobby", uiSkin);
 
         // Add elements to table
-        table.pad(10);
-        table.add(imageLogo).padBottom(70);
+        table.add(header).padBottom(45);;
         table.row();
-        table.add(nameLabel);
+        table.add(lobbyField).width(300).padBottom(25);;
         table.row();
-        table.add(nameField).width(250).padBottom(25);
-        table.row();
-        table.add(create).center().colspan(2).padBottom(25);
-        table.row();
-        table.add(join).center().colspan(2);
+        table.add(join).width(250).padBottom(25);
+
+        table.debug();
 
         // Listeners
         join.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("Join Game");
-                playername = nameField.getText();
-                game.getClientController().setView(new JoinView(game));
+                game.setScreen(new LobbyView(game));
 
-            }
-        });
-
-        create.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Create Game");
-                playername = nameField.getText();
-                game.getClientController().setView(new LobbyView(game));
             }
         });
     }
@@ -77,11 +62,11 @@ public class LoginView extends View{
     @Override
     public void render(float delta){
         super.render(delta);
-        Gdx.gl.glClearColor(68.0f/256, 117.0f/256, 180.0f/256, 1);
+        Gdx.gl.glClearColor(68.0f/256, 180.0f/256, 112.0f/256, 1);
         Gdx.input.setCatchBackKey(true);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
-            Gdx.app.exit();
+            game.setScreen(new LoginView(game));
         }
 
 

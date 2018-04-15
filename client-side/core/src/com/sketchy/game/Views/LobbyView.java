@@ -2,6 +2,7 @@ package com.sketchy.game.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -10,9 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.SketchyGame;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Stack;
 
 
 public class LobbyView extends View {
@@ -21,7 +20,7 @@ public class LobbyView extends View {
     TextButton startGame;
     float remaining = 5;
     boolean startGame_r = false;
-    int playerCount = 1;
+    int playerCount = 0;
     Label numberOfPlayers;
     Table buttonTable;
     Table player_table = new Table();
@@ -34,6 +33,7 @@ public class LobbyView extends View {
 
         String lobbyID = "1337"; // TODO: should be given by server
         Label gameidLabel = new Label("LobbyID:"+" "+lobbyID, uiSkin);
+        gameidLabel.setColor(Color.CYAN);
         startGame = new TextButton("Start Game", uiSkin);
         numberOfPlayers = new Label(playerCount+"/8", uiSkin);
 
@@ -83,6 +83,7 @@ public class LobbyView extends View {
 
     private void addPerson(String name){
         Label playerName = new Label(name, uiSkin);
+        playerName.setColor(Color.CYAN);
         player_table.add(playerName);
         player_table.row();
     }
@@ -111,6 +112,9 @@ public class LobbyView extends View {
             System.out.println("Refresh player names");
             game.getClientController().updateLobby(newPlayers);
 
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
+            game.setScreen(new LoginView(game));
         }
 
         // Countdown. Todo: Move to startGameCounter
