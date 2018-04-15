@@ -13,13 +13,6 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new SketchyGame(), config);
-
-		try {
-			Communicator communicator = new Communicator();
-			communicator.joinLobby(1337, "hans gregor");
-		} catch (Exception e) {
-			System.out.println("Can't connect to server");
-		}
 	}
 
 }
