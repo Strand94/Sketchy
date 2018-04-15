@@ -1,12 +1,15 @@
 const lobbiesCapacity = require("../config");
 const Player = require("../models/player");
 const Lobby = require("../models/lobby");
+const Game = require("../models/game");
+const Communicator = require("../communicator");
 
 class LobbyController {
     constructor() {
         this.players = {};          // maps playerAdress to Player
         this.playerinLobby = {};    // maps player to lobbyId
         this.lobbies = new Array(lobbiesCapacity);  // lobbyId -> lobby
+        this.communicator = new Communicator(this);
 
         // make unique id's
         this.idStack = new Array();
@@ -37,7 +40,7 @@ class LobbyController {
         if (this.idStack.length > 0) {
             var player = new Player(playerName, playerAdress);
             var lobbyId = this.idStack.pop();
-            var lobby = new Lobby(lobbyId, player);
+            var lobby = new Lobby(lobbyId, player, this.communicator);
 
             this.lobbies[lobbyId] = lobby;
             this.playerinLobby[player] = lobbyId;
@@ -48,23 +51,27 @@ class LobbyController {
     }
     closeLobby(lobbyId) {
         var players = this.lobbies[lobbyId].getPlayers();
+
         for (let player in players) {
             delete this.playerinLobby[player];
             delete this.players[player.adress];
         }
+
         delete this.lobbies[lobbyId];
         this.idStack.push(lobbyId);
+        this.communicator.removeGameController(lobbyId);
+
+        console.log("Lobby %d closed", lobby.lobbyId);
     }
     playerDisconnected(playerAdress) {
-        if (this.players.hasOwnProperty(playerAdress)) {  // player has joined a lobby
+        if (this.players.hasOwnProperty(playerAdress)) {    // player has joined a lobby
             var player = this.players[playerAdress];
             var lobby = this.lobbies[this.playerinLobby[player]];
     
-            if (lobby.getPlayers().length < 2) {       // last member of lobby left
-                delete this.lobbies[lobby.lobbyId];
-                console.log("Lobby %d closed", lobby.lobbyId);
+            if (lobby.getPlayers().length < 2) {            // last member of lobby left
+                this.closeLobby(lobby.lobbyId);
             } else {
-                lobby.removePlayer(player);     // lobby kept alive
+                lobby.removePlayer(player);            
             }
     
             delete this.playerinLobby[player];

@@ -2,7 +2,8 @@ const app = require('express')();
 const server = require('http').createServer(app);
 const io = require("socket.io").listen(server);
 
-connections = {};   // maps socket.id to socket
+connections = {};       // maps socket.id to socket
+gameControllers = {};   // maps lobbyId to gameController
 
 const events = {
     START_GAME: "start-game",
@@ -20,12 +21,11 @@ const events = {
 
 
 class Communicator {
-    constructor(gameController, lobbyController) {
+    constructor(lobbyController) {
         server.listen(process.env.PORT || 5000, function(){
             console.log("Server listening on port %d", this.address().port);
         });
 
-        this.gameController = gameController;
         this.lobbyController = lobbyController;
 
         io.on('connection', function(socket) {
@@ -50,7 +50,7 @@ class Communicator {
                     lobbyController.startGame(obj.lobbyId);
                 })
                 .on(events.END_GAME, (obj) => {
-                    gameController.endGame(obj.lobbyId);
+                    gameControllers[obj.lobbyId].endGame;
                 })
                 .on(events.GET_ANSWER, (obj) => {
 
@@ -87,6 +87,14 @@ class Communicator {
         });
         
     };
+
+    addGameController(lobbyId, gameController) {
+        gameControllers[localStorage] = gameController;
+    }
+
+    removeGameController(lobbyId) {
+        delete gameControllers[lobbyId];
+    }
 }
 
 module.exports = Communicator;
