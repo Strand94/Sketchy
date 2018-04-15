@@ -104,7 +104,7 @@ public class LoginView extends View{
         System.out.println("Create Game");
 
         game.getClientController().setPlayer(new Player(nameField.getText()));
-        game.getClientController().CreateLobby(nameField.getText());
+        game.getClientController().CreateLobby(game.getClientController().getPlayer().getName());
     }
 
 }

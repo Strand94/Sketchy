@@ -28,14 +28,17 @@ public class ClientController {
 
     //=========== GAME ==============\\
     public int getPlayerCount() {
+        System.out.println("getPlayerCount() -> " + playerCount);
         return playerCount;
     }
 
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
+        System.out.println("setPlayerCount() -> " + this.playerCount);
     }
 
     public void startGame() {
+        System.out.println("clientController.startGame() -> ");
         //TODO: Check if it's okay to change view
         game.getClientController().setView(new DrawView(game));
     }
@@ -60,6 +63,7 @@ public class ClientController {
     //=========== LOBBY ==============\\
 
     public void CreateLobby(String playername){
+        System.out.println(String.format("clientController.CreateLobby('%s')", playername));
         communicator.createLobby(playername);
 
         //Todo: Check if it's OK to change view
@@ -67,6 +71,7 @@ public class ClientController {
     }
 
     public void JoinLobby(int lobbyId, String playername){
+        System.out.println("clientController.JoinLobby() -> " + lobbyId + playername);
         communicator.joinLobby(lobbyId, playername);
 
         //Todo: Check if it's OK to change view
@@ -74,6 +79,7 @@ public class ClientController {
     }
 
     public void updateLobby(List<String> names){
+        System.out.println("clientController.updateLobby() -> " + names.size());
         setPlayerCount(names.size());
 
         if (view instanceof LobbyView){
@@ -87,10 +93,12 @@ public class ClientController {
 
     //=========== PLAYER ==============\\
     public Player getPlayer() {
+        System.out.println("clientController.getPlayer() -> " + player.getName());
         return player;
     }
 
     public void setPlayer(Player player) {
+        System.out.println(String.format("clientController.setPlayer('%s')", player.getName()));
         this.player = player;
     }
     //=========== END PLAYER ==============\\
@@ -110,7 +118,7 @@ public class ClientController {
         }
         this.view = view;
 
-        System.out.println("SetView:" + view);
+        System.out.println("*SetView:" + view);
     }
     //=========== END VIEW ==============\\
 
