@@ -42,18 +42,10 @@ public class LobbyView extends View {
         buttonTable.row();
         buttonTable.add(numberOfPlayers);
 
-        //TODO remove, testing only
-        newPlayers.add("some_dude");
-        newPlayers.add("random");
-        newPlayers.add("TDT4240slayer");
-        newPlayers.add("Mumitrollet");
-        newPlayers.add("ElephantDrawer");
-
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Start game");
-                startGameCounter();
+                OnGameStart();
             }
         });
     }
@@ -95,17 +87,6 @@ public class LobbyView extends View {
         super.render(delta);
         Gdx.gl.glClearColor(246.0f/256, 195.0f/256, 42.0f/256, 1);
 
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.A)){
-            newPlayers.add("foo");
-            System.out.println("Player foo has joined the server, but client is not updated");
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.U)){
-            System.out.println("Refresh player names");
-            game.getClientController().updateLobby(newPlayers);
-
-        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
             game.setScreen(new LoginView(game));
         }
@@ -115,8 +96,11 @@ public class LobbyView extends View {
             float deltaTime = Gdx.graphics.getDeltaTime();
             remaining -= deltaTime;
             startGame.setText(String.format("Start in %.0fs", remaining));
-            game.getClientController().setView(new DrawView(game));
         }
+    }
+
+    private void OnGameStart(){
+        game.getClientController().startGame();
     }
 
     @Override

@@ -34,7 +34,8 @@ public class ClientController {
     }
 
     public void startGame() {
-
+        //TODO: Check if it's okay to change view
+        game.getClientController().setView(new DrawView(game));
     }
 
     public void endGame() {
