@@ -1,3 +1,4 @@
+
 class Game {
     constructor() {
         this.counter = 0;
@@ -5,7 +6,9 @@ class Game {
     }
     abortGame() { }
     nextStep() { }
-    endGame() { }
+    endGame() {
+
+    }
 }
 
 module.exports = Game;

@@ -1,9 +1,21 @@
+const Game = require("./game");
+
 class GameController {
-    constructor(game) {
-        this.game = game;
+    constructor(lobby, communicator) {
+        this.lobby = lobby;
+        this.game = null;
+        this.communicator = communicator;
+        communicator.addGameController(lobby.lobbyId, this);
     }
+    
+    // "public" functions
+
     endGame() {
         this.game.abortGame();
+    }
+
+    startGame() {
+        this.game = new Game();
     }
 }
 
