@@ -109,7 +109,7 @@ public class LobbyView extends View {
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.U)){
             System.out.println("Refresh player names");
-            game.clientController.updateLobby(newPlayers);
+            game.getClientController().updateLobby(newPlayers);
 
         }
 
@@ -118,7 +118,7 @@ public class LobbyView extends View {
             float deltaTime = Gdx.graphics.getDeltaTime();
             remaining -= deltaTime;
             startGame.setText(String.format("Start in %.0fs", remaining));
-            game.clientController.setView(new DrawView(game));
+            game.getClientController().setView(new DrawView(game));
         }
     }
 

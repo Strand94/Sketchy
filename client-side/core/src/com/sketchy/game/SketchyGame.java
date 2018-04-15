@@ -11,7 +11,6 @@ public class SketchyGame extends Game {
 
     public SpriteBatch batch;
     public BitmapFont font;
-    private Communicator communicator;
     private ClientController clientController;
 
     public int MAX_PLAYERS = 8;
@@ -22,11 +21,13 @@ public class SketchyGame extends Game {
         batch = new SpriteBatch();
         clientController = new ClientController(this);
 
-
         LoginView loginView = new LoginView(this);
         this.setScreen(loginView);
         clientController.setView(loginView);
+    }
 
+    public ClientController getClientController() {
+        return clientController;
     }
 
     @Override
