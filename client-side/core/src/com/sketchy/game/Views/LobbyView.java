@@ -28,11 +28,10 @@ public class LobbyView extends View {
 
     List<String> newPlayers = new ArrayList<String>(); // for testing only
 
-    public LobbyView(SketchyGame game) {
+    public LobbyView(SketchyGame game, int lobbyID) {
         this.game = game;
 
-        String lobbyID = "1337"; // TODO: should be given by server
-        Label gameidLabel = new Label("LobbyID:"+" "+lobbyID, uiSkin);
+        Label gameidLabel = new Label("LobbyID:"+" "+ Integer.toString(lobbyID), uiSkin);
         gameidLabel.setColor(Color.CYAN);
         startGame = new TextButton("Start Game", uiSkin);
         numberOfPlayers = new Label(playerCount+"/8", uiSkin);
