@@ -15,12 +15,12 @@ import java.util.List;
 public class LobbyView extends View {
     SketchyGame game;
 
-    TextButton startGame;
-    float remaining = 5;
-    boolean startGame_r = false;
-    Label numberOfPlayers;
-    Table buttonTable;
-    Table player_table = new Table();
+    private TextButton startGame;
+    private float remaining = 5;
+    private boolean startGame_r = false;
+    private Label numberOfPlayers;
+    private Table buttonTable;
+    private Table player_table = new Table();
 
     public LobbyView(SketchyGame game, int lobbyID) {
         this.game = game;
