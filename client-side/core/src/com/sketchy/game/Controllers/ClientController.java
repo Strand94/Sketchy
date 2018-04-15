@@ -2,6 +2,7 @@ package com.sketchy.game.Controllers;
 
 import com.sketchy.game.Models.Player;
 import com.sketchy.game.SketchyGame;
+import com.sketchy.game.Views.JoinView;
 import com.sketchy.game.Views.LobbyView;
 import com.sketchy.game.Views.View;
 import com.sketchy.game.Models.Sheet;
@@ -27,10 +28,6 @@ public class ClientController {
     }
 
     public void endGame() {
-
-    }
-
-    public void goToLobby(int lobbyId){
 
     }
 
@@ -69,12 +66,30 @@ public class ClientController {
 
     }
 
+    public void CreateLobby(String playername){
+        communicator.createLobby(playername);
+
+        //Todo: Check if it's OK to change view
+        game.getClientController().setView(new LobbyView(game, 1337));
+    }
+
+    public void JoinLobby(int lobbyId, String playername){
+        communicator.joinLobby(lobbyId, playername);
+
+        //Todo: Check if it's OK to change view
+        game.setScreen(new LobbyView(game, 1337));
+    }
+
     public SketchyGame getGame() {
         return game;
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     public Communicator getCommunicator() {

@@ -17,7 +17,8 @@ import com.sketchy.game.SketchyGame;
 
 public class JoinView extends View{
     final SketchyGame game;
-    private static String lobbyID;
+
+    TextField lobbyField;
 
     public JoinView(final SketchyGame game){
         this.game = game;
@@ -28,7 +29,7 @@ public class JoinView extends View{
 
 
         // TextFields
-        final TextField lobbyField = new TextField("", uiSkin);
+        lobbyField = new TextField("", uiSkin);
         lobbyField.setColor(Color.CORAL);
 
         // Buttons
@@ -47,9 +48,7 @@ public class JoinView extends View{
         join.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Join Game");
-                game.setScreen(new LobbyView(game));
-
+                OnJoin();
             }
         });
     }
@@ -80,6 +79,11 @@ public class JoinView extends View{
     @Override
     public void dispose(){
         super.dispose();
+    }
+
+    private void OnJoin(){
+        System.out.println("Join Game");
+        game.getClientController().JoinLobby(Integer.parseInt(lobbyField.getText()), game.getClientController().getPlayer().getName());
     }
 
 }

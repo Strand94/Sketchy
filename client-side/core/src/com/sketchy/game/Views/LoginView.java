@@ -12,11 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
+import com.sketchy.game.Models.Player;
 import com.sketchy.game.SketchyGame;
 
 public class LoginView extends View{
     final SketchyGame game;
-    static String playername;
+    TextField nameField;
 
     public LoginView(final SketchyGame game){
         this.game = game;
@@ -31,7 +32,7 @@ public class LoginView extends View{
         TextButton join = new TextButton("Join Game", uiSkin);
 
         // TextFields
-        final TextField nameField = new TextField(playername, uiSkin);
+        nameField = new TextField("Your name", uiSkin);
 
         // Labels
         final Label nameLabel = new Label("Name:", uiSkin);
@@ -52,19 +53,14 @@ public class LoginView extends View{
         join.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Join Game");
-                playername = nameField.getText();
-                game.getClientController().setView(new JoinView(game));
-
+                OnJoin();
             }
         });
 
         create.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Create Game");
-                playername = nameField.getText();
-                game.getClientController().setView(new LobbyView(game));
+                OnCreate();
             }
         });
     }
@@ -95,6 +91,20 @@ public class LoginView extends View{
     @Override
     public void dispose(){
         super.dispose();
+    }
+
+    private void OnJoin(){
+        System.out.println("Join Game");
+
+        game.getClientController().setPlayer(new Player(nameField.getText()));
+        game.getClientController().setView(new JoinView(game));
+    }
+
+    private void OnCreate(){
+        System.out.println("Create Game");
+
+        game.getClientController().setPlayer(new Player(nameField.getText()));
+        game.getClientController().CreateLobby(nameField.getText());
     }
 
 }
