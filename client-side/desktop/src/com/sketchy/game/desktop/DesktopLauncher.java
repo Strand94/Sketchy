@@ -16,13 +16,5 @@ public class DesktopLauncher {
 		config.width = 720/2;
 		config.height = 1280/2;
 
-		try {
-			Communicator communicator = new Communicator(false, game);
-			communicator.joinLobby(1337, "hans gregor");
-			TimeUnit.SECONDS.sleep(5);
-		} catch (Exception e) {
-			System.out.println("Can't connect to server");
-		}
-
 	}
 }

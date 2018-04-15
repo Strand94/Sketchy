@@ -11,8 +11,8 @@ public class SketchyGame extends Game {
 
     public SpriteBatch batch;
     public BitmapFont font;
-    public Communicator communicator;
-    public ClientController clientController;
+    private Communicator communicator;
+    private ClientController clientController;
 
     public int MAX_PLAYERS = 8;
 
@@ -20,12 +20,12 @@ public class SketchyGame extends Game {
     public void create() {
         font = new BitmapFont(); // Use default Arial font
         batch = new SpriteBatch();
-        communicator = new Communicator(this);
         clientController = new ClientController(this);
+
 
         LoginView loginView = new LoginView(this);
         this.setScreen(loginView);
-        clientController.view = loginView;
+        clientController.setView(loginView);
 
     }
 
