@@ -3,6 +3,7 @@ package com.sketchy.game.communicator;
 import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Sheet;
+import com.sketchy.game.SketchyGame;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,16 +21,15 @@ import static com.sketchy.game.communicator.Event.*;
 public class Communicator {
     private Socket socket;
     private HashMap<Event, Listener> serverEventMap;
-    private ClientController clientController;
 
     public Communicator() {
-        clientController = new ClientController();
+        clientController = new ClientController(game);
         connect(false);
         populateServerEventMap();
     }
 
     public Communicator(boolean local) {
-        clientController = new ClientController();
+        clientController = new ClientController(game);
         connect(local);
         populateServerEventMap();
     }
