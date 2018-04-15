@@ -21,15 +21,14 @@ import static com.sketchy.game.communicator.Event.*;
 public class Communicator {
     private Socket socket;
     private HashMap<Event, Listener> serverEventMap;
+    SketchyGame game;
 
-    public Communicator() {
-        clientController = new ClientController(game);
+    public Communicator(SketchyGame game) {
         connect(false);
         populateServerEventMap();
     }
 
-    public Communicator(boolean local) {
-        clientController = new ClientController(game);
+    public Communicator(boolean local, SketchyGame game) {
         connect(local);
         populateServerEventMap();
     }
@@ -117,23 +116,23 @@ public class Communicator {
     }
 
     private void onStartGame() {
-        clientController.startGame();
+        game.clientController.startGame();
     }
 
     private void onEndGame() {
-        clientController.endGame();
+        game.clientController.endGame();
     }
 
     private void onUpdateView() {
-        clientController.updateView();
+        game.clientController.updateView();
     }
 
     private void onUpdateLobby(List<String> members) {
-        clientController.updateLobby(members);
+        game.clientController.updateLobby(members);
     }
 
     private void onBeginRound(Sheet sheet) {
-        clientController.beginRound(sheet);
+        game.clientController.beginRound(sheet);
     }
 
     private void onGetAnswer() {

@@ -20,7 +20,7 @@ public class SketchyGame extends Game {
     public void create() {
         font = new BitmapFont(); // Use default Arial font
         batch = new SpriteBatch();
-        communicator = new Communicator();
+        communicator = new Communicator(this);
         clientController = new ClientController(this);
 
         LoginView loginView = new LoginView(this);
