@@ -2,10 +2,11 @@ const GameController = require("../controllers/gameController");
 
 class Lobby {
     constructor(lobbyId, lobbyMaster, communicator) {
-        this.gameController = new GameController(this, communicator);
         this.lobbyId = lobbyId;
         this.players = [lobbyMaster];
         this.lobbyMaster = lobbyMaster;
+        
+        this.gameController = new GameController(this, communicator);
     }
     addPlayer(player) {
         this.players.push(player);
