@@ -2,6 +2,7 @@ package com.sketchy.game.Controllers;
 
 import com.sketchy.game.Models.Player;
 import com.sketchy.game.SketchyGame;
+import com.sketchy.game.Views.LobbyView;
 import com.sketchy.game.Views.LoginView;
 import com.sketchy.game.Views.View;
 import com.sketchy.game.Models.Should_this_even_be_here_qm.Sheet;
@@ -23,6 +24,9 @@ public class ClientController {
     }
 
     public void updateLobby(List<String> names){
+        if (view instanceof LobbyView){
+            ((LobbyView) view).updatePlayerList(names);
+        }
 
     }
 
