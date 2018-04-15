@@ -17,6 +17,8 @@ const events = {
     SOCKET_ID: "socketID"
 }
 
+var connections = {};       // maps socket.id to socket
+var gameControllers = {};   // maps lobbyId to gameController
 
 class Communicator {
     constructor(lobbyController) {
@@ -25,8 +27,6 @@ class Communicator {
         });
 
         this.lobbyController = lobbyController;
-        this.connections = {};       // maps socket.id to socket
-        this.gameControllers = {};   // maps lobbyId to gameController
 
         io.on('connection', function(socket) {
             console.log("Player Connected!");
@@ -39,18 +39,18 @@ class Communicator {
                     console.log("Player disconnected");
                 })
                 .on(events.JOIN_LOBBY, (obj) => {
-                    this.connections[socket.id] = socket; 
+                    connections[socket.id] = socket; 
                     lobbyController.joinLobby(obj.lobbyId, obj.playerName, socket.id);
                 })
                 .on(events.CREATE_LOBBY, (obj) => {
-                    this.connections[socket.id] = socket;
+                    connections[socket.id] = socket;
                     lobbyController.createLobby(obj.playerName);
                 })
                 .on(events.START_GAME, (obj) => {
                     lobbyController.startGame(obj.lobbyId);
                 })
                 .on(events.END_GAME, (obj) => {
-                    this.gameControllers[obj.lobbyId].endGame;
+                    gameControllers[obj.lobbyId].endGame;
                 })
                 .on(events.GET_ANSWER, (obj) => {
 
@@ -60,44 +60,44 @@ class Communicator {
     }
 
     startGame(playerAddress) {
-        this.connections[playerAddress].emit(events.START_GAME);
+        connections[playerAddress].emit(events.START_GAME);
     }
 
     endGame(playerAddress) {
-        this.connections[playerAddress].emit(events.END_GAME);
+        connections[playerAddress].emit(events.END_GAME);
     }
     
     updateView(playerAddress) {
-        this.connections[playerAddress].emit(events.UPDATE_VIEW);
+        connections[playerAddress].emit(events.UPDATE_VIEW);
     };
 
     updateLobby(playerAddress, playerList) {
-        // this.connections[playerAddress].emit(events.UPDATE_LOBBY, playerList);
+        connections[playerAddress].emit(events.UPDATE_LOBBY, playerList);
     }
 
     ping(playerAddress) {
-        this.connections[playerAddress].emit(events.PING);
+        connections[playerAddress].emit(events.PING);
     };
 
     beginRound(playerAddress, sheet) {
-        this.connections[playerAddress].emit(events.BEGIN_ROUND, sheet);
+        connections[playerAddress].emit(events.BEGIN_ROUND, sheet);
     };
 
     getAnswer(playerAddress) {
         // TODO: figure out logic and return the sheet
-        this.connections[playerAddress].emit(events.getAnswer);
-        this.connections[playerAddress].on(events.GET_ANSWER, (sheet) => {
+        connections[playerAddress].emit(events.getAnswer);
+        connections[playerAddress].on(events.GET_ANSWER, (sheet) => {
             
         });
         
     };
 
     addGameController(lobbyId, gameController) {
-        this.gameControllers[lobbyId] = gameController;
+        gameControllers[lobbyId] = gameController;
     }
 
     removeGameController(lobbyId) {
-        delete this.gameControllers[lobbyId];
+        delete gameControllers[lobbyId];
     }
 }
 
