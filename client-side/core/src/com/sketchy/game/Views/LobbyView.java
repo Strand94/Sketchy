@@ -28,7 +28,8 @@ public class LobbyView extends View {
         Label gameidLabel = new Label("LobbyID:"+" "+ Integer.toString(lobbyID), uiSkin);
         gameidLabel.setColor(Color.CYAN);
         startGame = new TextButton("Start Game", uiSkin);
-        numberOfPlayers = new Label(game.getClientController().getPlayerCount()+ "/" + Integer.toString(game.MAX_PLAYERS), uiSkin);
+        numberOfPlayers = new Label(game.getClientController().getPlayerCount()+ "/" +
+                Integer.toString(game.getClientController().MAX_PLAYERS), uiSkin);
 
         table.add(gameidLabel);
         table.row();
@@ -62,7 +63,7 @@ public class LobbyView extends View {
         }
         System.out.println("");
 
-        numberOfPlayers.setText(players.size() + "/" + game.MAX_PLAYERS);
+        numberOfPlayers.setText(players.size() + "/" + game.getClientController().MAX_PLAYERS);
 
     }
 
