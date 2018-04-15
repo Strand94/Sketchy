@@ -59,8 +59,12 @@ public class ClientController {
 
     public void setView(View view){
         game.setScreen(view);
-        this.view.dispose();
+        
+        if (this.view != null) {
+            this.view.dispose();
+        }
         this.view = view;
+
         System.out.println("SetView:" + view);
 
     }
