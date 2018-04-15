@@ -32,6 +32,12 @@ class LobbyController {
             var player = new Player(playerName, playerAdress)
             this.lobbies[lobbyId].addPlayer(player);
             this.playerinLobby[player] = lobbyId;
+            
+            var playerList = this.lobbies[lobbyId].getPlayers();
+            playerList.forEach(player => {
+                this.communicator.updateLobby(playerAdress, playerList);
+            });
+
             return true;
         }
         return false;
@@ -45,6 +51,8 @@ class LobbyController {
             this.lobbies[lobbyId] = lobby;
             this.playerinLobby[player] = lobbyId;
             this.players[playerAdress] = player;
+
+            this.communicator.updateLobby(playerAdress, [player]);
 
             console.log("Lobby %d created", lobbyId);
         } 
@@ -61,7 +69,7 @@ class LobbyController {
         this.idStack.push(lobbyId);
         this.communicator.removeGameController(lobbyId);
 
-        console.log("Lobby %d closed", lobby.lobbyId);
+        console.log("Lobby %d closed", lobbyId);
     }
     playerDisconnected(playerAdress) {
         if (this.players.hasOwnProperty(playerAdress)) {    // player has joined a lobby

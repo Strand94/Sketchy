@@ -1,4 +1,4 @@
-const Game = require("./game");
+const Game = require("../models/game");
 
 class GameController {
     constructor(lobby, communicator) {
