@@ -2,6 +2,7 @@ package com.sketchy.game.Controllers;
 
 import com.sketchy.game.Models.Player;
 import com.sketchy.game.SketchyGame;
+import com.sketchy.game.Views.DrawView;
 import com.sketchy.game.Views.JoinView;
 import com.sketchy.game.Views.LobbyView;
 import com.sketchy.game.Views.View;
@@ -17,6 +18,15 @@ public class ClientController {
     private Communicator communicator;
     private View view;
 
+    public int getPlayerCount() {
+        return playerCount;
+    }
+
+    public void setPlayerCount(int playerCount) {
+        this.playerCount = playerCount;
+    }
+
+    private int playerCount = 0;
 
     public ClientController(SketchyGame game) {
         this.game = game;
@@ -36,6 +46,8 @@ public class ClientController {
     }
 
     public void updateLobby(List<String> names){
+        setPlayerCount(names.size());
+
         if (view instanceof LobbyView){
             ((LobbyView) view).updatePlayerList(names);
         }

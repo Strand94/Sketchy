@@ -9,24 +9,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.SketchyGame;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class LobbyView extends View {
-    final SketchyGame game;
+    SketchyGame game;
 
     TextButton startGame;
     float remaining = 5;
     boolean startGame_r = false;
-    int playerCount = 0;
     Label numberOfPlayers;
     Table buttonTable;
     Table player_table = new Table();
-
-
-    List<String> newPlayers = new ArrayList<String>(); // for testing only
 
     public LobbyView(SketchyGame game, int lobbyID) {
         this.game = game;
@@ -34,7 +28,7 @@ public class LobbyView extends View {
         Label gameidLabel = new Label("LobbyID:"+" "+ Integer.toString(lobbyID), uiSkin);
         gameidLabel.setColor(Color.CYAN);
         startGame = new TextButton("Start Game", uiSkin);
-        numberOfPlayers = new Label(playerCount+"/8", uiSkin);
+        numberOfPlayers = new Label(game.getClientController().getPlayerCount()+ "/" + Integer.toString(game.MAX_PLAYERS), uiSkin);
 
         table.add(gameidLabel);
         table.row();
