@@ -74,7 +74,7 @@ public class Communicator {
         socket.on(UPDATE_LOBBY.toString(), new Listener() {
             @Override
             public void call(Object... args) {
-                onUpdateLobby((List<String>) args[0]);
+                onUpdateLobby((int) args[0], (List<String>) args[1]);
             }
         });
         socket.on(BEGIN_ROUND.toString(), new Listener() {
@@ -116,8 +116,8 @@ public class Communicator {
         clientController.updateView();
     }
 
-    private void onUpdateLobby(List<String> members) {
-        clientController.updateLobby(members);
+    private void onUpdateLobby(int lobbyId, List<String> members) {
+        clientController.updateLobby(lobbyId, members);
     }
 
     private void onBeginRound(Notepad notepad) {

@@ -53,7 +53,7 @@ class LobbyController {
             this.playerinLobby[player] = lobbyId;
             this.players[playerAddress] = player;
 
-            this.communicator.updateLobby(playerAddress, [player]);
+            this.communicator.updateLobby(playerAddress, lobbyId, [player]);
 
             console.log("Lobby %d created", lobbyId);
         } 

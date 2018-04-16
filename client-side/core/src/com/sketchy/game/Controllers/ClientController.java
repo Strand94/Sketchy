@@ -79,12 +79,12 @@ public class ClientController {
         game.setScreen(new LobbyView(game, this.lobbyId));
     }
 
-    public void updateLobby(List<String> names){
-        System.out.println("clientController.updateLobby() -> " + names.size());
-        setPlayerCount(names.size());
+    public void updateLobby(int lobbyId, List<String> players){
+        System.out.println("clientController.updateLobby() -> " + players.size());
+        setPlayerCount(players.size());
 
         if (view instanceof LobbyView){
-            ((LobbyView) view).updatePlayerList(names);
+            ((LobbyView) view).updatePlayerList(players);
         }
 
     }
