@@ -2,6 +2,7 @@ package com.sketchy.game.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -10,16 +11,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.SketchyGame;
 
+import java.util.Stack;
+
 public class GuessView extends View {
+    final SketchyGame game;
+    Stack<DrawView.Dots> drawing;
 
-    private SketchyGame game;
+    // Renderer
+    private ShapeRenderer shapeRenderer;
 
-    public GuessView(SketchyGame game) {
+    public GuessView(SketchyGame game, Stack<DrawView.Dots> drawing) {
         this.game = game;
+        this.drawing = drawing;
 
-        TextField guessField;
-        Label header;
-        TextButton send;
+        shapeRenderer = new ShapeRenderer();
 
         // Header
         header = new Label("Wat is dis?", uiSkin);
@@ -56,6 +61,13 @@ public class GuessView extends View {
         super.render(delta);
         Gdx.gl.glClearColor(49.0f/256, 176.0f/256, 213.0f/256, 1);
         Gdx.input.setCatchBackKey(true);
+
+        for (DrawView.Dots dot : drawing) {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(dot.color);
+            shapeRenderer.circle(dot.position.x, screenHeight - dot.position.y, dot.radius);
+            shapeRenderer.end();
+        }
     }
 
     @Override
