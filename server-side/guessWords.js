@@ -20,7 +20,7 @@ const gw = [
 	"et bankran",
 	"coechella",
 	"drita rita",
-	"en vakker sommerkveld"
+	"en vakker sommerkveld",
 ];
 		
 module.exports = gw;

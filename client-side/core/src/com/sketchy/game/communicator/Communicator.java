@@ -2,6 +2,7 @@ package com.sketchy.game.communicator;
 
 import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
+import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Sheet;
 
 import org.json.JSONException;
@@ -83,8 +84,8 @@ public class Communicator {
         serverEventMap.put(BEGIN_ROUND, new Listener() {
             @Override
             public void call(Object... args) {
-                Sheet sheet = (Sheet) args[0];
-                onBeginRound(sheet);
+                Notepad notepad = (Notepad) args[0];
+                onBeginRound(notepad);
             }
         });
         serverEventMap.put(GET_ANSWER, new Listener() {
@@ -132,8 +133,8 @@ public class Communicator {
         clientController.updateLobby(members);
     }
 
-    private void onBeginRound(Sheet sheet) {
-        clientController.beginRound(sheet);
+    private void onBeginRound(Notepad notepad) {
+        clientController.beginRound(notepad);
     }
 
     private void onGetAnswer() {

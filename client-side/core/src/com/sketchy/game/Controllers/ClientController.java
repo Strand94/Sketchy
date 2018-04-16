@@ -1,5 +1,6 @@
 package com.sketchy.game.Controllers;
 
+import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Player;
 import com.sketchy.game.SketchyGame;
 import com.sketchy.game.Views.JoinView;
@@ -47,7 +48,7 @@ public class ClientController {
 
     }
 
-    public void beginRound(Sheet sheet){
+    public void beginRound(Notepad notepad){
 
     }
 

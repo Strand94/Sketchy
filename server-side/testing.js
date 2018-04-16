@@ -2,15 +2,22 @@ const GameController = require('./controllers/gameController');
 const LobbyController = require('./controllers/lobbyController');
 const Game = require("./models/game");
 const Player = require("./models/player");
+const Notepad = require("./models/notepad");
 
-var players = [];
-for (let i = 0; i<8; i++) {
-	players.push(new Player(i.toString(), i.toString()));
-}
-
-const game = new Game(players);
 
 const lobbyController = new LobbyController();
-lobbyController.createLobby("per", "1337");
-lobbyController.joinLobby("ola", "100");
-lobbyController.playerDisconnected("1337");
+lobbyController.createLobby("per");
+
+players = []
+for (let i = 0; i<7; i++) {
+	let player = new Player(i.toString(), i.toString());
+	players.push(player);
+	lobbyController.joinLobby(0, player);
+}
+
+lobbyController.startGame(0);
+var gameController = lobbyController.lobbies[0].gameController;
+
+for (let i = 0; i<7; i++) {
+	gameController.recieveNotepad(new Notepad(i.toString(), players[i]));
+}
