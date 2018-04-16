@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.sketchy.game.SketchyGame;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
+import java.util.List;
 import java.util.Stack;
 
 public class DrawView extends View {
@@ -145,5 +146,7 @@ public class DrawView extends View {
 
     private void loadAssets(){}
 
-    public void getDrawing() {} // TODO
+    public List<Dots> getDrawing() {
+        return drawing;
+    }
 }
