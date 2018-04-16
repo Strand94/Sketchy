@@ -13,8 +13,6 @@ public class SketchyGame extends Game {
     public BitmapFont font;
     private ClientController clientController;
 
-    public int MAX_PLAYERS = 8;
-
     @Override
     public void create() {
         font = new BitmapFont(); // Use default Arial font

@@ -24,6 +24,9 @@ public class DrawView extends View {
     private float current_radius = 5.0f;
     private Color current_color = new Color(224.0f/256, 224.0f/256, 224.0f/256, 1);
 
+    private Float lastX = null;
+    private Float lastY = null;
+
     /**
      * A drawing consists of a stack of colored circles (Dots)
      */
@@ -71,10 +74,25 @@ public class DrawView extends View {
      * Drawing consists of lots of Dots.
      */
     private void Draw(){
-        if(Gdx.input.isTouched()){
+        if (Gdx.input.isTouched()) {
             float x = Gdx.input.getX();
             float y = Gdx.input.getY();
-            drawing.add(new Dots(current_radius, new Vector2(x, y), current_color));
+            if (lastX != null && lastY != null && (x != lastX || y != lastY)) {
+                int nDots = (int) Math.sqrt(Math.pow(y - lastY, 2) + Math.pow(x - lastX, 2)) - 1;
+                float dX = (x - lastX) / nDots;
+                float dY = (y - lastY) / nDots;
+                for (int i = 0; i < nDots; i += 3) {
+                    lastX += 3 * dX;
+                    lastY += 3 * dY;
+                    drawing.add( new Dots(current_radius, new Vector2(lastX, lastY), current_color));
+                }
+                drawing.add(new Dots(current_radius, new Vector2(x, y), current_color));
+            }
+            lastX = x;
+            lastY = y;
+        } else {
+            lastX = null;
+            lastY = null;
         }
     }
 
