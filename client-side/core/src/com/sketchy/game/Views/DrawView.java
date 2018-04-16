@@ -2,13 +2,13 @@ package com.sketchy.game.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.SketchyGame;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 import java.util.List;
 import java.util.Stack;
@@ -16,11 +16,11 @@ import java.util.Stack;
 public class DrawView extends View {
 
     final SketchyGame game;
-    private OrthographicCamera camera;
 
     // Rendering
     private ShapeRenderer shapeRenderer;
 
+    // Drawing
     private Stack<Dots> drawing;
     private float current_radius = 5.0f;
     private Color current_color = new Color(224.0f/256, 224.0f/256, 224.0f/256, 1);
@@ -32,7 +32,7 @@ public class DrawView extends View {
      * A drawing consists of a stack of colored circles (Dots)
      */
     public class Dots {
-        private float radius;
+        float radius;
         Vector2 position;
         Color color;
 
@@ -59,15 +59,29 @@ public class DrawView extends View {
         this.loadAssets();
 
         Label guessWord = new Label("Elephant", uiSkin);
-        table.add(guessWord).top().expand().padTop(20);
 
-        // Camera
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, screenWidth, screenHeight);
+        // Buttons
+        TextButton submit = new TextButton("Submit", uiSkin);
+
+        // Add to table
+        table.add(guessWord).top().expand().padTop(20);
+        table.add(submit).bottom().expandX();
+
+        // Listeners
+        submit.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                OnSubmit();
+            }
+        });
 
         // Drawing initialization
         drawing = new Stack<Dots>();
         shapeRenderer = new ShapeRenderer();
+    }
+
+    private void OnSubmit() {
+        game.getClientController().setView(new GuessView(game, drawing));
     }
 
     /**
@@ -118,9 +132,6 @@ public class DrawView extends View {
     public void render(float delta){
         super.render(delta);
         Gdx.gl.glClearColor(41.0f/256, 45.0f/256, 50.0f/256, 1);
-
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
 
         Draw();
 
