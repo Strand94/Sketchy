@@ -3,13 +3,11 @@ package com.sketchy.game.communicator;
 import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Notepad;
-import com.sketchy.game.Models.Sheet;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.List;
 
 import io.socket.client.IO;
@@ -20,18 +18,17 @@ import static com.sketchy.game.communicator.Event.*;
 
 public class Communicator {
     private Socket socket;
-    private HashMap<Event, Listener> serverEventMap;
     private ClientController clientController;
 
     public Communicator(ClientController clientController) {
         connect(false);
-        populateServerEventMap();
+        setServerEvents();
         this.clientController = clientController;
     }
 
     public Communicator(ClientController clientController, boolean local) {
         connect(local);
-        populateServerEventMap();
+        setServerEvents();
         this.clientController = clientController;
     }
 
@@ -55,66 +52,56 @@ public class Communicator {
 
     // Receive events from server:
 
-    private void populateServerEventMap() {
-        serverEventMap = new HashMap<>();
-        serverEventMap.put(START_GAME, new Listener() {
+    private void setServerEvents() {
+        socket.on(START_GAME.toString(), new Listener() {
             @Override
             public void call(Object... args) {
                 onStartGame();
             }
         });
-        serverEventMap.put(END_GAME, new Listener() {
+        socket.on(END_GAME.toString(), new Listener() {
             @Override
             public void call(Object... args) {
                 onEndGame();
             }
         });
-        serverEventMap.put(UPDATE_VIEW, new Listener() {
+        socket.on(UPDATE_VIEW.toString(), new Listener() {
             @Override
             public void call(Object... args) {
                 onUpdateView();
             }
         });
-        serverEventMap.put(UPDATE_LOBBY, new Listener() {
+        socket.on(UPDATE_LOBBY.toString(), new Listener() {
             @Override
             public void call(Object... args) {
                 onUpdateLobby((List<String>) args[0]);
             }
         });
-        serverEventMap.put(BEGIN_ROUND, new Listener() {
+        socket.on(BEGIN_ROUND.toString(), new Listener() {
             @Override
             public void call(Object... args) {
                 Notepad notepad = (Notepad) args[0];
                 onBeginRound(notepad);
             }
         });
-        serverEventMap.put(GET_ANSWER, new Listener() {
+        socket.on(GET_ANSWER.toString(), new Listener() {
             @Override
             public void call(Object... args) {
                 onGetAnswer();
             }
         });
-        serverEventMap.put(PING, new Listener() {
+        socket.on(PING.toString(), new Listener() {
             @Override
             public void call(Object... args) {
                 onPing();
             }
         });
-        serverEventMap.put(SOCKET_ID, new Listener() {
+        socket.on(SOCKET_ID.toString(), new Listener() {
             @Override
             public void call(Object... args) {
                 onSocketId((JSONObject) args[0]);
             }
         });
-    }
-
-
-    private void startListening(Event... events) {
-        for (Event event : events) socket.on(event.toString(), serverEventMap.get(event));
-    }
-
-    private void stopListening(Event... events) {
-        for (Event event : events) socket.off(event.toString());
     }
 
     private void onStartGame() {
