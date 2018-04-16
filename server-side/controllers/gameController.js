@@ -15,7 +15,17 @@ class GameController {
     }
 
     startGame() {
-        this.game = new Game();
+        this.game = new Game(this.lobby.getPlayers);
+    }
+
+    // "private" functions
+
+    sendNotepads() {
+        
+    }
+
+    recieveNotepad() {
+
     }
 }
 
