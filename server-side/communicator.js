@@ -44,7 +44,7 @@ class Communicator {
                 })
                 .on(events.CREATE_LOBBY, (obj) => {
                     connections[socket.id] = socket;
-                    lobbyController.createLobby(obj.playerName);
+                    lobbyController.createLobby(obj.playerName, obj.playerAddress);
                 })
                 .on(events.START_GAME, (obj) => {
                     lobbyController.startGame(obj.lobbyId);
