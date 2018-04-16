@@ -1,14 +1,10 @@
 const Sheet = require("./sheet");
 
 class Drawing extends Sheet {
-    constructor() {
+    constructor(objectiveWord, player) {
         super();
-        this.player = null;
-        this.drawingObjective = null;
-        this.answer = null;
-    }
-    getPlayer() {
-        return this.player;
+        this.objectiveWord = objectiveWord;
+        this.player = player;
     }
 }
 

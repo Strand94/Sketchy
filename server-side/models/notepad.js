@@ -3,17 +3,23 @@ const config = require("../config");
 class Notepad {
 	constructor(originalWord, route) {
 		this.originalWord = originalWord;
-		this.sheets = new Array(config.maxGameSize);
+		this.sheets = [];
 		this.route = route;
 	}
-	pushSheet(sheet) {
-		sheets.push(sheet);
+	push(sheet) {
+		this.sheets.push(sheet);
 	}
-	popSheet() {
+	pop() {
 		return this.sheets.pop();
 	}
 	nextOnRoute() {
 		return this.route.pop();
+	}
+	routeIsFinished() {
+		return (this.route.length < 1);
+	}
+	hasNoSheets() {
+		return (this.sheets.length < 1);	// no sheets on notepad
 	}
 }
 

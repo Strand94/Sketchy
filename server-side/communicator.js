@@ -52,46 +52,55 @@ class Communicator {
                 .on(events.END_GAME, (obj) => {
                     gameControllers[obj.lobbyId].endGame;
                 })
-                .on(events.GET_ANSWER, (obj) => {
-
-                })
-
         });
     }
 
     startGame(playerAddress) {
-        connections[playerAddress].emit(events.START_GAME);
+        if (typeof connections[playerAddress] === 'undefined') {
+            console.log("player with address %s not registered", playerAddress);
+        } else {
+            connections[playerAddress].emit(events.START_GAME);
+        }
     }
 
     endGame(playerAddress) {
-        connections[playerAddress].emit(events.END_GAME);
+        if (typeof connections[playerAddress] === 'undefined') {
+            console.log("player with address %s not registered", playerAddress);
+        } else {
+            connections[playerAddress].emit(events.END_GAME);
+        }
     }
     
     updateView(playerAddress) {
-        connections[playerAddress].emit(events.UPDATE_VIEW);
+        if (typeof connections[playerAddress] === 'undefined') {
+            console.log("player with address %s not registered", playerAddress);
+        } else {
+            connections[playerAddress].emit(events.UPDATE_VIEW);
+        }
     };
 
     updateLobby(playerAddress, playerList) {
-        console.log("connections: " + connections);
-        console.log("connections[playerAddress]: " + connections[playerAddress]);
-        connections[playerAddress].emit(events.UPDATE_LOBBY, playerList);
+        if (typeof connections[playerAddress] === 'undefined') {
+            console.log("player with address %s not registered", playerAddress);
+        } else {
+            connections[playerAddress].emit(events.UPDATE_LOBBY, playerList);
+        }
     }
 
     ping(playerAddress) {
-        connections[playerAddress].emit(events.PING);
+        if (typeof connections[playerAddress] === 'undefined') {
+            console.log("player with address %s not registered", playerAddress);
+        } else {
+            connections[playerAddress].emit(events.PING);
+        }
     };
 
-    beginRound(playerAddress, sheet) {
-        connections[playerAddress].emit(events.BEGIN_ROUND, sheet);
-    };
-
-    getAnswer(playerAddress) {
-        // TODO: figure out logic and return the sheet
-        connections[playerAddress].emit(events.getAnswer);
-        connections[playerAddress].on(events.GET_ANSWER, (sheet) => {
-            
-        });
-        
+    beginRound(playerAddress, notepad) {
+        if (typeof connections[playerAddress] === 'undefined') {
+            console.log("player with address %s not registered", playerAddress);
+        } else {
+            connections[playerAddress].emit(events.BEGIN_ROUND, notepad);
+        }
     };
 
     addGameController(lobbyId, gameController) {
@@ -99,7 +108,7 @@ class Communicator {
     }
 
     removeGameController(lobbyId) {
-        delete gameControllers[lobbyId];
+        if (gameControllers[lobbyId]) delete gameControllers[lobbyId];
     }
 }
 
