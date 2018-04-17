@@ -1,13 +1,21 @@
 package com.sketchy.game.communicator;
 
+import com.google.gson.Gson;
+
+import com.google.gson.reflect.TypeToken;
 import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Notepad;
+import com.sketchy.game.Models.Player;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import io.socket.client.IO;
@@ -15,6 +23,7 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter.Listener;
 
 import static com.sketchy.game.communicator.Event.*;
+import static com.sketchy.game.communicator.JSONTranslator.*;
 
 public class Communicator {
     private Socket socket;
@@ -24,6 +33,7 @@ public class Communicator {
         connect(false);
         setServerEvents();
         this.clientController = clientController;
+
     }
 
     public Communicator(ClientController clientController, boolean local) {
@@ -74,7 +84,8 @@ public class Communicator {
         socket.on(UPDATE_LOBBY.toString(), new Listener() {
             @Override
             public void call(Object... args) {
-                onUpdateLobby((int) args[0], (List<String>) args[1]);
+                onUpdateLobby((int) args[0], jsonToPlayerList(args[1]));
+
             }
         });
         socket.on(BEGIN_ROUND.toString(), new Listener() {
@@ -116,7 +127,7 @@ public class Communicator {
         clientController.updateView();
     }
 
-    private void onUpdateLobby(int lobbyId, List<String> members) {
+    private void onUpdateLobby(int lobbyId, List<Player> members) {
         clientController.updateLobby(lobbyId, members);
     }
 
@@ -220,6 +231,32 @@ public class Communicator {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private List<Player> jsonToPlayerList(Object json)  {
+        try {
+            Type listType = new TypeToken<List<Player>>() {}.getType();
+            Gson gson = new Gson();
+            return gson.fromJson(json.toString(), listType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String playerListToString(ArrayList<Player> players) {
+        // TODO: test this
+        try {
+            Type listType = new TypeToken<List<Player>>() {}.getType();
+            final List<Player> target = new LinkedList<>();
+            target.addAll(players);
+
+            Gson gson = new Gson();
+            return gson.toJson(target, listType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

@@ -52,7 +52,7 @@ public class JSONTranslator {
         return list;
     }
 
-    private static Object fromJson(Object json) throws JSONException {
+    public static Object fromJson(Object json) throws JSONException {
         if (json == JSONObject.NULL) {
             return null;
         } else if (json instanceof JSONObject) {

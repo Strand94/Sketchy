@@ -10,6 +10,7 @@ import com.sketchy.game.Views.View;
 import com.sketchy.game.Models.Sheet;
 import com.sketchy.game.communicator.Communicator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientController {
@@ -79,12 +80,18 @@ public class ClientController {
         game.setScreen(new LobbyView(game, this.lobbyId));
     }
 
-    public void updateLobby(int lobbyId, List<String> players){
+    public void updateLobby(int lobbyId, List<Player> players){
+        // TODO: adjust to Players
         System.out.println("clientController.updateLobby() -> " + players.size());
         setPlayerCount(players.size());
 
+        List<String> names = new ArrayList<>();
+        for (Player player : players) {
+            names.add(player.getName());
+        }
+
         if (view instanceof LobbyView){
-            ((LobbyView) view).updatePlayerList(players);
+            ((LobbyView) view).updatePlayerList(names);
         }
 
     }
