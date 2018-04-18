@@ -84,7 +84,7 @@ public class Communicator {
         socket.on(UPDATE_LOBBY.toString(), new Listener() {
             @Override
             public void call(Object... args) {
-                onUpdateLobby((int) args[0], jsonToPlayerList(args[1]));
+                onUpdateLobby((int) args[0], jsonToPlayerList(args[1]));    // lobbyID, playerList
 
             }
         });
@@ -234,6 +234,7 @@ public class Communicator {
     }
 
     private List<Player> jsonToPlayerList(Object json)  {
+        // Source: http://www.javadoc.io/doc/com.google.code.gson/gson/2.8.2
         try {
             Type listType = new TypeToken<List<Player>>() {}.getType();
             Gson gson = new Gson();
