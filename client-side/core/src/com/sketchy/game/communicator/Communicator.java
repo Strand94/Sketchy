@@ -1,14 +1,12 @@
 package com.sketchy.game.communicator;
 
 import com.google.gson.Gson;
-
 import com.google.gson.reflect.TypeToken;
 import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Player;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +21,6 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter.Listener;
 
 import static com.sketchy.game.communicator.Event.*;
-import static com.sketchy.game.communicator.JSONTranslator.*;
 
 public class Communicator {
     private Socket socket;

@@ -2,12 +2,11 @@ package com.sketchy.game.Controllers;
 
 import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Player;
+import com.sketchy.game.Models.Sheet;
 import com.sketchy.game.SketchyGame;
 import com.sketchy.game.Views.DrawView;
-import com.sketchy.game.Views.JoinView;
 import com.sketchy.game.Views.LobbyView;
 import com.sketchy.game.Views.View;
-import com.sketchy.game.Models.Sheet;
 import com.sketchy.game.communicator.Communicator;
 
 import java.util.ArrayList;

@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.SketchyGame;
-import java.util.List;
 
+import java.util.List;
 
 public class LobbyView extends View {
     SketchyGame game;

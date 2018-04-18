@@ -1,5 +1,3 @@
-const config = require("../config");
-
 class Notepad {
 	constructor(originalWord, route) {
 		this.originalWord = originalWord;

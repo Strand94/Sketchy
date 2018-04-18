@@ -1,7 +1,6 @@
 const config = require("../config");
 const Player = require("../models/player");
 const Lobby = require("../models/lobby");
-const Game = require("../models/game");
 const Communicator = require("../communicator");
 
 class LobbyController {

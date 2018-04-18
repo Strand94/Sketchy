@@ -1,7 +1,5 @@
 package com.sketchy.game.Models;
 
-import com.sketchy.game.Models.Player;
-
 import java.awt.image.BufferedImage;
 
 public class Guess extends Sheet {
