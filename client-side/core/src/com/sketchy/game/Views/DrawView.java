@@ -22,8 +22,8 @@ public class DrawView extends View {
 
     // Drawing
     private Stack<Dots> drawing;
-    private float current_radius = 5.0f;
-    private Color current_color = new Color(224.0f/256, 224.0f/256, 224.0f/256, 1);
+    private float currentRadius = 5.0f;
+    private Color currentColor = new Color(224.0f/256, 224.0f/256, 224.0f/256, 1);
 
     private Float lastX = null;
     private Float lastY = null;
@@ -71,7 +71,7 @@ public class DrawView extends View {
         submit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                OnSubmit();
+                onSubmit();
             }
         });
 
@@ -80,7 +80,7 @@ public class DrawView extends View {
         shapeRenderer = new ShapeRenderer();
     }
 
-    private void OnSubmit() {
+    private void onSubmit() {
         game.getClientController().setView(new GuessView(game, drawing));
     }
 
@@ -88,7 +88,7 @@ public class DrawView extends View {
      * Add colored Circle (Dot) at position of user input
      * Drawing consists of lots of Dots.
      */
-    private void Draw(){
+    private void draw(){
         if (Gdx.input.isTouched()) {
             float x = Gdx.input.getX();
             float y = Gdx.input.getY();
@@ -99,9 +99,9 @@ public class DrawView extends View {
                 for (int i = 0; i < nDots; i += 3) {
                     lastX += 3 * dX;
                     lastY += 3 * dY;
-                    drawing.add( new Dots(current_radius, new Vector2(lastX, lastY), current_color));
+                    drawing.add( new Dots(currentRadius, new Vector2(lastX, lastY), currentColor));
                 }
-                drawing.add(new Dots(current_radius, new Vector2(x, y), current_color));
+                drawing.add(new Dots(currentRadius, new Vector2(x, y), currentColor));
             }
             lastX = x;
             lastY = y;
@@ -114,7 +114,7 @@ public class DrawView extends View {
     /**
      * Render ALL the Dots!
      */
-    private void RenderDrawing(){
+    private void renderDrawing(){
         for (Dots dot : drawing) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(dot.color);
@@ -133,10 +133,10 @@ public class DrawView extends View {
         super.render(delta);
         Gdx.gl.glClearColor(41.0f/256, 45.0f/256, 50.0f/256, 1);
 
-        Draw();
+        draw();
 
         game.batch.begin();
-        RenderDrawing();
+        renderDrawing();
         game.batch.end();
     }
 

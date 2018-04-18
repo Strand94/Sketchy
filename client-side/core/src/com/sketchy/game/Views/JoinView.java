@@ -49,7 +49,7 @@ public class JoinView extends View {
         join.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                OnJoin();
+                onJoin();
             }
         });
     }
@@ -99,10 +99,10 @@ public class JoinView extends View {
             }
         }
 
-    private void OnJoin() {
+    private void onJoin() {
         System.out.println("Join Game");
         if (validLobbyId(lobbyField.getText())) {
-            game.getClientController().JoinLobby(Integer.parseInt(lobbyField.getText()), game.getClientController().getPlayer().getName());
+            game.getClientController().joinLobby(Integer.parseInt(lobbyField.getText()), game.getClientController().getPlayer().getName());
         } else {
             //TODO: Add alert box to notify invalid lobby id
             System.out.println("Invalid LobbyID");

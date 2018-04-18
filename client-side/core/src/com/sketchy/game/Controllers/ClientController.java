@@ -63,17 +63,17 @@ public class ClientController {
 
     //=========== LOBBY ==============\\
 
-    public void CreateLobby(String playername){
-        System.out.println(String.format("clientController.CreateLobby('%s')", playername));
-        communicator.createLobby(playername);
+    public void createLobby(String playerName){
+        System.out.println(String.format("clientController.createLobby('%s')", playerName));
+        communicator.createLobby(playerName);
 
         //Todo: Check if it's OK to change view
         game.getClientController().setView(new LobbyView(game, this.lobbyId));
     }
 
-    public void JoinLobby(int lobbyId, String playername){
-        System.out.println("clientController.JoinLobby() -> " + lobbyId + playername);
-        communicator.joinLobby(lobbyId, playername);
+    public void joinLobby(int lobbyId, String playerName){
+        System.out.println("clientController.joinLobby() -> " + lobbyId + playerName);
+        communicator.joinLobby(lobbyId, playerName);
 
         //Todo: Check if it's OK to change view
         game.setScreen(new LobbyView(game, this.lobbyId));

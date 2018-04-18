@@ -20,7 +20,7 @@ public class LobbyView extends View {
     private boolean startGame_r = false;
     private Label numberOfPlayers;
     private Table buttonTable;
-    private Table player_table = new Table();
+    private Table playerTable = new Table();
 
     public LobbyView(SketchyGame game, int lobbyID) {
         this.game = game;
@@ -38,7 +38,7 @@ public class LobbyView extends View {
 
         table.setFillParent(true);
         stage.addActor(buttonTable);
-        table.add(player_table);
+        table.add(playerTable);
         buttonTable.add(startGame);
         buttonTable.row();
         buttonTable.add(numberOfPlayers);
@@ -46,15 +46,15 @@ public class LobbyView extends View {
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                OnGameStart();
+                onGameStart();
             }
         });
     }
 
     public void updatePlayerList(List<String> players) {
-        table.removeActor(player_table);
-        player_table = new Table();
-        table.add(player_table);
+        table.removeActor(playerTable);
+        playerTable = new Table();
+        table.add(playerTable);
 
         System.out.print("Adding players: ");
         for (String player : players) {
@@ -70,8 +70,8 @@ public class LobbyView extends View {
     private void addPerson(String name){
         Label playerName = new Label(name, uiSkin);
         playerName.setColor(Color.CYAN);
-        player_table.add(playerName);
-        player_table.row();
+        playerTable.add(playerName);
+        playerTable.row();
     }
 
     private void startGameCounter(){
@@ -100,7 +100,7 @@ public class LobbyView extends View {
         }
     }
 
-    private void OnGameStart(){
+    private void onGameStart(){
         game.getClientController().startGame();
     }
 

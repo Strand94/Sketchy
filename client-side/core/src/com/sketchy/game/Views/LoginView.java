@@ -53,14 +53,14 @@ public class LoginView extends View{
         join.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                OnJoin();
+                onJoin();
             }
         });
 
         create.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                OnCreate();
+                onCreate();
             }
         });
     }
@@ -93,18 +93,18 @@ public class LoginView extends View{
         super.dispose();
     }
 
-    private void OnJoin(){
+    private void onJoin(){
         System.out.println("Join Game");
 
         game.getClientController().setPlayer(new Player(nameField.getText()));
         game.getClientController().setView(new JoinView(game));
     }
 
-    private void OnCreate(){
+    private void onCreate(){
         System.out.println("Create Game");
 
         game.getClientController().setPlayer(new Player(nameField.getText()));
-        game.getClientController().CreateLobby(game.getClientController().getPlayer().getName());
+        game.getClientController().createLobby(game.getClientController().getPlayer().getName());
     }
 
 }
