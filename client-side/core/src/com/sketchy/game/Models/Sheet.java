@@ -11,10 +11,10 @@ public class Sheet {
      * And even more explanations to follow in consecutive
      * paragraphs separated by HTML paragraph breaks.
      *
-     * @param  variable Description text text text.
+     * @param variable Description text text text.
      * @return Description text text text.
      */
-    public void getPlayer(){
+    public void getPlayer() {
 
     }
 

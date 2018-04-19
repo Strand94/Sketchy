@@ -57,17 +57,18 @@ public class GuessView extends View {
         });
     }
 
-    void onSend(){
+    void onSend() {
         System.out.println(String.format("You have guessed %s. Nothing more will happen", getGuess()));
     }
 
     @Override
-    public void show(){}
+    public void show() {
+    }
 
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         super.render(delta);
-        Gdx.gl.glClearColor(49.0f/256, 176.0f/256, 213.0f/256, 1);
+        Gdx.gl.glClearColor(49.0f / 256, 176.0f / 256, 213.0f / 256, 1);
         Gdx.input.setCatchBackKey(true);
 
         for (DrawView.Dots dot : drawing) {
@@ -84,11 +85,11 @@ public class GuessView extends View {
     }
 
     @Override
-    public void dispose(){
+    public void dispose() {
         super.dispose();
     }
 
-    String getGuess(){
+    String getGuess() {
         return guessField.getText();
     }
 }

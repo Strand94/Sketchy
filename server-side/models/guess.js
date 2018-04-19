@@ -1,6 +1,6 @@
 const Sheet = require("./sheet");
 
-class Guess extends Sheet{
+class Guess extends Sheet {
     constructor(objectiveWord, drawing, player) {
         super();
         this.objectiveWord = objectiveWord;
@@ -9,9 +9,11 @@ class Guess extends Sheet{
 
         this.answer = null;
     }
+
     setAnswer(answer) {
         this.answer = answer;
     }
+
     getAnswer() {
         return this.answer;
     }

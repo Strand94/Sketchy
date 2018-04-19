@@ -43,13 +43,17 @@ public class ClientController {
         game.getClientController().setView(new DrawView(game));
     }
 
-    public void endGame() {}
+    public void endGame() {
+    }
 
-    public void updateView() {}
+    public void updateView() {
+    }
 
-    public void beginRound(Sheet sheet){}
+    public void beginRound(Sheet sheet) {
+    }
 
-    public void beginRound(Notepad notepad){}
+    public void beginRound(Notepad notepad) {
+    }
 
     public SketchyGame getGame() {
         return game;
@@ -59,10 +63,9 @@ public class ClientController {
     //=========== END GAME ==============\\
 
 
-
     //=========== LOBBY ==============\\
 
-    public void createLobby(String playerName){
+    public void createLobby(String playerName) {
         System.out.println(String.format("clientController.createLobby('%s')", playerName));
         communicator.createLobby(playerName);
 
@@ -70,7 +73,7 @@ public class ClientController {
         game.getClientController().setView(new LobbyView(game, this.lobbyId));
     }
 
-    public void joinLobby(int lobbyId, String playerName){
+    public void joinLobby(int lobbyId, String playerName) {
         System.out.println("clientController.joinLobby() -> " + lobbyId + playerName);
         communicator.joinLobby(lobbyId, playerName);
 
@@ -78,7 +81,7 @@ public class ClientController {
         game.setScreen(new LobbyView(game, this.lobbyId));
     }
 
-    public void updateLobby(int lobbyId, List<Player> players){
+    public void updateLobby(int lobbyId, List<Player> players) {
         // TODO: adjust to Players
         System.out.println("clientController.updateLobby() -> " + players.size());
         setPlayerCount(players.size());
@@ -88,13 +91,12 @@ public class ClientController {
             names.add(player.getName());
         }
 
-        if (view instanceof LobbyView){
+        if (view instanceof LobbyView) {
             ((LobbyView) view).updatePlayerList(names);
         }
 
     }
     //=========== END LOBBY ==============\\
-
 
 
     //=========== PLAYER ==============\\
@@ -110,13 +112,12 @@ public class ClientController {
     //=========== END PLAYER ==============\\
 
 
-
     //=========== VIEW ==============\\
     public View getView() {
         return view;
     }
 
-    public void setView(View view){
+    public void setView(View view) {
         game.setScreen(view);
 
         if (this.view != null) {
@@ -127,8 +128,6 @@ public class ClientController {
         System.out.println("*SetView:" + view);
     }
     //=========== END VIEW ==============\\
-
-
 
 
     public Communicator getCommunicator() {

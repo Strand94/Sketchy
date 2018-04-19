@@ -12,10 +12,11 @@ class LobbyController {
 
         // make unique id's
         this.idStack = new Array();
-        for (let i=9999; i>=0; i--) {
+        for (let i = 9999; i >= 0; i--) {
             this.idStack.push(i);
         }
     }
+
     hasLobby(lobbyId) {
         return this.lobbies.hasOwnProperty(lobbyId);
     }
@@ -27,12 +28,13 @@ class LobbyController {
         }
         return false;
     }
+
     joinLobby(lobbyId, playerName, playerAddress) {
         if (this.hasLobby(lobbyId)) {
             var player = new Player(playerName, playerAddress)
             this.lobbies[lobbyId].addPlayer(player);
             this.playerinLobby[player] = lobbyId;
-            
+
             var playerList = this.lobbies[lobbyId].getPlayers();
             playerList.forEach(player => {
                 this.communicator.updateLobby(playerAddress, playerList);
@@ -42,6 +44,7 @@ class LobbyController {
         }
         return false;
     }
+
     createLobby(playerName, playerAddress) {
         if (this.idStack.length > 0) {
             var player = new Player(playerName, playerAddress);
@@ -55,8 +58,9 @@ class LobbyController {
             this.communicator.updateLobby(playerAddress, lobbyId, [player]);
 
             console.log("Lobby %d created", lobbyId);
-        } 
+        }
     }
+
     closeLobby(lobbyId) {
         var players = this.lobbies[lobbyId].getPlayers();
 
@@ -71,20 +75,21 @@ class LobbyController {
 
         console.log("Lobby %d closed", lobbyId);
     }
+
     playerDisconnected(playerAddress) {
         if (this.players.hasOwnProperty(playerAddress)) {    // player has joined a lobby
             var player = this.players[playerAddress];
             var lobby = this.lobbies[this.playerinLobby[player]];
-    
+
             if (lobby.getPlayers().length < 2) {            // last member of lobby left
                 this.closeLobby(lobby.lobbyId);
             } else {
-                lobby.removePlayer(player);            
+                lobby.removePlayer(player);
             }
-    
+
             delete this.playerinLobby[player];
             delete this.players[playerAddress];
-            
+
         }
 
     }

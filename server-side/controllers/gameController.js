@@ -7,7 +7,7 @@ class GameController {
         this.communicator = communicator;
         communicator.addGameController(lobby.lobbyId, this);
     }
-    
+
     // "public" functions
 
     abortGame() {
@@ -25,7 +25,7 @@ class GameController {
             this.continueGame();
         }
     }
-    
+
     // "private" functions
 
     continueGame() {

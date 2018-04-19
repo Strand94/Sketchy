@@ -5,12 +5,14 @@ class Lobby {
         this.lobbyId = lobbyId;
         this.players = [lobbyMaster];
         this.lobbyMaster = lobbyMaster;
-        
+
         this.gameController = new GameController(this, communicator);
     }
+
     addPlayer(player) {
         this.players.push(player);
     }
+
     removePlayer(player) {
         var index = this.players.indexOf(player);
         if (index < 0) {
@@ -19,9 +21,11 @@ class Lobby {
         }
         return false;
     }
+
     startGame() {
         this.gameController.startGame();
     }
+
     getPlayers() {
         return this.players;
     }

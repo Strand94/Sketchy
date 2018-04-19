@@ -8,18 +8,23 @@ class Sheet {
     setPlayer(player) {
         this.player = player;
     }
+
     setDrawing(drawing) {
         this.drawing = drawing;
     }
+
     setObjectiveWord(word) {
         this.objectiveWord = word;
     }
+
     getPlayer() {
         return this.player;
     }
+
     getDrawing() {
         return this.drawing;
     }
+
     getObjectiveWord() {
         return this.objectiveWord;
     }

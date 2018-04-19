@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class View implements Screen{
+public class View implements Screen {
 
     final int screenWidth = Gdx.graphics.getWidth();
     final int screenHeight = Gdx.graphics.getHeight();
@@ -34,12 +34,12 @@ public class View implements Screen{
     }
 
     @Override
-    public void show(){
+    public void show() {
 
     }
 
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(delta);
@@ -48,31 +48,31 @@ public class View implements Screen{
     }
 
     @Override
-    public void resize(int width, int height){
+    public void resize(int width, int height) {
         stage.getCamera().viewportWidth = Gdx.graphics.getWidth();
         stage.getCamera().viewportHeight = Gdx.graphics.getHeight();
     }
 
     @Override
-    public void pause(){
+    public void pause() {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void resume(){
+    public void resume() {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void hide(){
+    public void hide() {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void dispose(){
+    public void dispose() {
         System.out.println("*Dispose: " + this);
         stage.dispose();
     }

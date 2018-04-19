@@ -15,11 +15,11 @@ import com.badlogic.gdx.utils.Scaling;
 import com.sketchy.game.Models.Player;
 import com.sketchy.game.SketchyGame;
 
-public class LoginView extends View{
+public class LoginView extends View {
     final SketchyGame game;
     TextField nameField;
 
-    public LoginView(final SketchyGame game){
+    public LoginView(final SketchyGame game) {
         this.game = game;
 
         // Header
@@ -66,17 +66,17 @@ public class LoginView extends View{
     }
 
     @Override
-    public void show(){
+    public void show() {
 
     }
 
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         super.render(delta);
-        Gdx.gl.glClearColor(68.0f/256, 117.0f/256, 180.0f/256, 1);
+        Gdx.gl.glClearColor(68.0f / 256, 117.0f / 256, 180.0f / 256, 1);
         Gdx.input.setCatchBackKey(true);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
             Gdx.app.exit();
         }
 
@@ -89,18 +89,18 @@ public class LoginView extends View{
     }
 
     @Override
-    public void dispose(){
+    public void dispose() {
         super.dispose();
     }
 
-    private void onJoin(){
+    private void onJoin() {
         System.out.println("Join Game");
 
         game.getClientController().setPlayer(new Player(nameField.getText()));
         game.getClientController().setView(new JoinView(game));
     }
 
-    private void onCreate(){
+    private void onCreate() {
         System.out.println("Create Game");
 
         game.getClientController().setPlayer(new Player(nameField.getText()));

@@ -10,7 +10,7 @@ class Game {
         this.notepads = [];
 
         // fills inn notepads with unique routes
-        for (let i = 0; i<this.players.length; i++) {
+        for (let i = 0; i < this.players.length; i++) {
             var clone = this.players.slice(0);
             this.notepads.push(
                 new Notepad(this.getWord(), clone)
@@ -28,7 +28,7 @@ class Game {
         } else {
             this.normalHandleNotepads();
             return false;
-        } 
+        }
     }
 
     getNotepads() {

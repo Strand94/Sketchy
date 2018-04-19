@@ -1,4 +1,4 @@
 module.exports = {
-	lobbiesCapacity: 100000,
-	maxGameSize: 8,
+    lobbiesCapacity: 100000,
+    maxGameSize: 8,
 };

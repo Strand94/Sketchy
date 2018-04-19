@@ -26,16 +26,16 @@ public class LobbyView extends View {
     public LobbyView(SketchyGame game, int lobbyID) {
         this.game = game;
 
-        Label gameidLabel = new Label("LobbyID:"+" "+ Integer.toString(lobbyID), uiSkin);
+        Label gameidLabel = new Label("LobbyID:" + " " + Integer.toString(lobbyID), uiSkin);
         gameidLabel.setColor(Color.CYAN);
         startGame = new TextButton("Start Game", uiSkin);
-        numberOfPlayers = new Label(game.getClientController().getPlayerCount()+ "/" +
+        numberOfPlayers = new Label(game.getClientController().getPlayerCount() + "/" +
                 Integer.toString(Config.MAX_PLAYERS), uiSkin);
 
         table.add(gameidLabel);
         table.row();
         buttonTable = new Table();
-        buttonTable.setPosition(screenWidth/2, screenHeight*0.1f);
+        buttonTable.setPosition(screenWidth / 2, screenHeight * 0.1f);
 
         table.setFillParent(true);
         stage.addActor(buttonTable);
@@ -68,14 +68,14 @@ public class LobbyView extends View {
 
     }
 
-    private void addPerson(String name){
+    private void addPerson(String name) {
         Label playerName = new Label(name, uiSkin);
         playerName.setColor(Color.CYAN);
         playerTable.add(playerName);
         playerTable.row();
     }
 
-    private void startGameCounter(){
+    private void startGameCounter() {
         startGame_r = true;
     }
 
@@ -87,9 +87,9 @@ public class LobbyView extends View {
     @Override
     public void render(float delta) {
         super.render(delta);
-        Gdx.gl.glClearColor(246.0f/256, 195.0f/256, 42.0f/256, 1);
+        Gdx.gl.glClearColor(246.0f / 256, 195.0f / 256, 42.0f / 256, 1);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
             game.setScreen(new LoginView(game));
         }
 
@@ -101,7 +101,7 @@ public class LobbyView extends View {
         }
     }
 
-    private void onGameStart(){
+    private void onGameStart() {
         game.getClientController().startGame();
     }
 

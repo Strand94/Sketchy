@@ -127,7 +127,7 @@ public class Communicator {
             JSONObject obj = new JSONObject();
             obj.put("id", socket.id());
             socket.emit("pingOK", obj);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -142,25 +142,31 @@ public class Communicator {
         private final String event;
         private final JSONObject obj;
         private Socket socket;
+
         private Emit(String eventName) {
             this.event = eventName;
             obj = new JSONObject();
         }
+
         static Emit event(Event event) {
             return new Emit(event.toString());
         }
+
         Emit to(Socket socket) {
             this.socket = socket;
             return Emit.this;
         }
+
         Emit with(String name, int value) throws JSONException {
             obj.put(name, value);
             return Emit.this;
         }
+
         Emit with(String name, String value) throws JSONException {
             obj.put(name, value);
             return Emit.this;
         }
+
         void send() {
             socket.emit(event, obj);
         }
@@ -190,7 +196,7 @@ public class Communicator {
         }
     }
 
-    public void joinLobby(int lobbyId, String playerName){
+    public void joinLobby(int lobbyId, String playerName) {
         try {
             Emit
                     .event(JOIN_LOBBY)
@@ -215,7 +221,7 @@ public class Communicator {
         }
     }
 
-    private List<Player> jsonToPlayerList(Object json)  {
+    private List<Player> jsonToPlayerList(Object json) {
         // Source: http://www.javadoc.io/doc/com.google.code.gson/gson/2.8.2
         try {
             Type listType = new TypeToken<List<Player>>() {}.getType();

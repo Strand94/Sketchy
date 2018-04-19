@@ -22,13 +22,13 @@ var gameControllers = {};   // maps lobbyId to gameController
 
 class Communicator {
     constructor(lobbyController) {
-        server.listen(process.env.PORT || 5000, function(){
+        server.listen(process.env.PORT || 5000, function () {
             console.log("Server listening on port %d", this.address().port);
         });
 
         this.lobbyController = lobbyController;
 
-        io.on('connection', function(socket) {
+        io.on('connection', function (socket) {
             console.log("Player Connected!");
             socket.emit(events);    // TODO: handle on java side
 
@@ -39,7 +39,7 @@ class Communicator {
                     console.log("Player disconnected");
                 })
                 .on(events.JOIN_LOBBY, (obj) => {
-                    connections[socket.id] = socket; 
+                    connections[socket.id] = socket;
                     lobbyController.joinLobby(obj.lobbyId, obj.playerName, socket.id);
                 })
                 .on(events.CREATE_LOBBY, (obj) => {
@@ -70,7 +70,7 @@ class Communicator {
             connections[playerAddress].emit(events.END_GAME);
         }
     }
-    
+
     updateView(playerAddress) {
         if (typeof connections[playerAddress] === 'undefined') {
             console.log("player with address %s not registered", playerAddress);

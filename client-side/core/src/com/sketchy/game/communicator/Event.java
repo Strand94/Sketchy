@@ -17,11 +17,12 @@ public enum Event {
     PING_OK("pingOK");
 
 
-
     private static final Map<String, Event> fromStringMap;
 
     // Maps event names to Event objects
-    public static class NoSuchEvent extends IllegalArgumentException {}
+    public static class NoSuchEvent extends IllegalArgumentException {
+    }
+
     static {
         fromStringMap = new HashMap<String, Event>(values().length);
         for (Event event : values()) fromStringMap.put(event.toString(), event);

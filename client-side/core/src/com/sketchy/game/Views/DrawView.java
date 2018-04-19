@@ -23,7 +23,7 @@ public class DrawView extends View {
     // Drawing
     private Stack<Dots> drawing;
     private float currentRadius = 5.0f;
-    private Color currentColor = new Color(224.0f/256, 224.0f/256, 224.0f/256, 1);
+    private Color currentColor = new Color(224.0f / 256, 224.0f / 256, 224.0f / 256, 1);
 
     private Float lastX = null;
     private Float lastY = null;
@@ -38,9 +38,10 @@ public class DrawView extends View {
 
         /**
          * Dot constructor. Remember to add it to your Stack of Dots
-         * @param radius Dot size
+         *
+         * @param radius   Dot size
          * @param position Remember to render at (x, screenHeight - y))
-         * @param color gdx.Graphics.Color
+         * @param color    gdx.Graphics.Color
          */
         public Dots(float radius, Vector2 position, Color color) {
             this.radius = radius;
@@ -50,10 +51,9 @@ public class DrawView extends View {
     }
 
     /**
-     *
      * @param game
      */
-    public DrawView(SketchyGame game){
+    public DrawView(SketchyGame game) {
         this.game = game;
 
         this.loadAssets();
@@ -88,7 +88,7 @@ public class DrawView extends View {
      * Add colored Circle (Dot) at position of user input
      * Drawing consists of lots of Dots.
      */
-    private void draw(){
+    private void draw() {
         if (Gdx.input.isTouched()) {
             float x = Gdx.input.getX();
             float y = Gdx.input.getY();
@@ -99,7 +99,7 @@ public class DrawView extends View {
                 for (int i = 0; i < nDots; i += 3) {
                     lastX += 3 * dX;
                     lastY += 3 * dY;
-                    drawing.add( new Dots(currentRadius, new Vector2(lastX, lastY), currentColor));
+                    drawing.add(new Dots(currentRadius, new Vector2(lastX, lastY), currentColor));
                 }
                 drawing.add(new Dots(currentRadius, new Vector2(x, y), currentColor));
             }
@@ -114,7 +114,7 @@ public class DrawView extends View {
     /**
      * Render ALL the Dots!
      */
-    private void renderDrawing(){
+    private void renderDrawing() {
         for (Dots dot : drawing) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(dot.color);
@@ -124,14 +124,14 @@ public class DrawView extends View {
     }
 
     @Override
-    public void show(){
+    public void show() {
 
     }
 
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         super.render(delta);
-        Gdx.gl.glClearColor(41.0f/256, 45.0f/256, 50.0f/256, 1);
+        Gdx.gl.glClearColor(41.0f / 256, 45.0f / 256, 50.0f / 256, 1);
 
         draw();
 
@@ -141,21 +141,27 @@ public class DrawView extends View {
     }
 
     @Override
-    public void resize(int width, int height){}
+    public void resize(int width, int height) {
+    }
 
     @Override
-    public void pause(){}
+    public void pause() {
+    }
 
     @Override
-    public void resume(){}
+    public void resume() {
+    }
 
     @Override
-    public void hide(){}
+    public void hide() {
+    }
 
     @Override
-    public void dispose(){}
+    public void dispose() {
+    }
 
-    private void loadAssets(){}
+    private void loadAssets() {
+    }
 
     public List<Dots> getDrawing() {
         return drawing;
