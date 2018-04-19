@@ -18,7 +18,7 @@ class LobbyController {
     }
 
     hasLobby(lobbyId) {
-        return this.lobbies.hasOwnProperty(lobbyId);
+        return this.lobbies[lobbyId] !== undefined;
     }
 
     startGame(lobbyId) {
@@ -83,7 +83,7 @@ class LobbyController {
             var lobby = this.lobbies[this.playerinLobby[player]];
 
             console.log("Player %s disconnected", player.name);
-            if (lobby.getPlayers().length < 2) {            // last member of lobby left
+            if (lobby.getPlayers().length <= 1) {  // last member of lobby left
                 this.closeLobby(lobby.lobbyId);
             } else {
                 lobby.removePlayer(player);

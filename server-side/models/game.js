@@ -60,7 +60,7 @@ class Game {
                     previousSheet.getObjectiveWord(),
                     previousSheet.getDrawing(),
                     notepad.nextOnRoute()
-                ))
+                ));
             } else if (previousSheet instanceof Guess) {
                 notepad.push(previousSheet);
                 notepad.push(new Drawing(

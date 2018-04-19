@@ -21,7 +21,7 @@ class GameController {
 
     recieveNotepad(notepad) {
         this.game.pushNotepad(notepad);
-        if (this.game.getNotepads().length == this.lobby.getPlayers().length) {
+        if (this.game.getNotepads().length === this.lobby.getPlayers().length) {
             this.continueGame();
         }
     }
@@ -30,7 +30,7 @@ class GameController {
 
     continueGame() {
         var gameOver = this.game.nextStep();
-        if (gameOver == false) {
+        if (gameOver === false) {
             this.sendNotepads();
         } else {
             this.endGame();

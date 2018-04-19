@@ -56,7 +56,7 @@ class Communicator {
     }
 
     startGame(playerAddress) {
-        if (typeof this.connections[playerAddress] === 'undefined') {
+        if (this.connections[playerAddress] === undefined) {
             console.log("Player with address %s not registered", playerAddress);
         } else {
             this.connections[playerAddress].emit(events.START_GAME);
@@ -64,7 +64,7 @@ class Communicator {
     }
 
     endGame(playerAddress) {
-        if (typeof this.connections[playerAddress] === 'undefined') {
+        if (this.connections[playerAddress] === undefined) {
             console.log("Player with address %s not registered", playerAddress);
         } else {
             this.connections[playerAddress].emit(events.END_GAME);
@@ -72,7 +72,7 @@ class Communicator {
     }
 
     updateView(playerAddress) {
-        if (typeof this.connections[playerAddress] === 'undefined') {
+        if (this.connections[playerAddress] === undefined) {
             console.log("Player with address %s not registered", playerAddress);
         } else {
             this.connections[playerAddress].emit(events.UPDATE_VIEW);
@@ -80,7 +80,7 @@ class Communicator {
     };
 
     updateLobby(playerAddress, lobbyId, playerList) {
-        if (typeof this.connections[playerAddress] === 'undefined') {
+        if (this.connections[playerAddress] === undefined) {
             console.log("Player with address %s not registered", playerAddress);
         } else {
             this.connections[playerAddress].emit(events.UPDATE_LOBBY, lobbyId, playerList);
@@ -88,7 +88,7 @@ class Communicator {
     }
 
     ping(playerAddress) {
-        if (typeof this.connections[playerAddress] === 'undefined') {
+        if (this.connections[playerAddress] === undefined) {
             console.log("Player with address %s not registered", playerAddress);
         } else {
             this.connections[playerAddress].emit(events.PING);
@@ -96,7 +96,7 @@ class Communicator {
     };
 
     beginRound(playerAddress, notepad) {
-        if (typeof this.connections[playerAddress] === 'undefined') {
+        if (this.connections[playerAddress] === undefined) {
             console.log("Player with address %s not registered", playerAddress);
         } else {
             this.connections[playerAddress].emit(events.BEGIN_ROUND, notepad);
