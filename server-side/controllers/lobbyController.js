@@ -40,6 +40,7 @@ class LobbyController {
                 this.communicator.updateLobby(playerAddress, playerList);
             });
 
+            console.log("Player %s joined lobby %d", playerName, lobbyId);
             return true;
         }
         return false;
@@ -57,7 +58,7 @@ class LobbyController {
 
             this.communicator.updateLobby(playerAddress, lobbyId, [player]);
 
-            console.log("Lobby %d created", lobbyId);
+            console.log("Player %s created lobby %d", playerName, lobbyId);
         }
     }
 
@@ -81,6 +82,7 @@ class LobbyController {
             var player = this.players[playerAddress];
             var lobby = this.lobbies[this.playerinLobby[player]];
 
+            console.log("Player %s disconnected", player.name);
             if (lobby.getPlayers().length < 2) {            // last member of lobby left
                 this.closeLobby(lobby.lobbyId);
             } else {

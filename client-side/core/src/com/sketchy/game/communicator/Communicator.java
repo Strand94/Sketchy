@@ -35,8 +35,27 @@ public class Communicator {
 
     private void connect() {
         try {
+            System.out.format("Connecting to server at [%s]\n", Config.SERVER_ADDRESS);
             socket = IO.socket(Config.SERVER_ADDRESS);
-            socket.connect();
+            socket.connect()
+                    .on(Socket.EVENT_CONNECT, new Listener() {
+                        @Override
+                        public void call(Object... args) {
+                            System.out.println("Connected");
+                        }
+                    })
+                    .on(Socket.EVENT_CONNECT_TIMEOUT, new Listener() {
+                        @Override
+                        public void call(Object... args) {
+                            System.out.println("Connection timed out");
+                        }
+                    })
+                    .on(Socket.EVENT_CONNECT_ERROR, new Listener() {
+                        @Override
+                        public void call(Object... args) {
+                            System.out.format("Connection error: %s\n", args[0].toString());
+                        }
+                    });
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

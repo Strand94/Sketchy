@@ -37,10 +37,10 @@ public class JoinView extends View {
 
         // Add elements to table
         table.add(header).padBottom(45);
-        ;
+
         table.row();
         table.add(lobbyField).width(300).padBottom(25);
-        ;
+
         table.row();
         table.add(join).width(250).padBottom(25);
 

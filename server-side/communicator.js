@@ -29,14 +29,14 @@ class Communicator {
         this.lobbyController = lobbyController;
 
         io.on('connection', function (socket) {
-            console.log("Player Connected!");
+            console.log("Connection opened: %s", socket.id);
             socket.emit(events);    // TODO: handle on java side
 
             socket
                 .on('disconnect', () => {
                     lobbyController.playerDisconnected(socket.id);
                     delete connections[socket.id];
-                    console.log("Player disconnected");
+                    console.log("Connection closed: %s", socket.id);
                 })
                 .on(events.JOIN_LOBBY, (obj) => {
                     connections[socket.id] = socket;
@@ -57,7 +57,7 @@ class Communicator {
 
     startGame(playerAddress) {
         if (typeof connections[playerAddress] === 'undefined') {
-            console.log("player with address <%s> not registered", playerAddress);
+            console.log("Player with address %s not registered", playerAddress);
         } else {
             connections[playerAddress].emit(events.START_GAME);
         }
@@ -65,7 +65,7 @@ class Communicator {
 
     endGame(playerAddress) {
         if (typeof connections[playerAddress] === 'undefined') {
-            console.log("player with address %s not registered", playerAddress);
+            console.log("Player with address %s not registered", playerAddress);
         } else {
             connections[playerAddress].emit(events.END_GAME);
         }
@@ -73,7 +73,7 @@ class Communicator {
 
     updateView(playerAddress) {
         if (typeof connections[playerAddress] === 'undefined') {
-            console.log("player with address %s not registered", playerAddress);
+            console.log("Player with address %s not registered", playerAddress);
         } else {
             connections[playerAddress].emit(events.UPDATE_VIEW);
         }
@@ -81,7 +81,7 @@ class Communicator {
 
     updateLobby(playerAddress, lobbyId, playerList) {
         if (typeof connections[playerAddress] === 'undefined') {
-            console.log("player with address %s not registered", playerAddress);
+            console.log("Player with address %s not registered", playerAddress);
         } else {
             connections[playerAddress].emit(events.UPDATE_LOBBY, lobbyId, playerList);
         }
@@ -89,7 +89,7 @@ class Communicator {
 
     ping(playerAddress) {
         if (typeof connections[playerAddress] === 'undefined') {
-            console.log("player with address %s not registered", playerAddress);
+            console.log("Player with address %s not registered", playerAddress);
         } else {
             connections[playerAddress].emit(events.PING);
         }
@@ -97,7 +97,7 @@ class Communicator {
 
     beginRound(playerAddress, notepad) {
         if (typeof connections[playerAddress] === 'undefined') {
-            console.log("player with address %s not registered", playerAddress);
+            console.log("Player with address %s not registered", playerAddress);
         } else {
             connections[playerAddress].emit(events.BEGIN_ROUND, notepad);
         }

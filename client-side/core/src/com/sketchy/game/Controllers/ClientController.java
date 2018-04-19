@@ -66,7 +66,7 @@ public class ClientController {
     //=========== LOBBY ==============\\
 
     public void createLobby(String playerName) {
-        System.out.println(String.format("clientController.createLobby('%s')", playerName));
+        System.out.format("clientController.createLobby('%s')\n", playerName);
         communicator.createLobby(playerName);
 
         //Todo: Check if it's OK to change view
@@ -74,7 +74,7 @@ public class ClientController {
     }
 
     public void joinLobby(int lobbyId, String playerName) {
-        System.out.println("clientController.joinLobby() -> " + lobbyId + playerName);
+        System.out.format("clientController.joinLobby(%s, '%s')\n", lobbyId, playerName);
         communicator.joinLobby(lobbyId, playerName);
 
         //Todo: Check if it's OK to change view
@@ -83,7 +83,7 @@ public class ClientController {
 
     public void updateLobby(int lobbyId, List<Player> players) {
         // TODO: adjust to Players
-        System.out.println("clientController.updateLobby() -> " + players.size());
+        System.out.format("clientController.updateLobby(%s, players(%d))\n", lobbyId, players.size());
         setPlayerCount(players.size());
 
         List<String> names = new ArrayList<>();

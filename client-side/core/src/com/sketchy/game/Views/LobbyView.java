@@ -62,7 +62,7 @@ public class LobbyView extends View {
             addPerson(player);
             System.out.print(player + ",");
         }
-        System.out.println("");
+        System.out.println();
 
         numberOfPlayers.setText(players.size() + "/" + Config.MAX_PLAYERS);
 
