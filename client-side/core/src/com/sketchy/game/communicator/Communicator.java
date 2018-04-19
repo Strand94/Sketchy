@@ -132,7 +132,11 @@ public class Communicator {
     }
 
     private void onUpdateLobby(int lobbyId, List<Player> members) {
-        clientController.updateLobby(lobbyId, members);
+        try {
+            clientController.updateLobby(lobbyId, members);
+        } catch (Exception e) {
+            e.printStackTrace(); //TODO: Error message
+        }
     }
 
     private void onBeginRound(Notepad notepad) {

@@ -1,6 +1,6 @@
 package com.sketchy.game.Controllers;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.sketchy.game.Models.Lobby;
 import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Player;
 import com.sketchy.game.Models.Sheet;
@@ -21,10 +21,9 @@ public class ClientController {
 
     private Player player;
     private View view;
-    private int lobbyId;
     private Communicator communicator;
     private SketchyGame game;
-    private int playerCount = 0;
+    private Lobby lobby;
 
     public ClientController(SketchyGame game) {
         this.game = game;
@@ -35,17 +34,17 @@ public class ClientController {
 
     //=========== GAME ==============\\
     public int getPlayerCount() {
-        System.out.println("getPlayerCount() -> " + playerCount);
-        return playerCount;
+        System.out.println("getPlayerCount() -> " + lobby.playerCount);
+        return lobby.playerCount;
     }
 
     public void setPlayerCount(int playerCount) {
-        this.playerCount = playerCount;
-        System.out.println("setPlayerCount() -> " + this.playerCount);
+        lobby.playerCount = playerCount;
+        System.out.println("setPlayerCount(%d)" + playerCount);
     }
 
     public void startGame() {
-        System.out.println("clientController.startGame() -> ");
+        System.out.println("clientController.startGame()");
         //TODO: Check if it's okay to change view
         showDraw();
     }
@@ -72,6 +71,7 @@ public class ClientController {
     public void createLobby(String playerName) {
         System.out.format("clientController.createLobby('%s')\n", playerName);
         communicator.createLobby(playerName);
+        lobby = Lobby.LOADING;
 
         //Todo: Check if it's OK to change view
         showLobby();
@@ -85,9 +85,12 @@ public class ClientController {
         showLobby();
     }
 
-    public void updateLobby(int lobbyId, List<Player> players) {
-        // TODO: adjust to Players
-        this.lobbyId = lobbyId;
+    public void updateLobby(int lobbyId, List<Player> players) throws Exception {
+        // TODO: adjust to Players (What does that mean?)
+
+        if (lobby == Lobby.LOADING) lobby = new Lobby(lobbyId);
+        else if (lobbyId != lobby.lobbyId)
+            throw new Exception("Server and client disagree about lobby id");
 
         System.out.format("clientController.updateLobby(%s, players(%d))\n", lobbyId, players.size());
         setPlayerCount(players.size());
