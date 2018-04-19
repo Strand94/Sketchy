@@ -5,14 +5,13 @@ const Communicator = require("../communicator");
 
 class LobbyController {
     constructor() {
-        this.players = {};          // maps playerAddress to Player
-        this.playerinLobby = {};    // maps player to lobbyId
+        this.allPlayers = {};  // maps playerAddress to Player
         this.lobbies = new Array(config.lobbiesCapacity);  // lobbyId -> lobby
         this.communicator = new Communicator(this);
 
-        // make unique id's
-        this.idStack = new Array();
-        for (let i = 9999; i >= 0; i--) {
+        // Make unique id's
+        this.idStack = [];
+        for (let i = this.lobbies.length - 1; i > 0; i--) {
             this.idStack.push(i);
         }
     }
@@ -31,9 +30,9 @@ class LobbyController {
 
     joinLobby(lobbyId, playerName, playerAddress) {
         if (this.hasLobby(lobbyId)) {
-            const player = new Player(playerName, playerAddress);
+            const player = new Player(playerName, playerAddress, lobbyId);
             this.lobbies[lobbyId].addPlayer(player);
-            this.playerinLobby[player] = lobbyId;
+            this.allPlayers[playerAddress] = player;
 
             const playerList = this.lobbies[lobbyId].getPlayers();
             playerList.forEach(player => {
@@ -48,15 +47,10 @@ class LobbyController {
 
     createLobby(playerName, playerAddress) {
         if (this.idStack.length > 0) {
-            const player = new Player(playerName, playerAddress);
             const lobbyId = this.idStack.pop();
-            const lobby = new Lobby(lobbyId, player, this.communicator);
-
-            this.lobbies[lobbyId] = lobby;
-            this.playerinLobby[player] = lobbyId;
-            this.players[playerAddress] = player;
-
-            this.communicator.updateLobby(playerAddress, lobbyId, [player]);
+            const player = new Player(playerName, playerAddress, lobbyId);
+            this.lobbies[lobbyId] = new Lobby(lobbyId, player, this.communicator);
+            this.allPlayers[playerAddress] = player;
 
             console.log("Player %s created lobby %d", playerName, lobbyId);
         }
@@ -66,8 +60,7 @@ class LobbyController {
         const players = this.lobbies[lobbyId].getPlayers();
 
         for (let player in players) {
-            delete this.playerinLobby[player];
-            delete this.players[player.adress];
+            delete this.allPlayers[player.address];
         }
 
         delete this.lobbies[lobbyId];
@@ -78,9 +71,9 @@ class LobbyController {
     }
 
     playerDisconnected(playerAddress) {
-        if (this.players.hasOwnProperty(playerAddress)) {    // player has joined a lobby
-            const player = this.players[playerAddress];
-            const lobby = this.lobbies[this.playerinLobby[player]];
+        if (this.allPlayers.hasOwnProperty(playerAddress)) {  // player has joined a lobby
+            const player = this.allPlayers[playerAddress];
+            const lobby = this.lobbies[player.lobbyId];
 
             console.log("Player %s disconnected", player.name);
             if (lobby.getPlayers().length <= 1) {  // last member of lobby left
@@ -89,8 +82,7 @@ class LobbyController {
                 lobby.removePlayer(player);
             }
 
-            delete this.playerinLobby[player];
-            delete this.players[playerAddress];
+            delete this.allPlayers[playerAddress];
 
         }
 
