@@ -86,17 +86,12 @@ public class LobbyView extends View {
     }
 
     @Override
-    public void show() {
-        super.show();
-    }
-
-    @Override
     public void render(float delta) {
         super.render(delta);
         Gdx.gl.glClearColor(246.0f / 256, 195.0f / 256, 42.0f / 256, 1);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            controller.showLogin();
+            controller.goBack();
         }
 
         // Countdown. Todo: Move to startGameCounter
@@ -109,16 +104,5 @@ public class LobbyView extends View {
 
     private void onGameStart() {
         controller.startGame();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
     }
 }

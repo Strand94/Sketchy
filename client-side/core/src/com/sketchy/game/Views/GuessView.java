@@ -62,10 +62,6 @@ public class GuessView extends View {
     }
 
     @Override
-    public void show() {
-    }
-
-    @Override
     public void render(float delta) {
         super.render(delta);
         Gdx.gl.glClearColor(49.0f / 256, 176.0f / 256, 213.0f / 256, 1);
@@ -77,16 +73,6 @@ public class GuessView extends View {
             shapeRenderer.circle(dot.position.x, screenHeight - dot.position.y, dot.radius);
             shapeRenderer.end();
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
     }
 
     String getGuess() {

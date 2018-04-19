@@ -35,7 +35,6 @@ public class View implements Screen {
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -44,7 +43,6 @@ public class View implements Screen {
 
         stage.act(delta);
         stage.draw();
-
     }
 
     @Override
@@ -55,20 +53,14 @@ public class View implements Screen {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

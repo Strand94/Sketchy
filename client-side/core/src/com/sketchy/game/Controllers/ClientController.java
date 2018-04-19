@@ -14,20 +14,26 @@ import com.sketchy.game.Views.View;
 import com.sketchy.game.communicator.Communicator;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
 public class ClientController {
 
+    private final SketchyGame game;
+    private final Communicator communicator;
+    private final Stack<View> viewStack;
+    private final List<View> forDisposal;
+
     private Player player;
-    private View view;
-    private Communicator communicator;
-    private SketchyGame game;
     private Lobby lobby;
 
     public ClientController(SketchyGame game) {
         this.game = game;
         this.communicator = new Communicator(this);
+        this.viewStack = new Stack<>();
+        this.forDisposal = Collections.synchronizedList(new LinkedList<View>());
 
         showLogin();
     }
@@ -46,7 +52,7 @@ public class ClientController {
     public void startGame() {
         System.out.println("clientController.startGame()");
         //TODO: Check if it's okay to change view
-        showDraw();
+        showDraw(true);
     }
 
     public void endGame() {
@@ -100,9 +106,10 @@ public class ClientController {
             names.add(player.getName());
         }
 
-        if (view instanceof LobbyView) {
-            ((LobbyView) view).updatePlayerList(names);
-            ((LobbyView) view).setLobbyId(lobbyId);
+        if (viewStack.peek() instanceof LobbyView) {
+            LobbyView view = (LobbyView) viewStack.peek();
+            view.updatePlayerList(names);
+            view.setLobbyId(lobbyId);
         }
 
     }
@@ -123,35 +130,60 @@ public class ClientController {
 
 
     //=========== VIEW ==============\\
-    private void setView(View view) {
-        game.setScreen(view);
-
-        if (this.view != null) {
-            this.view.dispose();
+    private void setView(View view, boolean replaceCurrent) {
+        if (!viewStack.empty()) {
+            if (replaceCurrent) {
+                synchronized (forDisposal) {
+                    forDisposal.add(viewStack.pop());
+                }
+            } else {
+                viewStack.peek().pause();
+            }
         }
-        this.view = view;
+        this.viewStack.push(view);
 
-        System.out.println("*SetView:" + view);
+        game.setScreen(view);
+        System.out.println("*setView:" + view);
+    }
+
+    public void goBack() {
+        if (viewStack.size() <= 1) return;
+        View currentView = viewStack.pop();
+        if (currentView != null) {
+            synchronized (forDisposal) {
+                forDisposal.add(currentView);
+            }
+        }
+
+        game.setScreen(viewStack.peek());
+        System.out.println("*goBack:" + viewStack.peek());
+    }
+
+    public void disposeViews() {
+        synchronized (forDisposal) {
+            for (View view : forDisposal) view.dispose();
+            forDisposal.clear();
+        }
     }
     //=========== END VIEW ==============\\
 
     public void showLogin() {
-        setView(new LoginView(this));
+        setView(new LoginView(this), true);
     }
 
     public void showJoin() {
-        setView(new JoinView(this));
+        setView(new JoinView(this), false);
     }
 
     public void showLobby() {
-        setView(new LobbyView(this));
+        setView(new LobbyView(this), false);
     }
 
     public void showGuess(Stack<DrawView.Dots> drawing) {
-        setView(new GuessView(this, drawing));
+        setView(new GuessView(this, drawing), true);
     }
 
-    private void showDraw() {
-        setView(new DrawView(this));
+    public void showDraw(boolean first) {
+        setView(new DrawView(this), !first);
     }
 }

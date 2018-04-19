@@ -56,31 +56,16 @@ public class JoinView extends View {
     }
 
     @Override
-    public void show() {
-
-    }
-
-    @Override
     public void render(float delta) {
         super.render(delta);
         Gdx.gl.glClearColor(68.0f / 256, 180.0f / 256, 112.0f / 256, 1);
         Gdx.input.setCatchBackKey(true);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            controller.showLogin();
+            controller.goBack();
         }
 
 
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
     }
 
     private Boolean validLobbyId(String input) {

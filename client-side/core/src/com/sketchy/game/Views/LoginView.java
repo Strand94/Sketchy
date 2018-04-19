@@ -66,11 +66,6 @@ public class LoginView extends View {
     }
 
     @Override
-    public void show() {
-
-    }
-
-    @Override
     public void render(float delta) {
         super.render(delta);
         Gdx.gl.glClearColor(68.0f / 256, 117.0f / 256, 180.0f / 256, 1);
@@ -79,18 +74,6 @@ public class LoginView extends View {
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
             Gdx.app.exit();
         }
-
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
     }
 
     private void onJoin() {
