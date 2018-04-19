@@ -2,20 +2,21 @@ package com.sketchy.game.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.sketchy.game.SketchyGame;
+import com.sketchy.game.Controllers.ClientController;
 
 import java.util.List;
 import java.util.Stack;
 
 public class DrawView extends View {
 
-    final SketchyGame game;
+    private final ClientController controller;
 
     // Rendering
     private ShapeRenderer shapeRenderer;
@@ -51,10 +52,10 @@ public class DrawView extends View {
     }
 
     /**
-     * @param game
+     * @param controller
      */
-    public DrawView(SketchyGame game) {
-        this.game = game;
+    public DrawView(ClientController controller) {
+        this.controller = controller;
 
         this.loadAssets();
 
@@ -81,7 +82,7 @@ public class DrawView extends View {
     }
 
     private void onSubmit() {
-        game.getClientController().setView(new GuessView(game, drawing));
+        controller.showGuess(drawing);
     }
 
     /**
@@ -135,9 +136,10 @@ public class DrawView extends View {
 
         draw();
 
-        game.batch.begin();
+        SpriteBatch batch = controller.getGame().getSpriteBatch();
+        batch.begin();
         renderDrawing();
-        game.batch.end();
+        batch.end();
     }
 
     @Override

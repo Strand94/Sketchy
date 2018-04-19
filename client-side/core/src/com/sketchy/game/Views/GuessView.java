@@ -8,12 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.sketchy.game.SketchyGame;
+import com.sketchy.game.Controllers.ClientController;
 
 import java.util.Stack;
 
 public class GuessView extends View {
-    private final SketchyGame game;
+    private final ClientController controller;
     private Stack<DrawView.Dots> drawing;
 
     // UI elements
@@ -24,8 +24,8 @@ public class GuessView extends View {
     // Renderer
     private ShapeRenderer shapeRenderer;
 
-    public GuessView(SketchyGame game, Stack<DrawView.Dots> drawing) {
-        this.game = game;
+    public GuessView(ClientController controller, Stack<DrawView.Dots> drawing) {
+        this.controller = controller;
         this.drawing = drawing;
 
         shapeRenderer = new ShapeRenderer();

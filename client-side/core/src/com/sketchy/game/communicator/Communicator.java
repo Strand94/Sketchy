@@ -100,12 +100,6 @@ public class Communicator {
                 onEndGame();
             }
         });
-        socket.on(UPDATE_VIEW.toString(), new Listener() {
-            @Override
-            public void call(JSONObject params) throws JSONException {
-                onUpdateView();
-            }
-        });
         socket.on(UPDATE_LOBBY.toString(), new Listener() {
             @Override
             protected void call(JSONObject params) throws JSONException {
@@ -135,10 +129,6 @@ public class Communicator {
 
     private void onEndGame() {
         clientController.endGame();
-    }
-
-    private void onUpdateView() {
-        clientController.updateView();
     }
 
     private void onUpdateLobby(int lobbyId, List<Player> members) {

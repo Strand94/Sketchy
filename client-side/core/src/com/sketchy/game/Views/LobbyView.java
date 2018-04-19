@@ -9,13 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Config;
-import com.sketchy.game.SketchyGame;
+import com.sketchy.game.Controllers.ClientController;
 
 import java.util.List;
 import java.util.Locale;
 
 public class LobbyView extends View {
-    SketchyGame game;
+    ClientController controller;
 
     private TextButton startGame;
     private float remaining = 5;
@@ -25,13 +25,13 @@ public class LobbyView extends View {
     private Table buttonTable;
     private Table playerTable = new Table();
 
-    public LobbyView(SketchyGame game) {
-        this.game = game;
+    public LobbyView(ClientController controller) {
+        this.controller = controller;
 
         lobbyIdLabel = new Label("LobbyID: \u2014", uiSkin);
         lobbyIdLabel.setColor(Color.CYAN);
         startGame = new TextButton("Start Game", uiSkin);
-        numberOfPlayers = new Label(game.getClientController().getPlayerCount() + "/" +
+        numberOfPlayers = new Label(controller.getPlayerCount() + "/" +
                 Integer.toString(Config.MAX_PLAYERS), uiSkin);
 
         table.add(lobbyIdLabel);
@@ -96,7 +96,7 @@ public class LobbyView extends View {
         Gdx.gl.glClearColor(246.0f / 256, 195.0f / 256, 42.0f / 256, 1);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            game.setScreen(new LoginView(game));
+            controller.showLogin();
         }
 
         // Countdown. Todo: Move to startGameCounter
@@ -108,7 +108,7 @@ public class LobbyView extends View {
     }
 
     private void onGameStart() {
-        game.getClientController().startGame();
+        controller.startGame();
     }
 
     @Override

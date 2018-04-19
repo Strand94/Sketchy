@@ -1,16 +1,21 @@
 package com.sketchy.game.Controllers;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Player;
 import com.sketchy.game.Models.Sheet;
 import com.sketchy.game.SketchyGame;
 import com.sketchy.game.Views.DrawView;
+import com.sketchy.game.Views.GuessView;
+import com.sketchy.game.Views.JoinView;
 import com.sketchy.game.Views.LobbyView;
+import com.sketchy.game.Views.LoginView;
 import com.sketchy.game.Views.View;
 import com.sketchy.game.communicator.Communicator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class ClientController {
 
@@ -24,6 +29,8 @@ public class ClientController {
     public ClientController(SketchyGame game) {
         this.game = game;
         this.communicator = new Communicator(this);
+
+        showLogin();
     }
 
     //=========== GAME ==============\\
@@ -40,13 +47,10 @@ public class ClientController {
     public void startGame() {
         System.out.println("clientController.startGame() -> ");
         //TODO: Check if it's okay to change view
-        game.getClientController().setView(new DrawView(game));
+        showDraw();
     }
 
     public void endGame() {
-    }
-
-    public void updateView() {
     }
 
     public void beginRound(Sheet sheet) {
@@ -70,7 +74,7 @@ public class ClientController {
         communicator.createLobby(playerName);
 
         //Todo: Check if it's OK to change view
-        game.getClientController().setView(new LobbyView(game));
+        showLobby();
     }
 
     public void joinLobby(int lobbyId, String playerName) {
@@ -78,11 +82,13 @@ public class ClientController {
         communicator.joinLobby(lobbyId, playerName);
 
         //Todo: Check if it's OK to change view
-        game.setScreen(new LobbyView(game));
+        showLobby();
     }
 
     public void updateLobby(int lobbyId, List<Player> players) {
         // TODO: adjust to Players
+        this.lobbyId = lobbyId;
+
         System.out.format("clientController.updateLobby(%s, players(%d))\n", lobbyId, players.size());
         setPlayerCount(players.size());
 
@@ -114,11 +120,7 @@ public class ClientController {
 
 
     //=========== VIEW ==============\\
-    public View getView() {
-        return view;
-    }
-
-    public void setView(View view) {
+    private void setView(View view) {
         game.setScreen(view);
 
         if (this.view != null) {
@@ -130,9 +132,23 @@ public class ClientController {
     }
     //=========== END VIEW ==============\\
 
-
-    public Communicator getCommunicator() {
-        return communicator;
+    public void showLogin() {
+        setView(new LoginView(this));
     }
 
+    public void showJoin() {
+        setView(new JoinView(this));
+    }
+
+    public void showLobby() {
+        setView(new LobbyView(this));
+    }
+
+    public void showGuess(Stack<DrawView.Dots> drawing) {
+        setView(new GuessView(this, drawing));
+    }
+
+    private void showDraw() {
+        setView(new DrawView(this));
+    }
 }
