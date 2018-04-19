@@ -55,7 +55,18 @@ class Communicator {
                 .on(events.END_GAME, (obj) => {
                     thiz.gameControllers[obj.lobbyId].endGame();
                 })
+                .on(events.REWIND_SHOW_NEXT, (obj) => {
+                    thiz.gameControllers[obj.lobbyId].rewindShowNext();
+                })
         });
+    }
+
+    addGameController(lobbyId, gameController) {
+        this.gameControllers[lobbyId] = gameController;
+    }
+
+    removeGameController(lobbyId) {
+        if (this.gameControllers[lobbyId]) delete this.gameControllers[lobbyId];
     }
 
     startGame(playerAddress) {
@@ -82,20 +93,16 @@ class Communicator {
         this.notifyPlayer(playerAddress, events.BEGIN_ROUND, {"notepad": notepad});
     };
 
-    addGameController(lobbyId, gameController) {
-        this.gameControllers[lobbyId] = gameController;
-    }
-
-    removeGameController(lobbyId) {
-        if (this.gameControllers[lobbyId]) delete this.gameControllers[lobbyId];
-    }
-
     startRewind(playerAddress, notepadList) {
         this.notifyPlayer(playerAddress, events.START_REWIND, {"notepadList": notepadList});
     }
 
     rewindShowNext(playerAddress) {
         this.notifyPlayer(playerAddress, events.REWIND_SHOW_NEXT);
+    }
+
+    rewindFinshed(playerAddress) {
+        this.notifyPlayer(playerAddress, events.REWIND_FINISHED);
     }
 
     // "private"
