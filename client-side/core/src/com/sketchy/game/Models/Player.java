@@ -1,11 +1,11 @@
 package com.sketchy.game.Models;
 
 public class Player {
-    String name;
-    String address;
-    int points;
-    int lobbyId;
-    boolean isLobbyMaster;
+    private String name;
+    private String address;
+    private int points;
+    private int lobbyId;
+    private boolean isLobbyMaster;
 
     public Player(String name) {
         this.name = name;
