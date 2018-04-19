@@ -15,18 +15,18 @@ const events = {
     PING: "ping",
     PING_OK: "pingOK",
     SOCKET_ID: "socketID"
-}
-
-var connections = {};       // maps socket.id to socket
-var gameControllers = {};   // maps lobbyId to gameController
+};
 
 class Communicator {
     constructor(lobbyController) {
+        this.connections = {};       // maps socket.id to socket
+        this.gameControllers = {};   // maps lobbyId to gameController
+
         server.listen(process.env.PORT || 5000, function () {
             console.log("Server listening on port %d", this.address().port);
         });
 
-        this.lobbyController = lobbyController;
+        const thiz = this;
 
         io.on('connection', function (socket) {
             console.log("Connection opened: %s", socket.id);
@@ -35,80 +35,80 @@ class Communicator {
             socket
                 .on('disconnect', () => {
                     lobbyController.playerDisconnected(socket.id);
-                    delete connections[socket.id];
+                    delete thiz.connections[socket.id];
                     console.log("Connection closed: %s", socket.id);
                 })
                 .on(events.JOIN_LOBBY, (obj) => {
-                    connections[socket.id] = socket;
+                    thiz.connections[socket.id] = socket;
                     lobbyController.joinLobby(obj.lobbyId, obj.playerName, socket.id);
                 })
                 .on(events.CREATE_LOBBY, (obj) => {
-                    connections[socket.id] = socket;
+                    thiz.connections[socket.id] = socket;
                     lobbyController.createLobby(obj.playerName, socket.id);
                 })
                 .on(events.START_GAME, (obj) => {
                     lobbyController.startGame(obj.lobbyId);
                 })
                 .on(events.END_GAME, (obj) => {
-                    gameControllers[obj.lobbyId].endGame;
+                    thiz.gameControllers[obj.lobbyId].endGame();
                 })
         });
     }
 
     startGame(playerAddress) {
-        if (typeof connections[playerAddress] === 'undefined') {
+        if (typeof this.connections[playerAddress] === 'undefined') {
             console.log("Player with address %s not registered", playerAddress);
         } else {
-            connections[playerAddress].emit(events.START_GAME);
+            this.connections[playerAddress].emit(events.START_GAME);
         }
     }
 
     endGame(playerAddress) {
-        if (typeof connections[playerAddress] === 'undefined') {
+        if (typeof this.connections[playerAddress] === 'undefined') {
             console.log("Player with address %s not registered", playerAddress);
         } else {
-            connections[playerAddress].emit(events.END_GAME);
+            this.connections[playerAddress].emit(events.END_GAME);
         }
     }
 
     updateView(playerAddress) {
-        if (typeof connections[playerAddress] === 'undefined') {
+        if (typeof this.connections[playerAddress] === 'undefined') {
             console.log("Player with address %s not registered", playerAddress);
         } else {
-            connections[playerAddress].emit(events.UPDATE_VIEW);
+            this.connections[playerAddress].emit(events.UPDATE_VIEW);
         }
     };
 
     updateLobby(playerAddress, lobbyId, playerList) {
-        if (typeof connections[playerAddress] === 'undefined') {
+        if (typeof this.connections[playerAddress] === 'undefined') {
             console.log("Player with address %s not registered", playerAddress);
         } else {
-            connections[playerAddress].emit(events.UPDATE_LOBBY, lobbyId, playerList);
+            this.connections[playerAddress].emit(events.UPDATE_LOBBY, lobbyId, playerList);
         }
     }
 
     ping(playerAddress) {
-        if (typeof connections[playerAddress] === 'undefined') {
+        if (typeof this.connections[playerAddress] === 'undefined') {
             console.log("Player with address %s not registered", playerAddress);
         } else {
-            connections[playerAddress].emit(events.PING);
+            this.connections[playerAddress].emit(events.PING);
         }
     };
 
     beginRound(playerAddress, notepad) {
-        if (typeof connections[playerAddress] === 'undefined') {
+        if (typeof this.connections[playerAddress] === 'undefined') {
             console.log("Player with address %s not registered", playerAddress);
         } else {
-            connections[playerAddress].emit(events.BEGIN_ROUND, notepad);
+            this.connections[playerAddress].emit(events.BEGIN_ROUND, notepad);
         }
     };
 
     addGameController(lobbyId, gameController) {
-        gameControllers[lobbyId] = gameController;
+        this.gameControllers[lobbyId] = gameController;
     }
 
     removeGameController(lobbyId) {
-        if (gameControllers[lobbyId]) delete gameControllers[lobbyId];
+        if (this.gameControllers[lobbyId]) delete this.gameControllers[lobbyId];
     }
 }
 
