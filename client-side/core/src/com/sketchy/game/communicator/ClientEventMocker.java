@@ -8,6 +8,10 @@ import java.util.Scanner;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 
+/**
+ * Connects to the node.js server via socket.io, and can be used to send events
+ * to the server. Does not interact with the client in any way.
+ */
 public class ClientEventMocker {
     public static void main(String[] args) {
         Socket socket;
