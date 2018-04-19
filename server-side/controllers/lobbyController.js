@@ -34,11 +34,7 @@ class LobbyController {
             this.lobbies[lobbyId].addPlayer(player);
             this.allPlayers[playerAddress] = player;
 
-            const playerList = this.lobbies[lobbyId].getPlayers();
-            playerList.forEach(player => {
-                this.communicator.updateLobby(playerAddress, playerList);
-            });
-
+            this.updateLobby(lobbyId);
             console.log("Player %s joined lobby %d", playerName, lobbyId);
             return true;
         }
@@ -52,6 +48,7 @@ class LobbyController {
             this.lobbies[lobbyId] = new Lobby(lobbyId, player, this.communicator);
             this.allPlayers[playerAddress] = player;
 
+            this.updateLobby(lobbyId);
             console.log("Player %s created lobby %d", playerName, lobbyId);
         }
     }
@@ -80,12 +77,19 @@ class LobbyController {
                 this.closeLobby(lobby.lobbyId);
             } else {
                 lobby.removePlayer(player);
+                this.updateLobby(lobby.lobbyId);
             }
 
             delete this.allPlayers[playerAddress];
 
         }
+    }
 
+    updateLobby(lobbyId) {
+        const players = this.lobbies[lobbyId].getPlayers();
+        players.forEach(player => {
+            this.communicator.updateLobby(player.address, lobbyId, players)
+        });
     }
 }
 
