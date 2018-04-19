@@ -83,7 +83,7 @@ class Communicator {
         if (this.connections[playerAddress] === undefined) {
             console.log("Player with address %s not registered", playerAddress);
         } else {
-            this.connections[playerAddress].emit(events.UPDATE_LOBBY, lobbyId, playerList);
+            this.connections[playerAddress].emit(events.UPDATE_LOBBY, {"lobbyId": lobbyId, "playerList": playerList});
         }
     }
 
@@ -99,7 +99,7 @@ class Communicator {
         if (this.connections[playerAddress] === undefined) {
             console.log("Player with address %s not registered", playerAddress);
         } else {
-            this.connections[playerAddress].emit(events.BEGIN_ROUND, notepad);
+            this.connections[playerAddress].emit(events.BEGIN_ROUND, {"notepad": notepad});
         }
     };
 

@@ -18,11 +18,29 @@ import java.util.List;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter.Listener;
+import io.socket.emitter.Emitter;
 
 import static com.sketchy.game.communicator.Event.*;
 
 public class Communicator {
+    public abstract class Listener implements Emitter.Listener {
+        private JSONObject params;
+
+        @Override
+        public void call(Object... args) {
+            params = (JSONObject) args[0];
+            try {
+                call(params);
+            } catch (JSONException e) {
+                System.out.println(params);
+                e.printStackTrace();
+            }
+        }
+
+        protected void call(JSONObject params) throws JSONException {
+        }
+    }
+
     private Socket socket;
     private ClientController clientController;
 
@@ -64,56 +82,51 @@ public class Communicator {
     // Receive events from server:
 
     private void setServerEvents() {
+        socket.on(PING.toString(), new Listener() {
+            @Override
+            protected void call(JSONObject params) throws JSONException {
+                onPing();
+            }
+        });
         socket.on(START_GAME.toString(), new Listener() {
             @Override
-            public void call(Object... args) {
+            protected void call(JSONObject params) throws JSONException {
                 onStartGame();
             }
         });
         socket.on(END_GAME.toString(), new Listener() {
             @Override
-            public void call(Object... args) {
+            protected void call(JSONObject params) throws JSONException {
                 onEndGame();
             }
         });
         socket.on(UPDATE_VIEW.toString(), new Listener() {
             @Override
-            public void call(Object... args) {
+            public void call(JSONObject params) throws JSONException {
                 onUpdateView();
             }
         });
         socket.on(UPDATE_LOBBY.toString(), new Listener() {
             @Override
-            public void call(Object... args) {
-                onUpdateLobby((int) args[0], jsonToPlayerList(args[1]));    // lobbyID, playerList
-
+            protected void call(JSONObject params) throws JSONException {
+                onUpdateLobby(
+                        params.getInt("lobbyId"),
+                        jsonToPlayerList(params.getString("playerList"))
+                );
             }
         });
-        socket.on(BEGIN_ROUND.toString(), new Listener() {
-            @Override
-            public void call(Object... args) {
-                Notepad notepad = (Notepad) args[0];
-                onBeginRound(notepad);
-            }
-        });
-        socket.on(GET_ANSWER.toString(), new Listener() {
-            @Override
-            public void call(Object... args) {
-                onGetAnswer();
-            }
-        });
-        socket.on(PING.toString(), new Listener() {
-            @Override
-            public void call(Object... args) {
-                onPing();
-            }
-        });
-        socket.on(SOCKET_ID.toString(), new Listener() {
-            @Override
-            public void call(Object... args) {
-                onSocketId((JSONObject) args[0]);
-            }
-        });
+//        socket.on(BEGIN_ROUND.toString(), new Listener() {
+//            @Override
+//            public void call(JSONObject params) throws JSONException {
+//                onBeginRound();
+//            }
+//        });
+//        socket.on(GET_ANSWER.toString(), new Listener() {
+//            @Override
+//            public void call(JSONObject params) throws JSONException {
+//                onGetAnswer();
+//            }
+//        });
     }
 
     private void onStartGame() {
@@ -143,16 +156,14 @@ public class Communicator {
     private void onPing() {
         try {
             System.out.println("ping");
-            JSONObject obj = new JSONObject();
-            obj.put("id", socket.id());
-            socket.emit("pingOK", obj);
+            Emit
+                    .event(PING_OK)
+                    .to(socket)
+                    .with("id", socket.id())
+                    .send();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void onSocketId(JSONObject... obj) {
-        System.out.println(obj);
     }
 
     // Send events to server:
@@ -240,19 +251,19 @@ public class Communicator {
         }
     }
 
-    private List<Player> jsonToPlayerList(Object json) {
+    private static List<Player> jsonToPlayerList(String json) {
         // Source: http://www.javadoc.io/doc/com.google.code.gson/gson/2.8.2
         try {
             Type listType = new TypeToken<List<Player>>() {}.getType();
             Gson gson = new Gson();
-            return gson.fromJson(json.toString(), listType);
+            return gson.fromJson(json, listType);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private String playerListToString(ArrayList<Player> players) {
+    private static String playerListToString(ArrayList<Player> players) {
         // TODO: test this
         try {
             Type listType = new TypeToken<List<Player>>() {}.getType();

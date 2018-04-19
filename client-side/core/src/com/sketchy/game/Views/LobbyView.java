@@ -12,6 +12,7 @@ import com.sketchy.game.Config;
 import com.sketchy.game.SketchyGame;
 
 import java.util.List;
+import java.util.Locale;
 
 public class LobbyView extends View {
     SketchyGame game;
@@ -19,20 +20,21 @@ public class LobbyView extends View {
     private TextButton startGame;
     private float remaining = 5;
     private boolean startGame_r = false;
+    private Label lobbyIdLabel;
     private Label numberOfPlayers;
     private Table buttonTable;
     private Table playerTable = new Table();
 
-    public LobbyView(SketchyGame game, int lobbyID) {
+    public LobbyView(SketchyGame game) {
         this.game = game;
 
-        Label gameidLabel = new Label("LobbyID:" + " " + Integer.toString(lobbyID), uiSkin);
-        gameidLabel.setColor(Color.CYAN);
+        lobbyIdLabel = new Label("LobbyID: \u2014", uiSkin);
+        lobbyIdLabel.setColor(Color.CYAN);
         startGame = new TextButton("Start Game", uiSkin);
         numberOfPlayers = new Label(game.getClientController().getPlayerCount() + "/" +
                 Integer.toString(Config.MAX_PLAYERS), uiSkin);
 
-        table.add(gameidLabel);
+        table.add(lobbyIdLabel);
         table.row();
         buttonTable = new Table();
         buttonTable.setPosition(screenWidth / 2, screenHeight * 0.1f);
@@ -50,6 +52,10 @@ public class LobbyView extends View {
                 onGameStart();
             }
         });
+    }
+
+    public void setLobbyId(int lobbyId) {
+        lobbyIdLabel.setText(String.format(Locale.GERMAN, "LobbyID: %05d", lobbyId));
     }
 
     public void updatePlayerList(List<String> players) {

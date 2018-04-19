@@ -13,8 +13,8 @@ import com.sketchy.game.SketchyGame;
 import java.util.Stack;
 
 public class GuessView extends View {
-    final SketchyGame game;
-    Stack<DrawView.Dots> drawing;
+    private final SketchyGame game;
+    private Stack<DrawView.Dots> drawing;
 
     // UI elements
     private TextField guessField;

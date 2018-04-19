@@ -16,7 +16,7 @@ public class ClientController {
 
     private Player player;
     private View view;
-    private int lobbyId = 1337; // TODO: Get from communicator
+    private int lobbyId;
     private Communicator communicator;
     private SketchyGame game;
     private int playerCount = 0;
@@ -70,7 +70,7 @@ public class ClientController {
         communicator.createLobby(playerName);
 
         //Todo: Check if it's OK to change view
-        game.getClientController().setView(new LobbyView(game, this.lobbyId));
+        game.getClientController().setView(new LobbyView(game));
     }
 
     public void joinLobby(int lobbyId, String playerName) {
@@ -78,7 +78,7 @@ public class ClientController {
         communicator.joinLobby(lobbyId, playerName);
 
         //Todo: Check if it's OK to change view
-        game.setScreen(new LobbyView(game, this.lobbyId));
+        game.setScreen(new LobbyView(game));
     }
 
     public void updateLobby(int lobbyId, List<Player> players) {
@@ -93,6 +93,7 @@ public class ClientController {
 
         if (view instanceof LobbyView) {
             ((LobbyView) view).updatePlayerList(names);
+            ((LobbyView) view).setLobbyId(lobbyId);
         }
 
     }
