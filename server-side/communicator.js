@@ -101,7 +101,7 @@ class Communicator {
         this.notifyPlayer(playerAddress, events.REWIND_SHOW_NEXT);
     }
 
-    rewindFinshed(playerAddress) {
+    endRewind(playerAddress) {
         this.notifyPlayer(playerAddress, events.REWIND_FINISHED);
     }
 
