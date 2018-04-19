@@ -4,6 +4,8 @@ public class Player {
     String name;
     String address;
     int points;
+    int lobbyId;
+    boolean isLobbyMaster;
 
     public Player(String name) {
         this.name = name;
@@ -32,6 +34,14 @@ public class Player {
 
     public int getPoints() {
         return points;
+    }
+
+    public boolean isLobbyMaster() {
+        return isLobbyMaster;
+    }
+
+    public int getLobbyId() {
+        return lobbyId;
     }
 
 }

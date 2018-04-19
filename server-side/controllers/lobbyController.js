@@ -30,7 +30,7 @@ class LobbyController {
 
     joinLobby(lobbyId, playerName, playerAddress) {
         if (this.hasLobby(lobbyId) && !this.lobbies[lobbyId].isFull()) {
-            const player = new Player(playerName, playerAddress, lobbyId);
+            const player = new Player(playerName, playerAddress, lobbyId, false);
             this.lobbies[lobbyId].addPlayer(player);
             this.allPlayers[playerAddress] = player;
 
@@ -44,7 +44,7 @@ class LobbyController {
     createLobby(playerName, playerAddress) {
         if (this.idStack.length > 0) {
             const lobbyId = this.idStack.pop();
-            const player = new Player(playerName, playerAddress, lobbyId);
+            const player = new Player(playerName, playerAddress, lobbyId, true);
             this.lobbies[lobbyId] = new Lobby(lobbyId, player, this.communicator);
             this.allPlayers[playerAddress] = player;
 
