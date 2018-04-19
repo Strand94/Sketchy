@@ -8,6 +8,7 @@ import com.sketchy.game.SketchyGame;
 import com.sketchy.game.Views.DrawView;
 import com.sketchy.game.Views.GuessView;
 import com.sketchy.game.Views.JoinView;
+import com.sketchy.game.Views.LoadingView;
 import com.sketchy.game.Views.LobbyView;
 import com.sketchy.game.Views.LoginView;
 import com.sketchy.game.Views.View;
@@ -26,6 +27,7 @@ public class ClientController {
     private final Stack<View> viewStack;
     private final List<View> forDisposal;
 
+    private View nextView;
     private Player player;
     private Lobby lobby;
 
@@ -79,16 +81,15 @@ public class ClientController {
         communicator.createLobby(playerName);
         lobby = Lobby.LOADING;
 
-        //Todo: Check if it's OK to change view
-        showLobby();
+        loadLobby();
     }
 
     public void joinLobby(int lobbyId, String playerName) {
         System.out.format("clientController.joinLobby(%s, '%s')\n", lobbyId, playerName);
         communicator.joinLobby(lobbyId, playerName);
+        lobby = Lobby.LOADING;
 
-        //Todo: Check if it's OK to change view
-        showLobby();
+        loadLobby();
     }
 
     public void updateLobby(int lobbyId, List<Player> players) throws Exception {
@@ -104,6 +105,10 @@ public class ClientController {
         List<String> names = new ArrayList<>();
         for (Player player : players) {
             names.add(player.getName());
+        }
+
+        if (nextView instanceof LobbyView) {
+            setView(nextView, true);
         }
 
         if (viewStack.peek() instanceof LobbyView) {
@@ -141,6 +146,7 @@ public class ClientController {
             }
         }
         this.viewStack.push(view);
+        this.nextView = null;
 
         game.setScreen(view);
         System.out.println("*setView:" + view);
@@ -154,6 +160,7 @@ public class ClientController {
                 forDisposal.add(currentView);
             }
         }
+        this.nextView = null;
 
         game.setScreen(viewStack.peek());
         System.out.println("*goBack:" + viewStack.peek());
@@ -175,8 +182,9 @@ public class ClientController {
         setView(new JoinView(this), false);
     }
 
-    public void showLobby() {
-        setView(new LobbyView(this), false);
+    public void loadLobby() {
+        setView(new LoadingView(this), false);
+        nextView = new LobbyView(this);
     }
 
     public void showGuess(Stack<DrawView.Dots> drawing) {
