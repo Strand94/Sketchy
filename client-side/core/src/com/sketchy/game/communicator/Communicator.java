@@ -109,6 +109,25 @@ public class Communicator {
                 );
             }
         });
+        socket.on(START_REWIND.toString(), new Listener() {
+            @Override
+            public void call(JSONObject params) throws JSONException {
+                // TODO: make function to convert from JSON to List<notepad>
+                onStartRewind();
+            }
+        });
+        socket.on(REWIND_SHOW_NEXT.toString(), new Listener() {
+            @Override
+            protected void call(JSONObject params) throws JSONException {
+                onRewindShowNext();
+            }
+        });
+        socket.on(REWIND_FINISHED.toString(), new Listener() {
+            @Override
+            protected void call(JSONObject params) throws JSONException {
+                onRewindFinished();
+            }
+        })
 //        socket.on(BEGIN_ROUND.toString(), new Listener() {
 //            @Override
 //            public void call(JSONObject params) throws JSONException {
@@ -143,17 +162,16 @@ public class Communicator {
 
     }
 
-    private void onPing() {
-        try {
-            System.out.println("ping");
-            Emit
-                    .event(PING_OK)
-                    .to(socket)
-                    .with("id", socket.id())
-                    .send();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void onStartRewind(List<Notepad> notepadList) {
+        // TODO
+    }
+
+    private void onRewindShowNext() {
+        // TODO
+    }
+
+    private void onRewindFinished() {
+        // TODO
     }
 
     // Send events to server:
@@ -237,6 +255,19 @@ public class Communicator {
                     .with("playerName", playerName)
                     .send();
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onPing() {
+        try {
+            System.out.println("ping");
+            Emit
+                    .event(PING_OK)
+                    .to(socket)
+                    .with("id", socket.id())
+                    .send();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

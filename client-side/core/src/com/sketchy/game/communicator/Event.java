@@ -14,7 +14,10 @@ public enum Event {
     GET_ANSWER("get-answer"),
     SOCKET_ID("socketID"),
     PING("ping"),
-    PING_OK("pingOK");
+    PING_OK("pingOK"),
+    START_REWIND("start-rewind"),
+    REWIND_SHOW_NEXT("rewind-show-next"),
+    REWIND_FINISHED("rewind-finished");
 
 
     private static final Map<String, Event> fromStringMap;
