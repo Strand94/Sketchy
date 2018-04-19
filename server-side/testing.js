@@ -6,7 +6,7 @@ const Notepad = require("./models/notepad");
 const lobbyController = new LobbyController();
 lobbyController.createLobby("per");
 
-players = []
+players = [];
 for (let i = 0; i < 7; i++) {
     let player = new Player(i.toString(), i.toString());
     players.push(player);

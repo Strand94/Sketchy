@@ -59,13 +59,13 @@ class Game {
                 notepad.push(new Guess(
                     previousSheet.getObjectiveWord(),
                     previousSheet.getDrawing(),
-                    notepad.nextOnRoute(),
+                    notepad.nextOnRoute()
                 ))
             } else if (previousSheet instanceof Guess) {
                 notepad.push(previousSheet);
                 notepad.push(new Drawing(
                     previousSheet.getAnswer(),
-                    notepad.nextOnRoute(),
+                    notepad.nextOnRoute()
                 ))
             } else {
                 throw (new Error("sheet that is neither Guess or Drawing in notepad"));
@@ -77,7 +77,7 @@ class Game {
         this.notepads.forEach(notepad => {
             notepad.push(new Drawing(
                 notepad.originalWord,
-                notepad.nextOnRoute(),
+                notepad.nextOnRoute()
             ))
         })
     }
