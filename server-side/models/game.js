@@ -11,7 +11,7 @@ class Game {
 
         // fills inn notepads with unique routes
         for (let i = 0; i < this.players.length; i++) {
-            var clone = this.players.slice(0);
+            const clone = this.players.slice(0);
             this.notepads.push(
                 new Notepad(this.getWord(), clone)
             );
@@ -46,14 +46,14 @@ class Game {
     }
 
     rotatePlayers() {
-        var tmp = this.players.shift();
+        const tmp = this.players.shift();
         this.players.push(tmp);
     }
 
     normalHandleNotepads() {
         // partly fills inn and pushes new sheet to each notepad
         this.notepads.forEach(notepad => {
-            var previousSheet = notepad.pop();
+            const previousSheet = notepad.pop();
             if (previousSheet instanceof Drawing) {
                 notepad.push(previousSheet);
                 notepad.push(new Guess(

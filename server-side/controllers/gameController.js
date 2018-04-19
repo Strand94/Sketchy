@@ -29,7 +29,7 @@ class GameController {
     // "private" functions
 
     continueGame() {
-        var gameOver = this.game.nextStep();
+        const gameOver = this.game.nextStep();
         if (gameOver === false) {
             this.sendNotepads();
         } else {
@@ -39,7 +39,7 @@ class GameController {
 
     sendNotepads() {
         this.game.getNotepads().forEach(notepad => {
-            let player = notepad.nextOnRoute();
+            const player = notepad.nextOnRoute();
             if (typeof player === 'undefined') {
                 console.log("no more players on route");
             } else {

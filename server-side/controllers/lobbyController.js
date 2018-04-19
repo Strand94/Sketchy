@@ -31,11 +31,11 @@ class LobbyController {
 
     joinLobby(lobbyId, playerName, playerAddress) {
         if (this.hasLobby(lobbyId)) {
-            var player = new Player(playerName, playerAddress)
+            const player = new Player(playerName, playerAddress);
             this.lobbies[lobbyId].addPlayer(player);
             this.playerinLobby[player] = lobbyId;
 
-            var playerList = this.lobbies[lobbyId].getPlayers();
+            const playerList = this.lobbies[lobbyId].getPlayers();
             playerList.forEach(player => {
                 this.communicator.updateLobby(playerAddress, playerList);
             });
@@ -48,9 +48,9 @@ class LobbyController {
 
     createLobby(playerName, playerAddress) {
         if (this.idStack.length > 0) {
-            var player = new Player(playerName, playerAddress);
-            var lobbyId = this.idStack.pop();
-            var lobby = new Lobby(lobbyId, player, this.communicator);
+            const player = new Player(playerName, playerAddress);
+            const lobbyId = this.idStack.pop();
+            const lobby = new Lobby(lobbyId, player, this.communicator);
 
             this.lobbies[lobbyId] = lobby;
             this.playerinLobby[player] = lobbyId;
@@ -63,7 +63,7 @@ class LobbyController {
     }
 
     closeLobby(lobbyId) {
-        var players = this.lobbies[lobbyId].getPlayers();
+        const players = this.lobbies[lobbyId].getPlayers();
 
         for (let player in players) {
             delete this.playerinLobby[player];
@@ -79,8 +79,8 @@ class LobbyController {
 
     playerDisconnected(playerAddress) {
         if (this.players.hasOwnProperty(playerAddress)) {    // player has joined a lobby
-            var player = this.players[playerAddress];
-            var lobby = this.lobbies[this.playerinLobby[player]];
+            const player = this.players[playerAddress];
+            const lobby = this.lobbies[this.playerinLobby[player]];
 
             console.log("Player %s disconnected", player.name);
             if (lobby.getPlayers().length <= 1) {  // last member of lobby left

@@ -6,7 +6,7 @@ const Notepad = require("./models/notepad");
 const lobbyController = new LobbyController();
 lobbyController.createLobby("per");
 
-players = [];
+const players = [];
 for (let i = 0; i < 7; i++) {
     let player = new Player(i.toString(), i.toString());
     players.push(player);
@@ -14,7 +14,7 @@ for (let i = 0; i < 7; i++) {
 }
 
 lobbyController.startGame(0);
-var gameController = lobbyController.lobbies[0].gameController;
+const gameController = lobbyController.lobbies[0].gameController;
 
 for (let i = 0; i < 7; i++) {
     gameController.recieveNotepad(new Notepad(i.toString(), players[i]));

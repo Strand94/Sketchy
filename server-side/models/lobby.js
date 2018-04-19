@@ -14,7 +14,7 @@ class Lobby {
     }
 
     removePlayer(player) {
-        var index = this.players.indexOf(player);
+        const index = this.players.indexOf(player);
         if (index < 0) {
             this.players.splice(index, 1);
             return true;
