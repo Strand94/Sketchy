@@ -13,9 +13,15 @@ for (let i = 0; i < 7; i++) {
     lobbyController.joinLobby(0, player);
 }
 
+/*
+
 lobbyController.startGame(0);
 const gameController = lobbyController.lobbies[0].gameController;
 
 for (let i = 0; i < 7; i++) {
     gameController.recieveNotepad(new Notepad(i.toString(), players[i]));
 }
+
+*/
+
+lobbyController.communicator.notifyPlayer(1111, "test");

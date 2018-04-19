@@ -20,10 +20,17 @@ class GameController {
     }
 
     recieveNotepad(notepad) {
+        // TODO: remove old notepad when new arrives
         this.game.pushNotepad(notepad);
         if (this.game.getNotepads().length === this.lobby.getPlayers().length) {
             this.continueGame();
         }
+    }
+
+    rewindShowNext() {
+        this.lobby.getPlayers().forEach(player => {
+            this.communicator.rewindShowNext(player.address);
+        });
     }
 
     // "private" functions
