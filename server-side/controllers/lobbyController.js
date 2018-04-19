@@ -29,7 +29,7 @@ class LobbyController {
     }
 
     joinLobby(lobbyId, playerName, playerAddress) {
-        if (this.hasLobby(lobbyId)) {
+        if (this.hasLobby(lobbyId) && !this.lobbies[lobbyId].isFull()) {
             const player = new Player(playerName, playerAddress, lobbyId);
             this.lobbies[lobbyId].addPlayer(player);
             this.allPlayers[playerAddress] = player;

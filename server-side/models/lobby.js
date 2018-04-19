@@ -1,4 +1,5 @@
 const GameController = require("../controllers/gameController");
+const config = require("../config");
 
 class Lobby {
     constructor(lobbyId, lobbyMaster, communicator) {
@@ -28,6 +29,9 @@ class Lobby {
 
     getPlayers() {
         return this.players;
+    }
+    isFull() {
+        return this.players.length >= config.maxGameSize;
     }
 }
 
