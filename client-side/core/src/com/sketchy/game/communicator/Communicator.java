@@ -112,8 +112,7 @@ public class Communicator {
         socket.on(START_REWIND.toString(), new Listener() {
             @Override
             public void call(JSONObject params) throws JSONException {
-                // TODO: make function to convert from JSON to List<notepad>
-                onStartRewind();
+                onStartRewind(jsonToNotepadList(params.toString()));
             }
         });
         socket.on(REWIND_SHOW_NEXT.toString(), new Listener() {
@@ -127,7 +126,7 @@ public class Communicator {
             protected void call(JSONObject params) throws JSONException {
                 onRewindFinished();
             }
-        })
+        });
 //        socket.on(BEGIN_ROUND.toString(), new Listener() {
 //            @Override
 //            public void call(JSONObject params) throws JSONException {
@@ -163,15 +162,15 @@ public class Communicator {
     }
 
     private void onStartRewind(List<Notepad> notepadList) {
-        // TODO
+        // TODO: onStartRewind
     }
 
     private void onRewindShowNext() {
-        // TODO
+        // TODO: onRewindShowNext
     }
 
     private void onRewindFinished() {
-        // TODO
+        // TODO: onRewindFinished
     }
 
     // Send events to server:
@@ -284,8 +283,21 @@ public class Communicator {
         return null;
     }
 
-    private static String playerListToString(ArrayList<Player> players) {
-        // TODO: test this
+    public static List<Notepad> jsonToNotepadList(String json) {
+        // Source: http://www.javadoc.io/doc/com.google.code.gson/gson/2.8.2
+        // TODO: test jsonToNotepadList
+        try {
+            Type listType = new TypeToken<List<Notepad>>() {}.getType();
+            Gson gson = new Gson();
+            return gson.fromJson(json, listType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String playerListToJsonString(ArrayList<Player> players) {
+        // TODO: playerListToJsonString
         try {
             Type listType = new TypeToken<List<Player>>() {}.getType();
             final List<Player> target = new LinkedList<>();

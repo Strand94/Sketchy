@@ -1,6 +1,7 @@
 const LobbyController = require('./controllers/lobbyController');
 const Player = require("./models/player");
 const Notepad = require("./models/notepad");
+const Drawing = require("./models/drawing");
 
 
 const lobbyController = new LobbyController();
@@ -24,4 +25,6 @@ for (let i = 0; i < 7; i++) {
 
 */
 
-lobbyController.communicator.notifyPlayer(1111, "test");
+var notepad = new Notepad("lemmen", players);
+notepad.push(new Drawing("hest", players[0]));
+console.log(notepad);
