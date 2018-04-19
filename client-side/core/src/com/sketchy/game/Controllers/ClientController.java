@@ -20,7 +20,6 @@ public class ClientController {
     private Communicator communicator;
     private SketchyGame game;
     private int playerCount = 0;
-    public int MAX_PLAYERS = 8;
 
     public ClientController(SketchyGame game) {
         this.game = game;

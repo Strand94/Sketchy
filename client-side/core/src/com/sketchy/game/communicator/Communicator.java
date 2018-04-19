@@ -27,33 +27,18 @@ public class Communicator {
     private ClientController clientController;
 
     public Communicator(ClientController clientController) {
-        connect(false);
+        connect();
         setServerEvents();
         this.clientController = clientController;
 
     }
 
-    public Communicator(ClientController clientController, boolean local) {
-        connect(local);
-        setServerEvents();
-        this.clientController = clientController;
-    }
-
-    private void connect(boolean local) {
-        if (local) {
-            try {
-                socket = IO.socket(Config.LOCAL_PORT);  // TODO: broken for some reason
-                socket.connect();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                socket = IO.socket(Config.SERVER_ADDRESS);
-                socket.connect();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
+    private void connect() {
+        try {
+            socket = IO.socket(Config.SERVER_ADDRESS);
+            socket.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 

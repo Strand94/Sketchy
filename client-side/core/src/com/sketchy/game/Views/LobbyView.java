@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.sketchy.game.Config;
 import com.sketchy.game.SketchyGame;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class LobbyView extends View {
         gameidLabel.setColor(Color.CYAN);
         startGame = new TextButton("Start Game", uiSkin);
         numberOfPlayers = new Label(game.getClientController().getPlayerCount()+ "/" +
-                Integer.toString(game.getClientController().MAX_PLAYERS), uiSkin);
+                Integer.toString(Config.MAX_PLAYERS), uiSkin);
 
         table.add(gameidLabel);
         table.row();
@@ -63,7 +64,7 @@ public class LobbyView extends View {
         }
         System.out.println("");
 
-        numberOfPlayers.setText(players.size() + "/" + game.getClientController().MAX_PLAYERS);
+        numberOfPlayers.setText(players.size() + "/" + Config.MAX_PLAYERS);
 
     }
 

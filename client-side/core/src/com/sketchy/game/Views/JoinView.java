@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.sketchy.game.Config;
 import com.sketchy.game.SketchyGame;
 
 public class JoinView extends View {
@@ -83,21 +84,14 @@ public class JoinView extends View {
     }
 
     private Boolean validLobbyId(String input) {
-            try
-            {
-                Integer.parseInt( input );
-                int number = Integer.parseInt( input );
-                if (number > 0){
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            catch( Exception e)
-            {
-                return false;
-            }
+        try {
+            int number = Integer.parseInt(input);
+            return number > 0 && number < Config.LOBBIES_CAPACITY;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
+    }
 
     private void onJoin() {
         System.out.println("Join Game");
