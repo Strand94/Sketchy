@@ -13,8 +13,7 @@ public class LoadingView extends View {
         this.controller = controller;
 
         // Loading
-        Label loading = new Label("Loading...", uiSkin);
-        loading.setColor(Color.RED);
+        Label loading = new Label("Loading...", redLabel);
 
         // Add elements to table
         table.add(loading).padBottom(45);
