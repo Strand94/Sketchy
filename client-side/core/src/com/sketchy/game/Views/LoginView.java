@@ -17,27 +17,32 @@ import com.sketchy.game.Models.Player;
 
 public class LoginView extends View {
 
-    final ClientController controller;
-    TextField nameField;
-    Label warning;
+    private final ClientController controller;
+
+    private Image imageLogo;
+    private TextField nameField;
+    private Label warning, nameLabel;
+    private TextButton create, join;
 
     public LoginView(final ClientController controller) {
         this.controller = controller;
 
         // Header
-        Image imageLogo = new Image();
+        imageLogo = new Image();
         imageLogo.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sketchy_logo.png")))));
         imageLogo.setScaling(Scaling.fit);
 
         // Buttons
-        TextButton create = new TextButton("Create Game", uiSkin);
-        TextButton join = new TextButton("Join Game", uiSkin);
+        create = new TextButton("Create Game", uiSkin);
+        join = new TextButton("Join Game", uiSkin);
 
         // TextFields
         nameField = new TextField("Your name", uiSkin);
 
         // Labels
-        final Label nameLabel = new Label("Name:", uiSkin);
+        nameLabel = new Label("Name:", uiSkin);
+        warning = new Label("Please enter a\nvalid username", uiSkin);
+        warning.setVisible(false);
 
         // Add elements to table
         table.pad(10);
@@ -50,9 +55,6 @@ public class LoginView extends View {
         table.add(create).center().colspan(2).padBottom(25);
         table.row();
         table.add(join).center().colspan(2);
-
-        warning = new Label("Please enter a\nvalid username", uiSkin);
-        warning.setVisible(false);
         table.row();
         table.add(warning);
 
@@ -70,17 +72,6 @@ public class LoginView extends View {
                 onCreate();
             }
         });
-    }
-
-    @Override
-    public void render(float delta) {
-        super.render(delta);
-        Gdx.gl.glClearColor(68.0f / 256, 117.0f / 256, 180.0f / 256, 1);
-        Gdx.input.setCatchBackKey(true);
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            Gdx.app.exit();
-        }
     }
 
     private void onJoin() {
@@ -109,6 +100,17 @@ public class LoginView extends View {
         return     nameField.getText().equals("Your name")
                 || nameField.getText().equals("")
                 || nameField.getText().equals(" ");
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        Gdx.gl.glClearColor(68.0f / 256, 117.0f / 256, 180.0f / 256, 1);
+        Gdx.input.setCatchBackKey(true);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            Gdx.app.exit();
+        }
     }
 
 }
