@@ -37,7 +37,8 @@ public class LoginView extends View {
         join = new TextButton("Join Game", uiSkin);
 
         // TextFields
-        nameField = new TextField("Your name", uiSkin);
+        nameField = new TextField("", uiSkin);
+        nameField.setMessageText("Your name");
 
         // Labels
         nameLabel = new Label("Name:", uiSkin);
