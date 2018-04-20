@@ -34,7 +34,8 @@ public class GuessView extends View {
         header = new Label("Wat is dis?", redLabel);
 
         // TextFields
-        guessField = new TextField("Enter guess here", redTextField);
+        guessField = new TextField("", redTextField);
+        guessField.setMessageText("Enter your name");
 
         // Buttons
         submit = new TextButton("Submit", uiSkin);
