@@ -90,10 +90,6 @@ public class View implements Screen {
             path = "xhdpi";
         }
 
-        // Now we ignore the previous check and force path to mdpi.
-        // This is to ensure app doesn't crash while I add support for other devices
-        path = "xhdpi";
-
         path += "/";
         jsonPath = path + "uiSkin.json";
         atlasPath = path + "uiSkin.atlas";
