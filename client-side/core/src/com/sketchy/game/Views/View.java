@@ -5,8 +5,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class View implements Screen {
@@ -15,14 +17,15 @@ public class View implements Screen {
     Table table;
     Skin uiSkin;
 
+    // Styles
+    protected Label.LabelStyle blueLabel, redLabel, greenLabel;
+    protected TextField.TextFieldStyle redTextField;
+
     public View() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        // UI skin
-        uiSkin = new Skin(Gdx.files.internal("uiSkin.json"));
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("uiSkin.atlas"));
-        uiSkin.addRegions(atlas);
+        loadAssets();
 
         // Table for keeping track of position of UI elements
         table = new Table();
@@ -74,4 +77,41 @@ public class View implements Screen {
         stage.dispose();
     }
 
+    private void loadAssets(){
+
+        float density = Gdx.graphics.getDensity();
+        String path, jsonPath, atlasPath;
+
+        if (density <= 1.5){
+            path = "mdpi";
+        } else if (density > 1.5f && density <= 2.0f){
+            path = "hdpi";
+        } else if (density > 2.0f && density <= 3){
+            path = "xhdpi";
+        } else {
+            path = "xxhdpi";
+        }
+
+        // Now we ignore the previous check and force path to mdpi.
+        // This is to ensure app doesn't crash while I add support for other devices
+        path = "mdpi";
+
+        path += "/";
+        jsonPath = path + "uiSkin.json";
+        atlasPath = path + "uiSkin.atlas";
+
+        System.out.println("Loading assets from " + jsonPath + ", density determined to be " + density);
+
+        // Skin
+        uiSkin = new Skin(Gdx.files.internal(jsonPath));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(atlasPath));
+        uiSkin.addRegions(atlas);
+
+        // Styles
+        blueLabel = uiSkin.get("blue", Label.LabelStyle.class);
+        redLabel = uiSkin.get("red", Label.LabelStyle.class);
+        greenLabel = uiSkin.get("green", Label.LabelStyle.class);
+
+        redTextField = uiSkin.get("red", TextField.TextFieldStyle.class);
+    }
 }
