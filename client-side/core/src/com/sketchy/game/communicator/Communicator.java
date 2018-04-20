@@ -163,7 +163,7 @@ public class Communicator {
     }
 
     private void onRewindShowNext() {
-        // TODO: onRewindShowNext
+        clientController.rewindShowNext();
     }
 
     private void onRewindFinished() {
