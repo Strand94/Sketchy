@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class LobbyView extends View {
-    ClientController controller;
+    private ClientController controller;
 
     private TextButton startGame;
     private float remaining = 5;
