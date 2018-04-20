@@ -136,10 +136,7 @@ public class DrawView extends View {
 
         draw();
 
-        SpriteBatch batch = controller.getGame().getSpriteBatch();
-        batch.begin();
         renderDrawing();
-        batch.end();
     }
 
     @Override
