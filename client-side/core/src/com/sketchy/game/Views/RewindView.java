@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
@@ -71,7 +70,7 @@ public class RewindView extends View {
         sheets = notepad.getSheets();
     }
 
-    public void advance(){
+    public void showNext(){
 
         if (sheets.size() == 0){
             System.out.println("No more sheets in notepad to show!");
@@ -80,16 +79,16 @@ public class RewindView extends View {
 
         // Show objective word
         if(advances == 0){
-            createView(sheets.get(0), true, true);
+            createRewindStep(sheets.get(0), true, true);
         }
         // Show drawing
         else if(advances % 2 == 1){
-            createView(sheets.get(0), false, false);
+            createRewindStep(sheets.get(0), false, false);
         }
 
         // Show guess
         else if (advances % 2 == 0){
-            createView(sheets.get(0), true, false);
+            createRewindStep(sheets.get(0), true, false);
 
             // We are now done with 1 sheet and can proceed to the next
             sheets.remove(0);
@@ -98,7 +97,7 @@ public class RewindView extends View {
         advances++;
     }
 
-    private void  createView(Sheet sheet, boolean guess, boolean first){
+    private void createRewindStep(Sheet sheet, boolean guess, boolean first){
         table.reset();
 
         who.setText(sheet.getPlayerName());
@@ -139,7 +138,7 @@ public class RewindView extends View {
         Gdx.gl.glClearColor(250.0f / 256, 171.0f / 256, 71.0f / 256, 1);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            clientController.advanceRewind();
+            clientController.rewindShowNext();
         }
     }
 
