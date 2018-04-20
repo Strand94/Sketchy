@@ -1,5 +1,6 @@
 package com.sketchy.game.Controllers;
 
+import com.sketchy.game.Models.Dot;
 import com.sketchy.game.Models.Lobby;
 import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Player;
@@ -187,7 +188,7 @@ public class ClientController {
         nextView = new LobbyView(this);
     }
 
-    public void showGuess(Stack<DrawView.Dots> drawing) {
+    public void showGuess(Stack<Dot> drawing) {
         setView(new GuessView(this, drawing), true);
     }
 
