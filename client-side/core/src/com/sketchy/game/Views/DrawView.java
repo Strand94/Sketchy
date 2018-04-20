@@ -42,7 +42,8 @@ public class DrawView extends View {
 
         // Add to table
         table.add(guessWord).top().expand().padTop(20);
-        table.add(submit).bottom().expandX();
+        table.row();
+        table.add(submit).bottom().expandX().padBottom(0.03f * getScreenHeight());
 
         // Listeners
         submit.addListener(new ChangeListener() {
