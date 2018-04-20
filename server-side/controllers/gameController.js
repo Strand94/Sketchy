@@ -11,19 +11,32 @@ class GameController {
     // "public" functions
 
     abortGame() {
-        // TODO: implement
+        this.startRewind();
     }
 
     startGame() {
-        this.game = new Game(this.lobby.getPlayers());
+        this.game = new Game(this.lobby.players);
         this.continueGame();
     }
 
     recieveNotepad(notepad) {
-        this.game.pushNotepad(notepad);
-        if (this.game.getNotepads().length === this.lobby.getPlayers().length) {
+        this.game.addNotepad(notepad);
+        if (this.game.notepads.length === this.lobby.players.length) {
             this.continueGame();
         }
+    }
+
+    rewindShowNext() {
+        this.lobby.players.forEach(player => {
+            this.communicator.rewindShowNext(player.address);
+        });
+    }
+
+    endRewind() {
+        this.lobby.players.forEach(player => {
+            this.communicator.endRewind(player.address);
+        });
+        this.game = null;
     }
 
     // "private" functions
@@ -33,12 +46,12 @@ class GameController {
         if (gameOver === false) {
             this.sendNotepads();
         } else {
-            this.endGame();
+            this.startRewind();
         }
     }
 
     sendNotepads() {
-        this.game.getNotepads().forEach(notepad => {
+        this.game.notepads.forEach(notepad => {
             const player = notepad.nextOnRoute();
             if (typeof player === 'undefined') {
                 console.log("no more players on route");
@@ -48,8 +61,10 @@ class GameController {
         });
     }
 
-    endGame() {
-        // TODO: implement
+    startRewind() {
+        this.lobby.players.forEach(player => {
+            this.communicator.startRewind(player.address, this.game.notepads);
+        });
     }
 
 }

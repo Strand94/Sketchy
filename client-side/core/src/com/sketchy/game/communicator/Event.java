@@ -12,9 +12,13 @@ public enum Event {
     UPDATE_LOBBY("update-lobby"),
     BEGIN_ROUND("begin-round"),
     GET_ANSWER("get-answer"),
+    SEND_ANSWER("send-answer"),
     SOCKET_ID("socketID"),
     PING("ping"),
-    PING_OK("pingOK");
+    PING_OK("pingOK"),
+    START_REWIND("start-rewind"),
+    REWIND_SHOW_NEXT("rewind-show-next"),
+    REWIND_FINISHED("rewind-finished");
 
 
     private static final Map<String, Event> fromStringMap;

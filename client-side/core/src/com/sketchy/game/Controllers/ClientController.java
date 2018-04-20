@@ -2,8 +2,8 @@ package com.sketchy.game.Controllers;
 
 import com.sketchy.game.Models.Dot;
 import com.sketchy.game.Models.Lobby;
+
 import com.sketchy.game.Models.Notepad;
-import com.sketchy.game.Models.Player;
 import com.sketchy.game.Models.Sheet;
 import com.sketchy.game.SketchyGame;
 import com.sketchy.game.Views.DrawView;
@@ -15,9 +15,9 @@ import com.sketchy.game.Views.LoginView;
 import com.sketchy.game.Views.View;
 import com.sketchy.game.communicator.Communicator;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Stack;
 
@@ -29,8 +29,9 @@ public class ClientController {
     private final List<View> forDisposal;
 
     private View nextView;
-    private Player player;
     private Lobby lobby;
+    private String playerName;
+
 
     public ClientController(SketchyGame game) {
         this.game = game;
@@ -93,20 +94,13 @@ public class ClientController {
         loadLobby();
     }
 
-    public void updateLobby(int lobbyId, List<Player> players) throws Exception {
-        // TODO: adjust to Players (What does that mean?)
+    public void updateLobby(int lobbyId, List<String> names) throws Exception {
+            if (lobby == Lobby.LOADING) lobby = new Lobby(lobbyId);
+            else if (lobbyId != lobby.lobbyId)
+                throw new Exception("Server and client disagree about lobby id");
 
-        if (lobby == Lobby.LOADING) lobby = new Lobby(lobbyId);
-        else if (lobbyId != lobby.lobbyId)
-            throw new Exception("Server and client disagree about lobby id");
-
-        System.out.format("clientController.updateLobby(%s, players(%d))\n", lobbyId, players.size());
-        setPlayerCount(players.size());
-
-        List<String> names = new ArrayList<>();
-        for (Player player : players) {
-            names.add(player.getName());
-        }
+        System.out.format("clientController.updateLobby(%s, players(%d))\n", lobbyId, names.size());
+        setPlayerCount(names.size());
 
         if (nextView instanceof LobbyView) {
             setView(nextView, true);
@@ -123,14 +117,14 @@ public class ClientController {
 
 
     //=========== PLAYER ==============\\
-    public Player getPlayer() {
-        System.out.println("clientController.getPlayer() -> " + player.getName());
-        return player;
+    public String getPlayerName() {
+        System.out.println("clientController.getPlayerName() -> " + playerName);
+        return playerName;
     }
 
-    public void setPlayer(Player player) {
-        System.out.println(String.format("clientController.setPlayer('%s')", player.getName()));
-        this.player = player;
+    public void setPlayer(String playerName) {
+        System.out.println(String.format("clientController.setPlayerName('%s')", playerName));
+        this.playerName = playerName;
     }
     //=========== END PLAYER ==============\\
 

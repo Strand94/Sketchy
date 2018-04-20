@@ -80,7 +80,7 @@ public class LoginView extends View {
         if(nameIsValid()){
             warning.setVisible(true);
         } else{
-            controller.setPlayer(new Player(nameField.getText()));
+            controller.setPlayer(nameField.getText());
             controller.showJoin();
         }
     }
@@ -91,8 +91,8 @@ public class LoginView extends View {
         if(nameIsValid()){
             warning.setVisible(true);
         } else{
-            controller.setPlayer(new Player(nameField.getText()));
-            controller.createLobby(controller.getPlayer().getName());
+            controller.setPlayer(nameField.getText());
+            controller.createLobby(controller.getPlayerName());
         }
     }
 

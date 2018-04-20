@@ -10,13 +10,22 @@ class Game {
         this.notepads = [];
 
         // fills inn notepads with unique routes
-        for (let i = 0; i < this.players.length; i++) {
-            const clone = this.players.slice(0);
+        var playerAddresses = [] 
+        this.players.forEach(player => {
+            playerAddresses.push(player.address);
+        });
+        this.players.forEach(player => {
+            const clone = playerAddresses.slice(0);  
+
             this.notepads.push(
                 new Notepad(this.getWord(), clone)
             );
-            this.rotatePlayers();
-        }
+
+            // rotate playeraddresses
+            let tmp = playerAddresses.shift();
+            playerAddresses.push(tmp);
+        });
+
     }
 
     nextStep() {
@@ -31,12 +40,13 @@ class Game {
         }
     }
 
-    getNotepads() {
-        return this.notepads;
-    }
-
-    pushNotepad(notepad) {
-        this.notepads.push(notepad);
+    addNotepad(newNotepad) {
+        this.notepads.forEach(notepad => {
+            if (notepad.originalWord === newNotepad.originalWord) {
+                notepads = notepads.filter(item => item !== notepad);
+            }
+        })
+        this.notepads.push(newNotepad);
     }
 
     // private functions
@@ -45,41 +55,27 @@ class Game {
         return guessWords.pop();
     }
 
-    rotatePlayers() {
-        const tmp = this.players.shift();
-        this.players.push(tmp);
-    }
-
     normalHandleNotepads() {
         // partly fills inn and pushes new sheet to each notepad
         this.notepads.forEach(notepad => {
             const previousSheet = notepad.pop();
-            if (previousSheet instanceof Drawing) {
+
+            if (previousSheet.answer === null) {
                 notepad.push(previousSheet);
-                notepad.push(new Guess(
-                    previousSheet.getObjectiveWord(),
-                    previousSheet.getDrawing(),
-                    notepad.nextOnRoute()
-                ));
-            } else if (previousSheet instanceof Guess) {
-                notepad.push(previousSheet);
-                notepad.push(new Drawing(
-                    previousSheet.getAnswer(),
-                    notepad.nextOnRoute()
-                ))
             } else {
-                throw (new Error("sheet that is neither Guess or Drawing in notepad"));
+                notepad.push(new Sheet(
+                    previousSheet.answer
+                ));
             }
-        })
+        });
     }
 
     firstHandleNotepads() {
         this.notepads.forEach(notepad => {
-            notepad.push(new Drawing(
-                notepad.originalWord,
-                notepad.nextOnRoute()
-            ))
-        })
+            notepad.push(new Sheet(
+                notepad.originalWord
+            ));
+        });
     }
 }
 
