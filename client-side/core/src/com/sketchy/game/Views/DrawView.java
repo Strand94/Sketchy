@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
+import com.sketchy.game.Models.Dot;
 
 import java.util.List;
 import java.util.Stack;
@@ -22,38 +23,14 @@ public class DrawView extends View {
     private ShapeRenderer shapeRenderer;
 
     // Drawing
-    private Stack<Dots> drawing;
+    private Stack<Dot> drawing;
     private float currentRadius = 5.0f;
     private Color currentColor = new Color(224.0f / 256, 224.0f / 256, 224.0f / 256, 1);
 
     private Float lastX = null;
     private Float lastY = null;
 
-    /**
-     * A drawing consists of a stack of colored circles (Dots)
-     */
-    public class Dots {
-        float radius;
-        Vector2 position;
-        Color color;
 
-        /**
-         * Dot constructor. Remember to add it to your Stack of Dots
-         *
-         * @param radius   Dot size
-         * @param position Remember to render at (x, screenHeight - y))
-         * @param color    gdx.Graphics.Color
-         */
-        public Dots(float radius, Vector2 position, Color color) {
-            this.radius = radius;
-            this.position = position;
-            this.color = color;
-        }
-    }
-
-    /**
-     * @param controller
-     */
     public DrawView(ClientController controller) {
         this.controller = controller;
 
@@ -77,7 +54,7 @@ public class DrawView extends View {
         });
 
         // Drawing initialization
-        drawing = new Stack<Dots>();
+        drawing = new Stack<>();
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -87,7 +64,7 @@ public class DrawView extends View {
 
     /**
      * Add colored Circle (Dot) at position of user input
-     * Drawing consists of lots of Dots.
+     * Drawing consists of lots of Dot.
      */
     private void draw() {
         if (Gdx.input.isTouched()) {
@@ -100,9 +77,9 @@ public class DrawView extends View {
                 for (int i = 0; i < nDots; i += 3) {
                     lastX += 3 * dX;
                     lastY += 3 * dY;
-                    drawing.add(new Dots(currentRadius, new Vector2(lastX, lastY), currentColor));
+                    drawing.add(new Dot(currentRadius, new Vector2(lastX, lastY), currentColor));
                 }
-                drawing.add(new Dots(currentRadius, new Vector2(x, y), currentColor));
+                drawing.add(new Dot(currentRadius, new Vector2(x, y), currentColor));
             }
             lastX = x;
             lastY = y;
@@ -113,13 +90,13 @@ public class DrawView extends View {
     }
 
     /**
-     * Render ALL the Dots!
+     * Render ALL the Dot!
      */
     private void renderDrawing() {
-        for (Dots dot : drawing) {
+        for (Dot dot : drawing) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(dot.color);
-            shapeRenderer.circle(dot.position.x, getScreenHeight() - dot.position.y, dot.radius);
+            shapeRenderer.setColor(dot.getColor());
+            shapeRenderer.circle(dot.getPosX(), getScreenHeight() - dot.getPosY(), dot.getRadius());
             shapeRenderer.end();
         }
     }
@@ -162,7 +139,7 @@ public class DrawView extends View {
     private void loadAssets() {
     }
 
-    public List<Dots> getDrawing() {
+    public List<Dot> getDrawing() {
         return drawing;
     }
 }

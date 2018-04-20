@@ -9,12 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
+import com.sketchy.game.Models.Dot;
 
 import java.util.Stack;
 
 public class GuessView extends View {
     private final ClientController controller;
-    private Stack<DrawView.Dots> drawing;
+    private Stack<Dot> drawing;
 
     // UI elements
     private TextField guessField;
@@ -24,7 +25,7 @@ public class GuessView extends View {
     // Renderer
     private ShapeRenderer shapeRenderer;
 
-    public GuessView(ClientController controller, Stack<DrawView.Dots> drawing) {
+    public GuessView(ClientController controller, Stack<Dot> drawing) {
         this.controller = controller;
         this.drawing = drawing;
 
@@ -67,10 +68,10 @@ public class GuessView extends View {
         Gdx.gl.glClearColor(49.0f / 256, 176.0f / 256, 213.0f / 256, 1);
         Gdx.input.setCatchBackKey(true);
 
-        for (DrawView.Dots dot : drawing) {
+        for (Dot dot : drawing) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(dot.color);
-            shapeRenderer.circle(dot.position.x, getScreenHeight() - dot.position.y, dot.radius);
+            shapeRenderer.setColor(dot.getColor());
+            shapeRenderer.circle(dot.getPosX(), getScreenHeight() - dot.getPosY(), dot.getRadius());
             shapeRenderer.end();
         }
     }
