@@ -23,11 +23,13 @@ public class RewindView extends View {
     boolean isLobbyMaster;
     int advances = 0;
 
+    Notepad notepad;
     List<Sheet> sheets;
 
     public RewindView(ClientController clientController, boolean lobbyMaster) {
         this.clientController = clientController;
         this.isLobbyMaster = lobbyMaster;
+
 
         // Labels
         who = new Label("if you see this something is wrong", blueLabel);
@@ -46,6 +48,27 @@ public class RewindView extends View {
                 advance(); //Todo send request to server instead
             }
         });
+
+        List<String> route = new ArrayList<>();
+        notepad = new Notepad("Elephant", route);
+
+        List<Sheet> sheets_2 = new ArrayList<>();
+
+        Sheet sheet = new Sheet();
+        sheet.setObjectiveWord(notepad.getOriginalWord());
+        sheet.setAnswer("Chimpanzee");
+        sheet.setDrawing("drawing.png");
+        sheet.setPlayerName("First Player");
+        sheets_2.add(sheet);
+
+        Sheet sheet_2 = new Sheet();
+        sheet_2.setAnswer("Yoda");
+        sheet_2.setDrawing("image.png");
+        sheet_2.setPlayerName("Luke");
+        sheets_2.add(sheet_2);
+
+        notepad.setSheets(sheets_2);
+        sheets = notepad.getSheets();
     }
 
     void advance(){
@@ -109,7 +132,7 @@ public class RewindView extends View {
 
         table.debug();
     }
-    
+
     @Override
     public void render(float delta) {
         super.render(delta);
