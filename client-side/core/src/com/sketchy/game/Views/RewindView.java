@@ -20,11 +20,11 @@ public class RewindView extends View {
     private Label who, guessWord, guessLabel, imageLabel, image;
     private TextButton next;
 
-    boolean isLobbyMaster;
-    int advances = 0;
+    private boolean isLobbyMaster;
+    private int advances = 0;
 
-    Notepad notepad;
-    List<Sheet> sheets;
+    private Notepad notepad;
+    private List<Sheet> sheets;
 
     public RewindView(ClientController clientController, boolean lobbyMaster) {
         this.clientController = clientController;
