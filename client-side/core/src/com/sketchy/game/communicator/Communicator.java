@@ -104,15 +104,10 @@ public class Communicator {
         socket.on(UPDATE_LOBBY.toString(), new Listener() {
             @Override
             protected void call(JSONObject params) throws JSONException {
-                System.out.println(params.getString("playerList"));
-                System.out.println(params.get("playerList"));
-                System.out.println(params.getJSONArray("playerList"));
-
                 onUpdateLobby(
                         params.getInt("lobbyId"),
                         jsonToPlayerNames(params.getString("playerList"))
                 );
-
             }
         });
         socket.on(START_REWIND.toString(), new Listener() {
@@ -303,7 +298,7 @@ public class Communicator {
     }
 
     public static String playerListToJsonString(List<String> playerNames) {
-        // TODO: test playerListToJsonString
+        // for reference, can be deleted when json converting is implemented
         try {
             Type listType = new TypeToken<List<String>>() {}.getType();
             final List<String> target = new LinkedList<>();
