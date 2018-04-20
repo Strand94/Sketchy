@@ -46,16 +46,16 @@ public class LoginView extends View {
         warning.setVisible(false);
 
         // Add elements to table
-        table.pad(10);
-        table.add(imageLogo).padBottom(70);
+        table.add(imageLogo).expandY().top().padTop(getScreenHeight()*0.2f);
         table.row();
-        table.add(nameLabel);
+        table.add(nameLabel).expandY().pad(10.0f).bottom();
         table.row();
-        table.add(nameField).width(250).padBottom(25);
+        table.add(nameField).width(getScreenWidth()/2).expandY().top();
+        table.debug();
         table.row();
-        table.add(create).center().colspan(2).padBottom(25);
+        table.add(create).center().padBottom(25);
         table.row();
-        table.add(join).center().colspan(2);
+        table.add(join).center();
         table.row();
         table.add(warning);
 
