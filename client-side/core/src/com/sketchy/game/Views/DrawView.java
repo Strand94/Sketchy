@@ -119,7 +119,7 @@ public class DrawView extends View {
         for (Dots dot : drawing) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(dot.color);
-            shapeRenderer.circle(dot.position.x, screenHeight - dot.position.y, dot.radius);
+            shapeRenderer.circle(dot.position.x, getScreenHeight() - dot.position.y, dot.radius);
             shapeRenderer.end();
         }
     }

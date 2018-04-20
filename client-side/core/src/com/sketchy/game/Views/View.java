@@ -11,9 +11,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class View implements Screen {
 
-    final int screenWidth = Gdx.graphics.getWidth();
-    final int screenHeight = Gdx.graphics.getHeight();
-
     Stage stage;
     Table table;
     Skin uiSkin;
@@ -33,6 +30,14 @@ public class View implements Screen {
         stage.addActor(table);
     }
 
+    float getScreenHeight(){
+        return Gdx.graphics.getHeight();
+    }
+
+    float getScreenWidth(){
+        return Gdx.graphics.getWidth();
+    }
+
     @Override
     public void show() {
     }
@@ -47,8 +52,8 @@ public class View implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getCamera().viewportWidth = Gdx.graphics.getWidth();
-        stage.getCamera().viewportHeight = Gdx.graphics.getHeight();
+        stage.getCamera().viewportWidth = getScreenWidth();
+        stage.getCamera().viewportHeight = getScreenHeight();
     }
 
     @Override

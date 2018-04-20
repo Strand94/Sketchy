@@ -41,16 +41,16 @@ public class LobbyView extends View {
                                     Integer.toString(Config.MAX_PLAYERS), uiSkin);
 
         // Add to table
-        table.add(lobbyIdLabel).top().padTop(0.07f * screenHeight);
+        table.add(lobbyIdLabel).top().padTop(0.07f * getScreenHeight());
         table.row();
         table.setFillParent(true);
 
-        buttonTable.setPosition(screenWidth / 2, screenHeight * 0.1f);
+        buttonTable.setPosition(getScreenWidth() / 2, getScreenHeight() * 0.1f);
         buttonTable.add(startGame);
         buttonTable.row();
         buttonTable.add(numberOfPlayers);
 
-        table.add(playerTable).expandY().top().padTop(0.1f * screenHeight);
+        table.add(playerTable).expandY().top().padTop(0.1f * getScreenHeight());
 
         startGame.addListener(new ChangeListener() {
             @Override
