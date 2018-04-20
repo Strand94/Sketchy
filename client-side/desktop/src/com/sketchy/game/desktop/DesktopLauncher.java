@@ -2,6 +2,7 @@ package com.sketchy.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.SketchyGame;
 
 import java.util.ArrayList;
@@ -18,10 +19,8 @@ public class DesktopLauncher {
         config.width = 720 / 2;
         config.height = 1280 / 2;
 
-        String notepadJson = "{\"originalWord\":\"lemmen\",\"sheets\":[{\"objectiveWord\":\"hest\",\"drawing\":null,\"playerName\":{\"name\":\"0\",\"address\":\"testAddress\",\"points\":0}}],\"route\":[{\"name\":\"0\",\"address\":\"testAddress\",\"points\":0},{\"name\":\"1\",\"address\":\"testAddress\",\"points\":0},{\"name\":\"2\",\"address\":\"testAddress\",\"points\":0}]}";
-        List<String> playerList = new ArrayList<String>();
-        playerList.add("per");
-        playerList.add("paul");
+        String notepadJson = "[{\"originalWord\":\"lemmen\",\"sheets\":[{\"objectiveWord\":\"hest\",\"drawing\":null,\"playerName\":\"Per\",\"answer\":null}],\"route\":[\"testAddress\"]}]";
+
 
 
     }

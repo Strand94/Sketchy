@@ -1,20 +1,17 @@
 package com.sketchy.game.communicator;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Notepad;
-import com.sketchy.game.Models.Player;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import io.socket.client.IO;
@@ -113,7 +110,7 @@ public class Communicator {
         socket.on(START_REWIND.toString(), new Listener() {
             @Override
             public void call(JSONObject params) throws JSONException {
-                // onStartRewind(jsonToNotepadList(params.toString())); TODO: convert notepadList from json
+                onStartRewind(jsonToNotepadList(params.getString("notepadList")));
             }
         });
         socket.on(REWIND_SHOW_NEXT.toString(), new Listener() {
@@ -128,18 +125,13 @@ public class Communicator {
                 onRewindFinished();
             }
         });
-//        socket.on(BEGIN_ROUND.toString(), new Listener() {
-//            @Override
-//            public void call(JSONObject params) throws JSONException {
-//                onBeginRound();
-//            }
-//        });
-//        socket.on(GET_ANSWER.toString(), new Listener() {
-//            @Override
-//            public void call(JSONObject params) throws JSONException {
-//                onGetAnswer();
-//            }
-//        });
+        socket.on(BEGIN_ROUND.toString(), new Listener() {
+            @Override
+            public void call(JSONObject params) throws JSONException {
+                onBeginRound(jsonToNotepad(params.getString("notepad")));
+            }
+        });
+
     }
 
     private void onStartGame() {
@@ -276,44 +268,32 @@ public class Communicator {
         }
     }
 
-    private static List<String> jsonToPlayerNames(String json) {
-        // Source: http://www.javadoc.io/doc/com.google.code.gson/gson/2.8.2
-        try {
-            Type listType = new TypeToken<List<String>>() {}.getType();
-            Gson gson = new Gson();
-            return gson.fromJson(json, listType);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    // Source: http://www.javadoc.io/doc/com.google.code.gson/gson/2.8.2
+
+    private static List<String> jsonToPlayerNames(String json) throws JsonParseException {
+        Type listType = new TypeToken<List<String>>() {}.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(json, listType);
     }
 
-    public static List<Notepad> jsonToNotepadList(String json) {
-        // Source: http://www.javadoc.io/doc/com.google.code.gson/gson/2.8.2
-        // TODO: test jsonToNotepadList
-        try {
-            Type listType = new TypeToken<List<Notepad>>() {}.getType();
-            Gson gson = new Gson();
-            return gson.fromJson(json, listType);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    private static List<Notepad> jsonToNotepadList(String json) throws JsonParseException {
+        Type listType = new TypeToken<List<Notepad>>(){}.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(json, listType);
     }
 
-    public static String playerListToJsonString(List<String> playerNames) {
-        // for reference, can be deleted when json converting is implemented
-        try {
-            Type listType = new TypeToken<List<String>>() {}.getType();
-            final List<String> target = new LinkedList<>();
-            target.addAll(playerNames);
-
-            Gson gson = new Gson();
-            return gson.toJson(target, listType);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    private static Notepad jsonToNotepad(String json) throws JsonParseException {
+        Type type = new TypeToken<Notepad>(){}.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(json, type);
     }
+
+    private static String notepadToJson(Notepad notepad) throws Exception {
+        Type type = new TypeToken<Notepad>() {}.getType();
+        Gson gson = new Gson();
+        return gson.toJson(notepad, type);
+    }
+
+
 
 }

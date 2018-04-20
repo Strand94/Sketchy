@@ -1,15 +1,12 @@
 package com.sketchy.game.Models;
 
-public abstract class Sheet {
+public class Sheet {
 
     private String objectiveWord;
     private String drawing;
     private String playerName;
+    private String answer;
 
-    public Sheet(String objectiveWord, String playerName) {
-        this.objectiveWord = objectiveWord;
-        this.playerName = playerName;
-    }
 
     public String getObjectiveWord() {
         return objectiveWord;
@@ -33,5 +30,13 @@ public abstract class Sheet {
 
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 }
