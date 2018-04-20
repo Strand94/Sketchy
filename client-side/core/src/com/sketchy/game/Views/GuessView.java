@@ -35,13 +35,13 @@ public class GuessView extends View {
 
         // TextFields
         guessField = new TextField("", redTextField);
-        guessField.setMessageText("Enter your name");
+        guessField.setMessageText("Your guess");
 
         // Buttons
         submit = new TextButton("Submit", uiSkin);
 
         // Add elements to table
-        table.add(header).padBottom(45);
+        table.add(header).expandY().top().padTop(getScreenHeight()*0.07f);
         table.row();
         table.add(guessField).width(300).padBottom(25);
         table.row();
