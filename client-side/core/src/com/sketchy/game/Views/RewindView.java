@@ -26,7 +26,7 @@ public class RewindView extends View {
     private Notepad notepad;
     private List<Sheet> sheets;
 
-    public RewindView(ClientController clientController, boolean lobbyMaster) {
+    public RewindView(final ClientController clientController, boolean lobbyMaster) {
         this.clientController = clientController;
         this.isLobbyMaster = lobbyMaster;
 
@@ -45,7 +45,7 @@ public class RewindView extends View {
         next.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                advance(); //Todo send request to server instead
+                clientController.requestRewind();
             }
         });
 
@@ -71,7 +71,7 @@ public class RewindView extends View {
         sheets = notepad.getSheets();
     }
 
-    void advance(){
+    public void advance(){
 
         if (sheets.size() == 0){
             System.out.println("No more sheets in notepad to show!");
@@ -98,7 +98,7 @@ public class RewindView extends View {
         advances++;
     }
 
-    void createView(Sheet sheet, boolean guess, boolean first){
+    private void  createView(Sheet sheet, boolean guess, boolean first){
         table.reset();
 
         who.setText(sheet.getPlayerName());
@@ -139,7 +139,7 @@ public class RewindView extends View {
         Gdx.gl.glClearColor(250.0f / 256, 171.0f / 256, 71.0f / 256, 1);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            advance();
+            clientController.advanceRewind();
         }
     }
 

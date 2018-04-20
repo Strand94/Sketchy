@@ -12,6 +12,7 @@ import com.sketchy.game.Views.JoinView;
 import com.sketchy.game.Views.LoadingView;
 import com.sketchy.game.Views.LobbyView;
 import com.sketchy.game.Views.LoginView;
+import com.sketchy.game.Views.RewindView;
 import com.sketchy.game.Views.View;
 import com.sketchy.game.communicator.Communicator;
 
@@ -169,6 +170,21 @@ public class ClientController {
     }
     //=========== END VIEW ==============\\
 
+    //=========== REWIND ================\\
+
+    public void advanceRewind(){
+        if (viewStack.peek() instanceof RewindView) {
+            RewindView view = (RewindView) viewStack.peek();
+            view.advance();
+        }
+    }
+
+    public void requestRewind(){
+        //todo: Send something to communicator
+    }
+
+    //=========== END REWIND ============\\
+
     public void showLogin() {
         setView(new LoginView(this), true);
     }
@@ -180,6 +196,11 @@ public class ClientController {
     public void loadLobby() {
         setView(new LoadingView(this), false);
         nextView = new LobbyView(this);
+    }
+
+    public void showRewind() {
+        //Todo not everyone can be lobby master
+        setView(new RewindView(this, true), true);
     }
 
     public void showGuess(Stack<Dot> drawing) {
