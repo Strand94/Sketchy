@@ -34,8 +34,7 @@ public class DrawView extends View {
     public DrawView(ClientController controller) {
         this.controller = controller;
 
-        this.loadAssets();
-
+        // Labels
         Label guessWord = new Label("Elephant", uiSkin);
 
         // Buttons
@@ -102,11 +101,6 @@ public class DrawView extends View {
     }
 
     @Override
-    public void show() {
-
-    }
-
-    @Override
     public void render(float delta) {
         super.render(delta);
         Gdx.gl.glClearColor(41.0f / 256, 45.0f / 256, 50.0f / 256, 1);
@@ -114,29 +108,6 @@ public class DrawView extends View {
         draw();
 
         renderDrawing();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
-    public void dispose() {
-    }
-
-    private void loadAssets() {
     }
 
     public List<Dot> getDrawing() {
