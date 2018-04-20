@@ -2,8 +2,6 @@ package com.sketchy.game.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -35,7 +33,7 @@ public class DrawView extends View {
     private Float lastY = null;
 
     // UI
-    private Label guessWord;
+    private Label drawWordLabel;
     private TextButton submit;
     List<Color> colors;
 
@@ -43,7 +41,7 @@ public class DrawView extends View {
         this.controller = controller;
 
         // Labels
-        guessWord = new Label("Elephant", uiSkin);
+        drawWordLabel = new Label("Elephant", uiSkin);
 
         // Buttons
         submit = new TextButton("Submit", uiSkin);
@@ -57,7 +55,7 @@ public class DrawView extends View {
 
         // Add to table
         table.row().colspan(5);
-        table.add(guessWord).top().expand().pad(20);
+        table.add(drawWordLabel).top().expand().pad(20);
         table.row();
 
         for (Color color : colors){
