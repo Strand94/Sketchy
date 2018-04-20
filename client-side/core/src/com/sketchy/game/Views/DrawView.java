@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Dot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -35,6 +37,7 @@ public class DrawView extends View {
     // UI
     private Label guessWord;
     private TextButton submit;
+    List<Color> colors;
 
     public DrawView(ClientController controller) {
         this.controller = controller;
@@ -45,10 +48,25 @@ public class DrawView extends View {
         // Buttons
         submit = new TextButton("Submit", uiSkin);
 
+        colors = new ArrayList<>();
+        colors.add(Color.RED);
+        colors.add(Color.GREEN);
+        colors.add(Color.BLUE);
+        colors.add(Color.ORANGE);
+        colors.add(Color.WHITE);
+
         // Add to table
-        table.add(guessWord).top().expand().padTop(20);
+        table.row().colspan(5);
+        table.add(guessWord).top().expand().pad(20);
         table.row();
-        table.add(submit).bottom().expandX().padBottom(0.03f * getScreenHeight());
+
+        for (Color color : colors){
+            ColorButton button = new ColorButton(uiSkin, color);
+            table.add(button).size(button.getWidth()*2);
+        }
+
+        table.row();
+        table.add(submit).bottom().expandX().padBottom(0.03f * getScreenHeight()).colspan(5);
 
         // Listeners
         submit.addListener(new ChangeListener() {
@@ -65,6 +83,22 @@ public class DrawView extends View {
 
     private void onSubmit() {
         controller.showGuess(drawing);
+    }
+
+    private class ColorButton extends Button{
+
+        public ColorButton(Skin skin, final Color color) {
+            super(skin);
+            this.setColor(color);
+
+            // Listeners
+            this.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    currentColor = color;
+                }
+            });
+        }
     }
 
     /**
