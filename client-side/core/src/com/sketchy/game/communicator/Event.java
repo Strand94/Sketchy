@@ -12,6 +12,7 @@ public enum Event {
     UPDATE_LOBBY("update-lobby"),
     BEGIN_ROUND("begin-round"),
     GET_ANSWER("get-answer"),
+    SEND_ANSWER("send-answer"),
     SOCKET_ID("socketID"),
     PING("ping"),
     PING_OK("pingOK"),

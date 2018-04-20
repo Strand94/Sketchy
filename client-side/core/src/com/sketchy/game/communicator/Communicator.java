@@ -255,6 +255,19 @@ public class Communicator {
         }
     }
 
+    public void sendAnswer(int lobbyId, Notepad notepad) {
+        try {
+            Emit
+                    .event(SEND_ANSWER)
+                    .to(socket)
+                    .with("lobbyId", lobbyId)
+                    .with("notepad", notepadToJson(notepad))
+                    .send();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void onPing() {
         try {
             System.out.println("ping");

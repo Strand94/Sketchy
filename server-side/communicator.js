@@ -12,6 +12,7 @@ const events = {
     UPDATE_LOBBY: "update-lobby",
     BEGIN_ROUND: "begin-round",
     GET_ANSWER: "get-answer",
+    SEND_ANSWER: "send-answer",
     PING: "ping",
     PING_OK: "pingOK",
     SOCKET_ID: "socketID",
@@ -51,6 +52,9 @@ class Communicator {
                 })
                 .on(events.START_GAME, (obj) => {
                     lobbyController.startGame(obj.lobbyId);
+                })
+                .on(events.SEND_ANSWER, (obj) => {
+                    thiz.gameControllers[obj.lobbyId].recieveNotepad(obj.notepad);
                 })
                 .on(events.END_GAME, (obj) => {
                     thiz.gameControllers[obj.lobbyId].endGame();
