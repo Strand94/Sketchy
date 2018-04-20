@@ -16,8 +16,10 @@ import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Player;
 
 public class LoginView extends View {
+
     final ClientController controller;
     TextField nameField;
+    Label warning;
 
     public LoginView(final ClientController controller) {
         this.controller = controller;
@@ -49,6 +51,11 @@ public class LoginView extends View {
         table.row();
         table.add(join).center().colspan(2);
 
+        warning = new Label("Please enter a\nvalid username", uiSkin);
+        warning.setVisible(false);
+        table.row();
+        table.add(warning);
+
         // Listeners
         join.addListener(new ChangeListener() {
             @Override
@@ -79,15 +86,29 @@ public class LoginView extends View {
     private void onJoin() {
         System.out.println("Join Game");
 
-        controller.setPlayer(new Player(nameField.getText()));
-        controller.showJoin();
+        if(!nameIsValid()){
+            warning.setVisible(true);
+        } else{
+            controller.setPlayer(new Player(nameField.getText()));
+            controller.showJoin();
+        }
     }
 
     private void onCreate() {
         System.out.println("Create Game");
 
-        controller.setPlayer(new Player(nameField.getText()));
-        controller.createLobby(controller.getPlayer().getName());
+        if(!nameIsValid()){
+            warning.setVisible(true);
+        } else{
+            controller.setPlayer(new Player(nameField.getText()));
+            controller.createLobby(controller.getPlayer().getName());
+        }
+    }
+
+    private boolean nameIsValid(){
+        return     nameField.getText().equals("Your name")
+                || nameField.getText().equals("")
+                || nameField.getText().equals(" ");
     }
 
 }
