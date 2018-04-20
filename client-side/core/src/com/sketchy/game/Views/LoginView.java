@@ -96,15 +96,15 @@ public class LoginView extends View {
     private void onJoin() {
         System.out.println("Join Game");
 
-        controller.setPlayer(new Player(nameField.getText()), );
+        controller.setPlayer(nameField.getText());
         controller.showJoin();
     }
 
     private void onCreate() {
         System.out.println("Create Game");
 
-        controller.setPlayer(new Player(nameField.getText()), );
-        controller.createLobby(controller.getPlayerName().getName());
+        controller.setPlayer(nameField.getText());
+        controller.createLobby(controller.getPlayerName());
     }
 
 }

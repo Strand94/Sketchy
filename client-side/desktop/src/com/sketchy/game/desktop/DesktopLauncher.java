@@ -14,8 +14,8 @@ public class DesktopLauncher {
         config.width = 720 / 2;
         config.height = 1280 / 2;
 
-
-        // jsonToNotepadList();
+        String notepadJson = "{\"originalWord\":\"lemmen\",\"sheets\":[{\"objectiveWord\":\"hest\",\"drawing\":null,\"playerName\":{\"name\":\"0\",\"address\":\"testAddress\",\"points\":0}}],\"route\":[{\"name\":\"0\",\"address\":\"testAddress\",\"points\":0},{\"name\":\"1\",\"address\":\"testAddress\",\"points\":0},{\"name\":\"2\",\"address\":\"testAddress\",\"points\":0}]}";
+        System.out.println(jsonToNotepadList(notepadJson));
 
     }
 }

@@ -25,3 +25,4 @@ for (let i = 0; i < 7; i++) {
 var notepad = new Notepad("lemmen", players);
 notepad.push(new Drawing("hest", players[0]));
 console.log(notepad);
+console.log(JSON.stringify(notepad));

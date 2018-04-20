@@ -7,6 +7,7 @@ import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Player;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -103,16 +104,21 @@ public class Communicator {
         socket.on(UPDATE_LOBBY.toString(), new Listener() {
             @Override
             protected void call(JSONObject params) throws JSONException {
+                System.out.println(params.getString("playerList"));
+                System.out.println(params.get("playerList"));
+                System.out.println(params.getJSONArray("playerList"));
+
                 onUpdateLobby(
                         params.getInt("lobbyId"),
                         jsonToPlayerNames(params.getString("playerList"))
                 );
+
             }
         });
         socket.on(START_REWIND.toString(), new Listener() {
             @Override
             public void call(JSONObject params) throws JSONException {
-                onStartRewind(jsonToNotepadList(params.toString()));
+                // onStartRewind(jsonToNotepadList(params.toString())); TODO: convert notepadList from json
             }
         });
         socket.on(REWIND_SHOW_NEXT.toString(), new Listener() {
