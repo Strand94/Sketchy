@@ -3,10 +3,12 @@ package com.sketchy.game.Views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
@@ -30,15 +32,18 @@ public class DrawView extends View {
     private Float lastX = null;
     private Float lastY = null;
 
+    // UI
+    private Label guessWord;
+    private TextButton submit;
 
     public DrawView(ClientController controller) {
         this.controller = controller;
 
         // Labels
-        Label guessWord = new Label("Elephant", uiSkin);
+        guessWord = new Label("Elephant", uiSkin);
 
         // Buttons
-        TextButton submit = new TextButton("Submit", uiSkin);
+        submit = new TextButton("Submit", uiSkin);
 
         // Add to table
         table.add(guessWord).top().expand().padTop(20);
