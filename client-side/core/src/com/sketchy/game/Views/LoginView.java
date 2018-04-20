@@ -77,7 +77,7 @@ public class LoginView extends View {
     private void onJoin() {
         System.out.println("Join Game");
 
-        if(!nameIsValid()){
+        if(nameIsValid()){
             warning.setVisible(true);
         } else{
             controller.setPlayer(new Player(nameField.getText()));
@@ -88,7 +88,7 @@ public class LoginView extends View {
     private void onCreate() {
         System.out.println("Create Game");
 
-        if(!nameIsValid()){
+        if(nameIsValid()){
             warning.setVisible(true);
         } else{
             controller.setPlayer(new Player(nameField.getText()));
