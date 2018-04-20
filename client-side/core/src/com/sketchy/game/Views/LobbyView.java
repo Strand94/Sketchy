@@ -28,7 +28,7 @@ public class LobbyView extends View {
         playerTable = new Table();
         buttonTable = new Table();
         stage.addActor(buttonTable);
-        
+
         // Header
         lobbyIdLabel = new Label("LobbyID: \u2014", uiSkin);
         lobbyIdLabel.setColor(Color.CYAN);
@@ -44,7 +44,6 @@ public class LobbyView extends View {
         table.add(lobbyIdLabel);
         table.row();
         table.setFillParent(true);
-        table.add(playerTable);
 
         buttonTable.setPosition(screenWidth / 2, screenHeight * 0.1f);
         buttonTable.add(startGame);
@@ -82,7 +81,7 @@ public class LobbyView extends View {
     private void addPerson(String name) {
         Label playerName = new Label(name, uiSkin);
         playerName.setColor(Color.CYAN);
-        playerTable.add(playerName);
+        playerTable.add(playerName).colspan(2);
         playerTable.row();
     }
 
