@@ -172,10 +172,10 @@ public class ClientController {
 
     //=========== REWIND ================\\
 
-    public void advanceRewind(){
+    public void rewindShowNext(){
         if (viewStack.peek() instanceof RewindView) {
-            RewindView view = (RewindView) viewStack.peek();
-            view.advance();
+            RewindView rewindView = (RewindView) viewStack.peek();
+            rewindView.showNext();
         }
     }
 
