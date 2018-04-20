@@ -1,21 +1,37 @@
 package com.sketchy.game.Models;
 
-public class Sheet {
+public abstract class Sheet {
 
-    /**
-     * Returns player
-     * <p>
-     * Longer description. If there were any, it would be
-     * here.
-     * <p>
-     * And even more explanations to follow in consecutive
-     * paragraphs separated by HTML paragraph breaks.
-     *
-     * @param variable Description text text text.
-     * @return Description text text text.
-     */
-    public void getPlayer() {
+    private String objectiveWord;
+    private String drawing;
+    private String playerName;
 
+    public Sheet(String objectiveWord, String playerName) {
+        this.objectiveWord = objectiveWord;
+        this.playerName = playerName;
     }
 
+    public String getObjectiveWord() {
+        return objectiveWord;
+    }
+
+    public void setObjectiveWord(String objectiveWord) {
+        this.objectiveWord = objectiveWord;
+    }
+
+    public String getDrawing() {
+        return drawing;
+    }
+
+    public void setDrawing(String drawing) {
+        this.drawing = drawing;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
 }

@@ -11,7 +11,7 @@ class GameController {
     // "public" functions
 
     abortGame() {
-        // TODO: implement
+        this.startRewind();
     }
 
     startGame() {
@@ -20,10 +20,23 @@ class GameController {
     }
 
     recieveNotepad(notepad) {
-        this.game.pushNotepad(notepad);
+        this.game.addNotepad(notepad);
         if (this.game.getNotepads().length === this.lobby.getPlayers().length) {
             this.continueGame();
         }
+    }
+
+    rewindShowNext() {
+        this.lobby.getPlayers().forEach(player => {
+            this.communicator.rewindShowNext(player.address);
+        });
+    }
+
+    endRewind() {
+        this.lobby.getPlayers().forEach(player => {
+            this.communicator.endRewind(player.address);
+        });
+        this.game = null;
     }
 
     // "private" functions
@@ -33,7 +46,7 @@ class GameController {
         if (gameOver === false) {
             this.sendNotepads();
         } else {
-            this.endGame();
+            this.startRewind();
         }
     }
 
@@ -48,8 +61,10 @@ class GameController {
         });
     }
 
-    endGame() {
-        // TODO: implement
+    startRewind() {
+        this.lobby.getPlayers().forEach(player => {
+            this.communicator.startRewind(player.address, this.game.getNotepads());
+        });
     }
 
 }

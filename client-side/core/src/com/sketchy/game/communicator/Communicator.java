@@ -7,6 +7,7 @@ import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Player;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -105,8 +106,26 @@ public class Communicator {
             protected void call(JSONObject params) throws JSONException {
                 onUpdateLobby(
                         params.getInt("lobbyId"),
-                        jsonToPlayerList(params.getString("playerList"))
+                        jsonToPlayerNames(params.getString("playerList"))
                 );
+            }
+        });
+        socket.on(START_REWIND.toString(), new Listener() {
+            @Override
+            public void call(JSONObject params) throws JSONException {
+                // onStartRewind(jsonToNotepadList(params.toString())); TODO: convert notepadList from json
+            }
+        });
+        socket.on(REWIND_SHOW_NEXT.toString(), new Listener() {
+            @Override
+            protected void call(JSONObject params) throws JSONException {
+                onRewindShowNext();
+            }
+        });
+        socket.on(REWIND_FINISHED.toString(), new Listener() {
+            @Override
+            protected void call(JSONObject params) throws JSONException {
+                onRewindFinished();
             }
         });
 //        socket.on(BEGIN_ROUND.toString(), new Listener() {
@@ -131,9 +150,9 @@ public class Communicator {
         clientController.endGame();
     }
 
-    private void onUpdateLobby(int lobbyId, List<Player> members) {
+    private void onUpdateLobby(int lobbyId, List<String> playerNames) {
         try {
-            clientController.updateLobby(lobbyId, members);
+            clientController.updateLobby(lobbyId, playerNames);
         } catch (Exception e) {
             e.printStackTrace(); //TODO: Error message
         }
@@ -147,17 +166,16 @@ public class Communicator {
 
     }
 
-    private void onPing() {
-        try {
-            System.out.println("ping");
-            Emit
-                    .event(PING_OK)
-                    .to(socket)
-                    .with("id", socket.id())
-                    .send();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void onStartRewind(List<Notepad> notepadList) {
+        // TODO: onStartRewind
+    }
+
+    private void onRewindShowNext() {
+        // TODO: onRewindShowNext
+    }
+
+    private void onRewindFinished() {
+        // TODO: onRewindFinished
     }
 
     // Send events to server:
@@ -245,10 +263,23 @@ public class Communicator {
         }
     }
 
-    private static List<Player> jsonToPlayerList(String json) {
+    public void onPing() {
+        try {
+            System.out.println("ping");
+            Emit
+                    .event(PING_OK)
+                    .to(socket)
+                    .with("id", socket.id())
+                    .send();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static List<String> jsonToPlayerNames(String json) {
         // Source: http://www.javadoc.io/doc/com.google.code.gson/gson/2.8.2
         try {
-            Type listType = new TypeToken<List<Player>>() {}.getType();
+            Type listType = new TypeToken<List<String>>() {}.getType();
             Gson gson = new Gson();
             return gson.fromJson(json, listType);
         } catch (Exception e) {
@@ -257,12 +288,25 @@ public class Communicator {
         return null;
     }
 
-    private static String playerListToString(ArrayList<Player> players) {
-        // TODO: test this
+    public static List<Notepad> jsonToNotepadList(String json) {
+        // Source: http://www.javadoc.io/doc/com.google.code.gson/gson/2.8.2
+        // TODO: test jsonToNotepadList
         try {
-            Type listType = new TypeToken<List<Player>>() {}.getType();
-            final List<Player> target = new LinkedList<>();
-            target.addAll(players);
+            Type listType = new TypeToken<List<Notepad>>() {}.getType();
+            Gson gson = new Gson();
+            return gson.fromJson(json, listType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String playerListToJsonString(List<String> playerNames) {
+        // for reference, can be deleted when json converting is implemented
+        try {
+            Type listType = new TypeToken<List<String>>() {}.getType();
+            final List<String> target = new LinkedList<>();
+            target.addAll(playerNames);
 
             Gson gson = new Gson();
             return gson.toJson(target, listType);

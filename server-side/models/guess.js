@@ -1,12 +1,10 @@
 const Sheet = require("./sheet");
 
 class Guess extends Sheet {
-    constructor(objectiveWord, drawing, player) {
-        super();
-        this.objectiveWord = objectiveWord;
+    constructor(objectiveWord, drawing, playerName) {
+        super(objectiveWord, playerName);
         this.drawing = drawing;
-        this.player = player;
-
+        
         this.answer = null;
     }
 

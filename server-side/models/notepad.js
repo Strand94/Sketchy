@@ -2,7 +2,7 @@ class Notepad {
     constructor(originalWord, route) {
         this.originalWord = originalWord;
         this.sheets = [];
-        this.route = route;
+        this.route = route; // array of playerAdresses
     }
 
     push(sheet) {
