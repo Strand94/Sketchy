@@ -40,10 +40,6 @@ class Game {
         }
     }
 
-    getNotepads() {
-        return this.notepads;
-    }
-
     addNotepad(newNotepad) {
         this.notepads.forEach(notepad => {
             if (notepad.originalWord === newNotepad.originalWord) {
@@ -63,32 +59,23 @@ class Game {
         // partly fills inn and pushes new sheet to each notepad
         this.notepads.forEach(notepad => {
             const previousSheet = notepad.pop();
-            if (previousSheet instanceof Drawing) {
+
+            if (previousSheet.answer === null) {
                 notepad.push(previousSheet);
-                notepad.push(new Guess(
-                    previousSheet.getObjectiveWord(),
-                    previousSheet.getDrawing(),
-                    notepad.nextOnRoute()
-                ));
-            } else if (previousSheet instanceof Guess) {
-                notepad.push(previousSheet);
-                notepad.push(new Drawing(
-                    previousSheet.getAnswer(),
-                    notepad.nextOnRoute()
-                ))
             } else {
-                throw (new Error("sheet that is neither Guess or Drawing in notepad"));
+                notepad.push(new Sheet(
+                    previousSheet.answer
+                ));
             }
-        })
+        });
     }
 
     firstHandleNotepads() {
         this.notepads.forEach(notepad => {
-            notepad.push(new Drawing(
-                notepad.originalWord,
-                notepad.nextOnRoute()
-            ))
-        })
+            notepad.push(new Sheet(
+                notepad.originalWord
+            ));
+        });
     }
 }
 

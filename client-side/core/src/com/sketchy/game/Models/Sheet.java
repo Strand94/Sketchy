@@ -4,8 +4,8 @@ public class Sheet {
 
     private String objectiveWord;
     private String drawing;
-    private String playerName;
     private String answer;
+    private String playerName;
 
 
     public String getObjectiveWord() {

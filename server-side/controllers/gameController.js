@@ -15,25 +15,25 @@ class GameController {
     }
 
     startGame() {
-        this.game = new Game(this.lobby.getPlayers());
+        this.game = new Game(this.lobby.players);
         this.continueGame();
     }
 
     recieveNotepad(notepad) {
         this.game.addNotepad(notepad);
-        if (this.game.getNotepads().length === this.lobby.getPlayers().length) {
+        if (this.game.notepads.length === this.lobby.players.length) {
             this.continueGame();
         }
     }
 
     rewindShowNext() {
-        this.lobby.getPlayers().forEach(player => {
+        this.lobby.players.forEach(player => {
             this.communicator.rewindShowNext(player.address);
         });
     }
 
     endRewind() {
-        this.lobby.getPlayers().forEach(player => {
+        this.lobby.players.forEach(player => {
             this.communicator.endRewind(player.address);
         });
         this.game = null;
@@ -51,7 +51,7 @@ class GameController {
     }
 
     sendNotepads() {
-        this.game.getNotepads().forEach(notepad => {
+        this.game.notepads.forEach(notepad => {
             const player = notepad.nextOnRoute();
             if (typeof player === 'undefined') {
                 console.log("no more players on route");
@@ -62,8 +62,8 @@ class GameController {
     }
 
     startRewind() {
-        this.lobby.getPlayers().forEach(player => {
-            this.communicator.startRewind(player.address, this.game.getNotepads());
+        this.lobby.players.forEach(player => {
+            this.communicator.startRewind(player.address, this.game.notepads);
         });
     }
 
