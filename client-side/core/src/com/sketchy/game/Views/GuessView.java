@@ -1,7 +1,6 @@
 package com.sketchy.game.Views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -32,12 +31,10 @@ public class GuessView extends View {
         shapeRenderer = new ShapeRenderer();
 
         // Header
-        header = new Label("Wat is dis?", uiSkin);
-        header.setColor(Color.RED);
+        header = new Label("Wat is dis?", redLabel);
 
         // TextFields
-        guessField = new TextField("Enter guess here", uiSkin);
-        guessField.setColor(Color.CORAL);
+        guessField = new TextField("Enter guess here", redTextField);
 
         // Buttons
         submit = new TextButton("Submit", uiSkin);
