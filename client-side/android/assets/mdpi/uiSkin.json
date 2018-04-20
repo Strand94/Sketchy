@@ -116,6 +116,8 @@ com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 		background: button-up-blue
 		focusedBackground: button-down-blue
 		cursor: caret-light-blue
+		messageFont: xkcd
+		messageFontColor: blue-light
 	}
 	red: {
 		font: xkcd
@@ -123,6 +125,8 @@ com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 		background: button-up-red
 		focusedBackground: button-down-red
 		cursor: caret-orange
+		messageFont: xkcd
+		messageFontColor: orange
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {

@@ -1705,14 +1705,14 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: messageFont
 						optional: true
-						value: null
+						value: xkcd
 					}
 					messageFontColor: {
 						class: com.ray3k.skincomposer.data.StyleProperty
 						type: com.badlogic.gdx.graphics.Color
 						name: messageFontColor
 						optional: true
-						value: null
+						value: blue-light
 					}
 				}
 				deletable: false
@@ -1790,14 +1790,14 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: messageFont
 						optional: true
-						value: null
+						value: xkcd
 					}
 					messageFontColor: {
 						class: com.ray3k.skincomposer.data.StyleProperty
 						type: com.badlogic.gdx.graphics.Color
 						name: messageFontColor
 						optional: true
-						value: null
+						value: orange
 					}
 				}
 				deletable: true
