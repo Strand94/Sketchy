@@ -18,30 +18,35 @@ public class LobbyView extends View {
     private ClientController controller;
 
     private TextButton startGame;
-    private float remaining = 5;
-    private boolean startGame_r = false;
-    private Label lobbyIdLabel;
-    private Label numberOfPlayers;
-    private Table buttonTable;
-    private Table playerTable = new Table();
+    private Label lobbyIdLabel, numberOfPlayers;
+    private Table buttonTable, playerTable;
 
     public LobbyView(ClientController controller) {
         this.controller = controller;
 
+        // Tables
+        playerTable = new Table();
+        buttonTable = new Table();
+        stage.addActor(buttonTable);
+        
+        // Header
         lobbyIdLabel = new Label("LobbyID: \u2014", uiSkin);
         lobbyIdLabel.setColor(Color.CYAN);
-        startGame = new TextButton("Start Game", uiSkin);
-        numberOfPlayers = new Label(controller.getPlayerCount() + "/" +
-                Integer.toString(Config.MAX_PLAYERS), uiSkin);
 
+        // Buttons
+        startGame = new TextButton("Start Game", uiSkin);
+
+        // Labels
+        numberOfPlayers = new Label(controller.getPlayerCount() + "/" +
+                                    Integer.toString(Config.MAX_PLAYERS), uiSkin);
+
+        // Add to table
         table.add(lobbyIdLabel);
         table.row();
-        buttonTable = new Table();
-        buttonTable.setPosition(screenWidth / 2, screenHeight * 0.1f);
-
         table.setFillParent(true);
-        stage.addActor(buttonTable);
         table.add(playerTable);
+
+        buttonTable.setPosition(screenWidth / 2, screenHeight * 0.1f);
         buttonTable.add(startGame);
         buttonTable.row();
         buttonTable.add(numberOfPlayers);
@@ -81,9 +86,6 @@ public class LobbyView extends View {
         playerTable.row();
     }
 
-    private void startGameCounter() {
-        startGame_r = true;
-    }
 
     @Override
     public void render(float delta) {
@@ -94,12 +96,6 @@ public class LobbyView extends View {
             controller.goBack();
         }
 
-        // Countdown. Todo: Move to startGameCounter
-        if (remaining > 0.1 && startGame_r == true) {
-            float deltaTime = Gdx.graphics.getDeltaTime();
-            remaining -= deltaTime;
-            startGame.setText(String.format("Start in %.0fs", remaining));
-        }
     }
 
     private void onGameStart() {
