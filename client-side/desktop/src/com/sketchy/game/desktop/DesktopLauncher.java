@@ -15,7 +15,7 @@ public class DesktopLauncher {
         config.height = 1280 / 2;
 
 
-        jsonToNotepadList();
+        // jsonToNotepadList();
 
     }
 }

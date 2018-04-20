@@ -10,13 +10,22 @@ class Game {
         this.notepads = [];
 
         // fills inn notepads with unique routes
-        for (let i = 0; i < this.players.length; i++) {
-            const clone = this.players.slice(0);
+        var playerAddresses = [] 
+        this.players.forEach(player => {
+            playerAddresses.push(player.address);
+        });
+        this.players.forEach(player => {
+            const clone = playerAddresses.slice(0);  
+
             this.notepads.push(
                 new Notepad(this.getWord(), clone)
             );
-            this.rotatePlayers();
-        }
+
+            // rotate playeraddresses
+            let tmp = playerAddresses.shift();
+            playerAddresses.push(tmp);
+        });
+
     }
 
     nextStep() {
@@ -37,23 +46,17 @@ class Game {
 
     addNotepad(newNotepad) {
         this.notepads.forEach(notepad => {
-            if (notpad.originalWord === newNotepad.originalWord) {
-                this.notepads = this.notepads.filter(item => item !== notepad);
-                break;
+            if (notepad.originalWord === newNotepad.originalWord) {
+                notepads = notepads.filter(item => item !== notepad);
             }
         })
-        this.notepads.push(notepad);
+        this.notepads.push(newNotepad);
     }
 
     // private functions
 
     getWord() {
         return guessWords.pop();
-    }
-
-    rotatePlayers() {
-        const tmp = this.players.shift();
-        this.players.push(tmp);
     }
 
     normalHandleNotepads() {

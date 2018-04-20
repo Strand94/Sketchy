@@ -105,7 +105,7 @@ public class Communicator {
             protected void call(JSONObject params) throws JSONException {
                 onUpdateLobby(
                         params.getInt("lobbyId"),
-                        jsonToPlayerList(params.getString("playerList"))
+                        jsonToPlayerNames(params.getString("playerList"))
                 );
             }
         });
@@ -149,8 +149,8 @@ public class Communicator {
         clientController.endGame();
     }
 
-    private void onUpdateLobby(int lobbyId, List<Player> members) {
-        clientController.updateLobby(lobbyId, members);
+    private void onUpdateLobby(int lobbyId, List<String> playerNames) {
+        clientController.updateLobby(lobbyId, playerNames);
     }
 
     private void onBeginRound(Notepad notepad) {
@@ -271,10 +271,10 @@ public class Communicator {
         }
     }
 
-    private static List<Player> jsonToPlayerList(String json) {
+    private static List<String> jsonToPlayerNames(String json) {
         // Source: http://www.javadoc.io/doc/com.google.code.gson/gson/2.8.2
         try {
-            Type listType = new TypeToken<List<Player>>() {}.getType();
+            Type listType = new TypeToken<List<String>>() {}.getType();
             Gson gson = new Gson();
             return gson.fromJson(json, listType);
         } catch (Exception e) {
@@ -296,12 +296,12 @@ public class Communicator {
         return null;
     }
 
-    public static String playerListToJsonString(ArrayList<Player> players) {
-        // TODO: playerListToJsonString
+    public static String playerListToJsonString(List<String> playerNames) {
+        // TODO: test playerListToJsonString
         try {
-            Type listType = new TypeToken<List<Player>>() {}.getType();
-            final List<Player> target = new LinkedList<>();
-            target.addAll(players);
+            Type listType = new TypeToken<List<String>>() {}.getType();
+            final List<String> target = new LinkedList<>();
+            target.addAll(playerNames);
 
             Gson gson = new Gson();
             return gson.toJson(target, listType);

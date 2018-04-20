@@ -1,9 +1,19 @@
 package com.sketchy.game.Models;
 
-import java.awt.image.BufferedImage;
-
 public class Guess extends Sheet {
-    BufferedImage guessingObjective; // Todo decide if 'BufferedImage' is correct to use here
-    Player player;
-    String answer;
+
+    private String answer;
+
+    public Guess(String objectiveWord, String playerName, String answer) {
+        super(objectiveWord, playerName);
+        this.answer = answer;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
 }

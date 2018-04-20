@@ -1,8 +1,6 @@
 package com.sketchy.game.Controllers;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sketchy.game.Models.Notepad;
-import com.sketchy.game.Models.Player;
 import com.sketchy.game.Models.Sheet;
 import com.sketchy.game.SketchyGame;
 import com.sketchy.game.Views.DrawView;
@@ -13,17 +11,16 @@ import com.sketchy.game.Views.LoginView;
 import com.sketchy.game.Views.View;
 import com.sketchy.game.communicator.Communicator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 public class ClientController {
 
-    private Player player;
-    private View view;
-    private int lobbyId;
-    private Communicator communicator;
     private SketchyGame game;
+    private Communicator communicator;
+    private View view;
+    private String playerName;
+    private int lobbyId;
     private int playerCount = 0;
 
     public ClientController(SketchyGame game) {
@@ -85,17 +82,11 @@ public class ClientController {
         showLobby();
     }
 
-    public void updateLobby(int lobbyId, List<Player> players) {
-        // TODO: adjust to Players
+    public void updateLobby(int lobbyId, List<String> names) {
         this.lobbyId = lobbyId;
 
-        System.out.format("clientController.updateLobby(%s, players(%d))\n", lobbyId, players.size());
-        setPlayerCount(players.size());
-
-        List<String> names = new ArrayList<>();
-        for (Player player : players) {
-            names.add(player.getName());
-        }
+        System.out.format("clientController.updateLobby(%s, players(%d))\n", lobbyId, names.size());
+        setPlayerCount(names.size());
 
         if (view instanceof LobbyView) {
             ((LobbyView) view).updatePlayerList(names);
@@ -107,14 +98,14 @@ public class ClientController {
 
 
     //=========== PLAYER ==============\\
-    public Player getPlayer() {
-        System.out.println("clientController.getPlayer() -> " + player.getName());
-        return player;
+    public String getPlayerName() {
+        System.out.println("clientController.getPlayerName() -> " + playerName);
+        return playerName;
     }
 
-    public void setPlayer(Player player) {
-        System.out.println(String.format("clientController.setPlayer('%s')", player.getName()));
-        this.player = player;
+    public void setPlayer(String playerName) {
+        System.out.println(String.format("clientController.setPlayerName('%s')", playerName));
+        this.playerName = playerName;
     }
     //=========== END PLAYER ==============\\
 

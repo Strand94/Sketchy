@@ -96,7 +96,7 @@ public class JoinView extends View {
     private void onJoin() {
         System.out.println("Join Game");
         if (validLobbyId(lobbyField.getText())) {
-            controller.joinLobby(Integer.parseInt(lobbyField.getText()), controller.getPlayer().getName());
+            controller.joinLobby(Integer.parseInt(lobbyField.getText()), controller.getPlayerName().getName());
         } else {
             //TODO: Add alert box to notify invalid lobby id
             System.out.println("Invalid LobbyID");

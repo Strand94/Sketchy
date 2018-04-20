@@ -24,8 +24,9 @@ class LobbyController {
         if (this.hasLobby(lobbyId)) {
             this.lobbies[lobbyId].startGame();
             return true;
+        } else {
+            console.log("can't start non-existing lobby with id %s", lobbyId);
         }
-        return false;
     }
 
     joinLobby(lobbyId, playerName, playerAddress) {
@@ -87,8 +88,14 @@ class LobbyController {
 
     updateLobby(lobbyId) {
         const players = this.lobbies[lobbyId].getPlayers();
+
+        var playerNames = []
         players.forEach(player => {
-            this.communicator.updateLobby(player.address, lobbyId, players)
+            playerNames.push(player.name);
+        })
+
+        players.forEach(player => {
+            this.communicator.updateLobby(player.address, lobbyId, playerNames);
         });
     }
 }

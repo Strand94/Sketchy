@@ -4,7 +4,12 @@ public abstract class Sheet {
 
     private String objectiveWord;
     private String drawing;
-    private Player player;
+    private String playerName;
+
+    public Sheet(String objectiveWord, String playerName) {
+        this.objectiveWord = objectiveWord;
+        this.playerName = playerName;
+    }
 
     public String getObjectiveWord() {
         return objectiveWord;
@@ -22,11 +27,11 @@ public abstract class Sheet {
         this.drawing = drawing;
     }
 
-    public Player getPlayer() {
-        return player;
+    public String getPlayerName() {
+        return playerName;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 }

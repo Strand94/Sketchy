@@ -1,32 +1,32 @@
 class Sheet {
-    constructor() {
-        this.objectiveWord = null;
+    constructor(objectiveWord, playerName) {
+        this.objectiveWord = objectiveWord;
         this.drawing = null;
-        this.player = null;
+        this.playerName = playerName;
+    }
+    
+    getPlayerName() {
+        return this.playerName;
     }
 
-    setPlayer(player) {
-        this.player = player;
-    }
-
-    setDrawing(drawing) {
-        this.drawing = drawing;
-    }
-
-    setObjectiveWord(word) {
-        this.objectiveWord = word;
-    }
-
-    getPlayer() {
-        return this.player;
+    setPlayerName(playerName) {
+        this.playerName = playerName;
     }
 
     getDrawing() {
         return this.drawing;
     }
 
+    setDrawing(drawing) {
+        this.drawing = drawing;
+    }
+    
     getObjectiveWord() {
         return this.objectiveWord;
+    }
+
+    setObjectiveWord(word) {
+        this.objectiveWord = word;
     }
 }
 

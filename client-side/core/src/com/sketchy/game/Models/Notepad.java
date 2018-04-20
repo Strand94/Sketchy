@@ -6,10 +6,10 @@ import java.util.List;
 public class Notepad {
     private String originalWord;
     private List<Sheet> sheets;
-    private List<Player> route;
+    private List<String> route;
 
 
-    public Notepad(String originalWord, List<Player> route) {
+    public Notepad(String originalWord, List<String> route) {
         this.originalWord = originalWord;
         this.sheets = new ArrayList<>();
         this.route = route;
@@ -31,11 +31,11 @@ public class Notepad {
         this.sheets = sheets;
     }
 
-    public List<Player> getRoute() {
+    public List<String> getRoute() {
         return route;
     }
 
-    public void setRoute(List<Player> route) {
+    public void setRoute(List<String> route) {
         this.route = route;
     }
 }
