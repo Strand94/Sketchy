@@ -86,15 +86,13 @@ public class View implements Screen {
             path = "mdpi";
         } else if (density > 1.5f && density <= 2.0f){
             path = "hdpi";
-        } else if (density > 2.0f && density <= 3){
-            path = "xhdpi";
         } else {
-            path = "xxhdpi";
+            path = "xhdpi";
         }
 
         // Now we ignore the previous check and force path to mdpi.
         // This is to ensure app doesn't crash while I add support for other devices
-        path = "mdpi";
+        path = "xhdpi";
 
         path += "/";
         jsonPath = path + "uiSkin.json";
