@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Timer;
 import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
 
@@ -20,6 +21,9 @@ public class LobbyView extends View {
     private TextButton startGame;
     private Label lobbyIdLabel, numberOfPlayers;
     private Table buttonTable, playerTable;
+
+    private Timer.Task timer;
+    private int counter = Config.START_GAME_TIMER;
 
     public LobbyView(ClientController controller) {
         this.controller = controller;
@@ -58,6 +62,14 @@ public class LobbyView extends View {
                 onGameStart();
             }
         });
+
+        // Timer
+        timer = new Timer.Task(){
+            @Override
+            public void run(){
+                countDown();
+            }
+        };
     }
 
     public void setLobbyId(int lobbyId) {
@@ -95,9 +107,21 @@ public class LobbyView extends View {
             controller.goBack();
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            startTimer();
+        }
     }
 
     private void onGameStart() {
         controller.startGame();
+    }
+
+    private void countDown(){
+        startGame.setText(String.format(String.format(Locale.GERMAN, "   Starting in %ds   ", counter)));
+        counter--;
+    }
+
+    public void startTimer(){
+        Timer.schedule(timer, 0f, 1f, Config.START_GAME_TIMER);
     }
 }
