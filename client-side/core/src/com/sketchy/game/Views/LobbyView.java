@@ -56,6 +56,7 @@ public class LobbyView extends View {
 
         table.add(playerTable).expandY().top().padTop(0.1f * getScreenHeight());
 
+        // Listeners
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
