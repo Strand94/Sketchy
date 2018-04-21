@@ -162,7 +162,7 @@ public class ClientController {
     }
 
     public void notifyPlayer(String message) {
-        // TODO: show message to user
+        viewStack.peek().showToast(message);
     }
 
     //=========== REWIND ================\\
