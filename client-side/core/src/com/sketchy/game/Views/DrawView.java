@@ -12,10 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Dot;
+import com.sketchy.game.Models.Drawing;
+import com.sketchy.game.Models.Sheet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class DrawView extends SheetView {
     private static final Color INITIAL_COLOR = new Color(224.0f / 256, 224.0f / 256, 224.0f / 256, 1);
@@ -25,7 +27,7 @@ public class DrawView extends SheetView {
     private ShapeRenderer shapeRenderer;
 
     // Drawing
-    private Stack<Dot> drawing;
+    private Drawing drawing;
     private float currentRadius = INITIAL_RADIUS;
     private Color currentColor = INITIAL_COLOR;
 
@@ -39,9 +41,10 @@ public class DrawView extends SheetView {
 
     DrawView(ClientController controller) {
         super(controller);
+        clearGl = false;
 
         // Labels
-        drawWordLabel = new Label(getSheet().getObjectiveWord(), uiSkin);
+        drawWordLabel = new Label("", uiSkin);
 
         // Buttons
         submit = new TextButton("Submit", uiSkin);
@@ -75,7 +78,7 @@ public class DrawView extends SheetView {
         });
 
         // Drawing initialization
-        drawing = new Stack<>();
+        drawing = new Drawing();
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -103,16 +106,8 @@ public class DrawView extends SheetView {
         if (Gdx.input.isTouched()) {
             float x = Gdx.input.getX();
             float y = Gdx.input.getY();
-            if (lastX != null && lastY != null && (x != lastX || y != lastY)) {
-                int nDots = (int) Math.sqrt(Math.pow(y - lastY, 2) + Math.pow(x - lastX, 2)) - 1;
-                float dX = (x - lastX) / nDots;
-                float dY = (y - lastY) / nDots;
-                for (int i = 0; i < nDots; i += 3) {
-                    lastX += 3 * dX;
-                    lastY += 3 * dY;
-                    drawing.add(new Dot(currentRadius, new Vector2(lastX, lastY), currentColor));
-                }
-                drawing.add(new Dot(currentRadius, new Vector2(x, y), currentColor));
+            if (lastX == null || x != lastX || y != lastY) {
+                drawing.add(new Dot(currentRadius, new Vector2(x, y), currentColor, lastX != null));
             }
             lastX = x;
             lastY = y;
@@ -122,39 +117,41 @@ public class DrawView extends SheetView {
         }
     }
 
-    /**
-     * Render ALL the Dot!
-     */
-    private void renderDrawing() {
-        for (Dot dot : drawing) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(dot.getColor());
-            shapeRenderer.circle(dot.getPosX(), getScreenHeight() - dot.getPosY(), dot.getRadius());
-            shapeRenderer.end();
-        }
-    }
-
     @Override
     public void render(float delta) {
-        super.render(delta);
-        Gdx.gl.glClearColor(41.0f / 256, 45.0f / 256, 50.0f / 256, 1);
-
         draw();
-
-        renderDrawing();
+        Gdx.gl.glClearColor(41.0f / 256, 45.0f / 256, 50.0f / 256, 1);
+        drawing.render(shapeRenderer, getScreenHeight(), 0);
+        super.render(delta);
     }
 
     @Override
     public void reset() {
         super.reset();
+        clearGlOnce();
         drawing.clear();
+        drawWordLabel.clear();
         currentColor = INITIAL_COLOR;
         currentRadius = INITIAL_RADIUS;
         lastX = null;
         lastY = null;
     }
 
-    public List<Dot> getDrawing() {
-        return drawing;
+    @Override
+    public void setSheet(Sheet sheet) throws Exception {
+        super.setSheet(sheet);
+        drawWordLabel.setText(sheet.getObjectiveWord());
+    }
+
+    @Override
+    protected void onSubmit() {
+        try {
+            getSheet().setBase64Drawing(drawing.toBase64());
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO: Show error message
+            throw new RuntimeException(e);
+        }
+        getSheet().setDrawer(controller.getPlayerName());
+        super.onSubmit();
     }
 }

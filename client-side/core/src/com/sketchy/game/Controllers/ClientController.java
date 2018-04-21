@@ -25,9 +25,11 @@ public class ClientController {
     private String playerName;
     private Notepad notepad;
 
+    private boolean isLobbyMaster;
+
     // Used by rewind
     private List<Notepad> filledNotepads;
-    private int sheetIndex, notepadIndex;
+    private int sheetIndex, notepadIndex, stepIndex;
     private List<Sheet> sheets;
 
     public ClientController(SketchyGame game) {
@@ -90,6 +92,9 @@ public class ClientController {
         showLoading();
         lobby = Lobby.LOADING;
         communicator.createLobby(playerName);
+
+        setLobbyMaster(true);
+        ViewManager.getInstance().lobbyView.setLobbyMaster();
     }
 
     public void joinLobby(int lobbyId, String playerName) {
@@ -156,43 +161,64 @@ public class ClientController {
         System.out.println("*goBack:" + to);
     }
 
+    public void notifyPlayer(String message) {
+        viewStack.peek().showToast(message);
+    }
+
     //=========== REWIND ================\\
 
     public void startRewind(List<Notepad> notepads) {
+
         filledNotepads = notepads;
         notepadIndex = 0;
         sheetIndex = 0;
+        stepIndex = 0;
         sheets = filledNotepads.get(notepadIndex).getSheets();
 
         showRewind();
         rewindShowNext();
+
+        if(isLobbyMaster()){
+            if (viewStack.peek() instanceof RewindView) {
+                RewindView rewindView = (RewindView) viewStack.peek();
+                rewindView.setLobbyMaster();
+            }
+        }
     }
 
     public void rewindShowNext(){
         if (viewStack.peek() instanceof RewindView) {
             RewindView rewindView = (RewindView) viewStack.peek();
 
-            if (!(sheetIndex < sheets.size())){
-                System.out.print("No more sheets");
+            if (!(stepIndex < sheets.size()*2+1)){
+                System.out.println("No more sheets!");
                 if (++notepadIndex < filledNotepads.size()) {
                     System.out.println("New notepad and new sheet");
                     sheets = filledNotepads.get(notepadIndex).getSheets();
                     sheetIndex = 0;
+                    stepIndex = 0;
                 } else {
-                    System.out.println("No more notepads");
+                    if (isLobbyMaster) {
+                        communicator.rewindFinished(lobby.lobbyId);
+                        System.out.println("Sent REWIND_FINISHED event");
+                    }
                     return;
                 }
             }
 
-            if (sheetIndex == 0) {
-                rewindView.showRewindStep(sheets.get(sheetIndex++), true, true);
-            } else if (sheetIndex % 2 == 1) {
-                rewindView.showRewindStep(sheets.get(sheetIndex++), false, false);
-            } else if (sheetIndex % 2 == 0) {
-                rewindView.showRewindStep(sheets.get(sheetIndex++), true, false);
+            if (stepIndex == 0) {
+                rewindView.showRewindStep(sheets.get(sheetIndex), true, true);
+            } else if (stepIndex % 2 == 1) {
+                rewindView.showRewindStep(sheets.get(sheetIndex), false, false);
+            } else if (stepIndex % 2 == 0) {
+                rewindView.showRewindStep(sheets.get(sheetIndex), true, false);
+                sheetIndex++;
             } else {
                 System.out.println("Something wrong");
             }
+
+            stepIndex++;
+
         }
     }
 
@@ -201,7 +227,7 @@ public class ClientController {
     }
 
     public void requestNextRewindStep() {
-        //todo: Ask communicator to broadcast onRewindShowNext to all players
+        communicator.rewindShowNext(lobby.lobbyId);
     }
 
     //=========== END REWIND ============\\
@@ -238,4 +264,13 @@ public class ClientController {
         setView(viewManager.drawView, true);
     }
     //=========== END VIEW ==============\\
+
+
+    public boolean isLobbyMaster() {
+        return isLobbyMaster;
+    }
+
+    public void setLobbyMaster(boolean lobbyMaster) {
+        isLobbyMaster = lobbyMaster;
+    }
 }

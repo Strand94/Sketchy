@@ -11,7 +11,7 @@ class GameController {
 
     // "public" functions
 
-    abortGame() {
+    endGame() {
         this.startRewind();
     }
 

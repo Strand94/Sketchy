@@ -8,8 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.sketchy.game.Config;
 
 public abstract class View implements Screen {
 
@@ -17,9 +20,16 @@ public abstract class View implements Screen {
     Table table;
     Skin uiSkin;
 
+    //Toast
+    private TextButton toast;
+    private Timer.Task toastFadeout;
+
     // Styles
     protected Label.LabelStyle blueLabel, redLabel, greenLabel;
     protected TextField.TextFieldStyle redTextField;
+
+    protected boolean clearGl = true;
+    private boolean hasCleared = false;
 
     protected View() {
         stage = new Stage(new ScreenViewport());
@@ -30,6 +40,20 @@ public abstract class View implements Screen {
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
+
+        // Toast message
+        toast = new TextButton("Toast!", uiSkin);
+        toast.setPosition(getScreenWidth()/2 - toast.getWidth()/2, getScreenHeight() * (1-0.1f));
+        toast.setVisible(false);
+        stage.addActor(toast);
+
+        toastFadeout = new Timer.Task(){
+            @Override
+            public void run(){
+                toast.setVisible(false);
+            }
+        };
+
     }
 
     float getScreenHeight(){
@@ -46,8 +70,14 @@ public abstract class View implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if(clearGl || !hasCleared) {
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            hasCleared = true;
+        }
+        renderStage(delta);
+    }
 
+    protected void renderStage(float delta) {
         stage.act(delta);
         stage.draw();
     }
@@ -109,6 +139,21 @@ public abstract class View implements Screen {
         redTextField = uiSkin.get("red", TextField.TextFieldStyle.class);
     }
 
+    public void showToast(String message){
+        if(!toastFadeout.isScheduled()) {
+            toast.setText(message);
+            toast.setVisible(true);
+            Timer.schedule(toastFadeout, Config.TOAST_FADEOUT_TIME);
+        } else {
+            System.out.println("Wait until toast is finished before scheduling again");
+        }
+
+    }
+
     public void reset() {
+    }
+
+    protected void clearGlOnce() {
+        hasCleared = false;
     }
 }

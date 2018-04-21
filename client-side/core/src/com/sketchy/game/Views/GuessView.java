@@ -9,11 +9,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Dot;
+import com.sketchy.game.Models.Drawing;
+import com.sketchy.game.Models.Sheet;
 
-import java.util.Stack;
+import java.io.IOException;
 
 public class GuessView extends SheetView {
-    private Stack<Dot> drawing;
+    private Drawing drawing;
+    private int drawIndex;
 
     // UI elements
     private TextField guessField;
@@ -25,7 +28,10 @@ public class GuessView extends SheetView {
 
     GuessView(ClientController controller) {
         super(controller);
-        drawing = new Stack<>();
+        clearGl = false;
+
+        drawing = new Drawing();
+        drawIndex = 0;
         shapeRenderer = new ShapeRenderer();
 
         // Header
@@ -56,28 +62,39 @@ public class GuessView extends SheetView {
 
     @Override
     public void render(float delta) {
-        super.render(delta);
         Gdx.gl.glClearColor(49.0f / 256, 176.0f / 256, 213.0f / 256, 1);
         Gdx.input.setCatchBackKey(true);
 
-        for (Dot dot : drawing) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(dot.getColor());
-            shapeRenderer.circle(dot.getPosX(), getScreenHeight() - dot.getPosY(), dot.getRadius());
-            shapeRenderer.end();
-        }
+        super.render(delta);
+        drawIndex = drawing.render(shapeRenderer, getScreenHeight(), drawIndex);
+        renderStage(delta);
     }
 
     @Override
     public void reset() {
         super.reset();
+        clearGlOnce();
         drawing.clear();
-        guessField.clear();
+        drawIndex = 0;
+        guessField.setText("");
+    }
+
+    @Override
+    public void setSheet(Sheet sheet) throws Exception {
+        super.setSheet(sheet);
+        try {
+            drawing = Drawing.fromBase64(sheet.getBase64Drawing());
+            drawIndex = 0;
+        } catch(IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     protected void onSubmit() {
         getSheet().setAnswer(guessField.getText());
+        getSheet().setGuesser(controller.getPlayerName());
         super.onSubmit();
     }
 }

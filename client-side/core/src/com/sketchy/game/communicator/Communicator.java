@@ -26,7 +26,7 @@ public class Communicator {
 
         @Override
         public void call(Object... args) {
-            params = (JSONObject) args[0];
+            params = args.length > 0 ? ((JSONObject) args[0]) : new JSONObject();
             try {
                 call(params);
             } catch (JSONException e) {
@@ -130,6 +130,12 @@ public class Communicator {
             public void call(JSONObject params) throws JSONException {
                 System.out.format("Receiving: %s\n", params);
                 onBeginRound(jsonToNotepad(params.getString("notepad")));
+            }
+        });
+        socket.on(NOTIFY_PLAYER.toString(), new Listener() {
+            @Override
+            protected void call(JSONObject params) throws JSONException {
+                clientController.notifyPlayer(params.getString("message"));
             }
         });
 
@@ -269,6 +275,30 @@ public class Communicator {
                     .with("notepad", notepadToJson(notepad))
                     .send();
         System.out.format("Sending: {lobbyId: %d, notepad: %s}\n", lobbyId, notepadToJson(notepad));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void rewindShowNext(int lobbyId) {
+        try {
+            Emit
+                    .event(REWIND_SHOW_NEXT)
+                    .to(socket)
+                    .with("lobbyId", lobbyId)
+                    .send();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void rewindFinished(int lobbyId) {
+        try {
+            Emit
+                    .event(REWIND_FINISHED)
+                    .to(socket)
+                    .with("lobbyId", lobbyId)
+                    .send();
         } catch (Exception e) {
             e.printStackTrace();
         }

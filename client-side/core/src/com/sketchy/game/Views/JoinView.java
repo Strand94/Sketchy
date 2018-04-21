@@ -43,8 +43,6 @@ public class JoinView extends View {
         table.row();
         table.add(join).width(250).padBottom(25);
 
-        table.debug();
-
         // Listeners
         join.addListener(new ChangeListener() {
             @Override

@@ -21,6 +21,7 @@ const events = {
     START_REWIND: "start-rewind",
     REWIND_SHOW_NEXT: "rewind-show-next",
     REWIND_FINISHED: "rewind-finished",
+    NOTIFY_PLAYER: "notify-player",
 };
 
 class Communicator {
@@ -57,7 +58,6 @@ class Communicator {
                 })
                 .on(events.SEND_ANSWER, (obj) => {
                     let notepad = Object.assign(new Notepad, JSON.parse(obj.notepad));
-                    notepad.peek().base64Drawing = "Boobop";
                     console.log("Receiving: {lobbyId: %d, notepad: %s}", obj.lobbyId, JSON.stringify(notepad));
                     thiz.gameControllers[obj.lobbyId].receiveNotepad(notepad);
                 })
@@ -66,6 +66,11 @@ class Communicator {
                 })
                 .on(events.REWIND_SHOW_NEXT, (obj) => {
                     thiz.gameControllers[obj.lobbyId].rewindShowNext();
+                })
+                .on(events.REWIND_FINISHED, (obj) => {
+                    console.log("Rewind finished!");
+                    thiz.gameControllers[obj.lobbyId].endRewind();
+                    lobbyController.updateLobby(obj.lobbyId);
                 })
         });
     }
@@ -87,37 +92,41 @@ class Communicator {
     }
 
     updateView(playerAddress) {
-        this.notifyPlayer(playerAddress, events.UPDATE_VIEW);
+        this.sendToPlayer(playerAddress, events.UPDATE_VIEW);
     };
 
     updateLobby(playerAddress, lobbyId, playerList) {
-        this.notifyPlayer(playerAddress, events.UPDATE_LOBBY, {"lobbyId": lobbyId, "playerList": playerList});
+        this.sendToPlayer(playerAddress, events.UPDATE_LOBBY, {"lobbyId": lobbyId, "playerList": playerList});
     }
 
     ping(playerAddress) {
-        this.notifyPlayer(playerAddress, events.PING);
+        this.sendToPlayer(playerAddress, events.PING);
     };
 
     beginRound(playerAddress, notepad) {
         console.log("Sending: %s", JSON.stringify({"notepad": notepad}));
-        this.notifyPlayer(playerAddress, events.BEGIN_ROUND, {"notepad": notepad});
+        this.sendToPlayer(playerAddress, events.BEGIN_ROUND, {"notepad": notepad});
     };
 
     startRewind(playerAddress, notepadList) {
-        this.notifyPlayer(playerAddress, events.START_REWIND, {"notepadList": notepadList});
+        this.sendToPlayer(playerAddress, events.START_REWIND, {"notepadList": notepadList});
     }
 
     rewindShowNext(playerAddress) {
-        this.notifyPlayer(playerAddress, events.REWIND_SHOW_NEXT);
+        this.sendToPlayer(playerAddress, events.REWIND_SHOW_NEXT);
     }
 
     endRewind(playerAddress) {
-        this.notifyPlayer(playerAddress, events.REWIND_FINISHED);
+        this.sendToPlayer(playerAddress, events.REWIND_FINISHED);
+    }
+
+    notifyPlayer(playerAddress, message) {
+        this.sendToPlayer(playerAddress, events.NOTIFY_PLAYER, {"message": message});
     }
 
     // "private"
 
-    notifyPlayer(playerAddress, event, args) {
+    sendToPlayer(playerAddress, event, args) {
         if (this.connections[playerAddress] === undefined) {
             console.log("Player with address %s not registered", playerAddress);
         } else {

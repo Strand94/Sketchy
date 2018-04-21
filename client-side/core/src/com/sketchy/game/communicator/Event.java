@@ -18,7 +18,8 @@ public enum Event {
     PING_OK("pingOK"),
     START_REWIND("start-rewind"),
     REWIND_SHOW_NEXT("rewind-show-next"),
-    REWIND_FINISHED("rewind-finished");
+    REWIND_FINISHED("rewind-finished"),
+    NOTIFY_PLAYER("notify-player");
 
 
     private static final Map<String, Event> fromStringMap;
