@@ -164,6 +164,8 @@ public class ClientController {
         sheetIndex = 0;
         sheets = filledNotepads.get(notepadIndex).getSheets();
 
+        showRewind();
+        rewindShowNext();
     }
 
     public void rewindShowNext(){
@@ -195,7 +197,7 @@ public class ClientController {
     }
 
     public void rewindFinished() {
-
+        showLobby();
     }
 
     public void requestRewind(){
