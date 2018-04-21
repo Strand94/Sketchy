@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Dot;
+import com.sketchy.game.Models.Sheet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class DrawView extends SheetView {
         super(controller);
 
         // Labels
-        drawWordLabel = new Label(getSheet().getObjectiveWord(), uiSkin);
+        drawWordLabel = new Label("", uiSkin);
 
         // Buttons
         submit = new TextButton("Submit", uiSkin);
@@ -148,13 +149,16 @@ public class DrawView extends SheetView {
     public void reset() {
         super.reset();
         drawing.clear();
+        drawWordLabel.clear();
         currentColor = INITIAL_COLOR;
         currentRadius = INITIAL_RADIUS;
         lastX = null;
         lastY = null;
     }
 
-    public List<Dot> getDrawing() {
-        return drawing;
+    @Override
+    public void setSheet(Sheet sheet) throws Exception {
+        super.setSheet(sheet);
+        drawWordLabel.setText(sheet.getObjectiveWord());
     }
 }
