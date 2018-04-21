@@ -78,6 +78,7 @@ public class GuessView extends SheetView {
     @Override
     protected void onSubmit() {
         getSheet().setAnswer(guessField.getText());
+        getSheet().setGuesser(controller.getPlayerName());
         super.onSubmit();
     }
 }

@@ -6,8 +6,8 @@ public class Sheet {
     private String objectiveWord;
     private String base64Drawing;
     private String answer;
-    private String playerName;
-
+    private String drawer;
+    private String guesser;
 
     public String getObjectiveWord() {
         return objectiveWord;
@@ -25,12 +25,12 @@ public class Sheet {
         this.base64Drawing = base64Drawing;
     }
 
-    public String getPlayerName() {
-        return playerName;
+    public String getDrawer() {
+        return drawer;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setDrawer(String drawer) {
+        this.drawer = drawer;
     }
 
     public String getAnswer() {
@@ -39,6 +39,14 @@ public class Sheet {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public String getGuesser() {
+        return guesser;
+    }
+
+    public void setGuesser(String guesser) {
+        this.guesser = guesser;
     }
 
     public boolean nextTaskIsDraw() {
