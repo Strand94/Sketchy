@@ -25,6 +25,8 @@ public class ClientController {
     private String playerName;
     private Notepad notepad;
 
+    private boolean isLobbyMaster;
+
     // Used by rewind
     private List<Notepad> filledNotepads;
     private int sheetIndex, notepadIndex;
@@ -90,6 +92,9 @@ public class ClientController {
         showLoading();
         lobby = Lobby.LOADING;
         communicator.createLobby(playerName);
+
+        setLobbyMaster(true);
+        ViewManager.getInstance().lobbyView.setLobbyMaster();
     }
 
     public void joinLobby(int lobbyId, String playerName) {
@@ -156,9 +161,14 @@ public class ClientController {
         System.out.println("*goBack:" + to);
     }
 
+    public void notifyPlayer(String message) {
+        // TODO: show message to user
+    }
+
     //=========== REWIND ================\\
 
     public void startRewind(List<Notepad> notepads) {
+
         filledNotepads = notepads;
         notepadIndex = 0;
         sheetIndex = 0;
@@ -166,6 +176,13 @@ public class ClientController {
 
         showRewind();
         rewindShowNext();
+
+        if(isLobbyMaster()){
+            if (viewStack.peek() instanceof RewindView) {
+                RewindView rewindView = (RewindView) viewStack.peek();
+                rewindView.setLobbyMaster();
+            }
+        }
     }
 
     public void rewindShowNext(){
@@ -201,7 +218,7 @@ public class ClientController {
     }
 
     public void requestNextRewindStep() {
-        //todo: Ask communicator to broadcast onRewindShowNext to all players
+        communicator.rewindShowNext(lobby.lobbyId);
     }
 
     //=========== END REWIND ============\\
@@ -238,4 +255,13 @@ public class ClientController {
         setView(viewManager.drawView, true);
     }
     //=========== END VIEW ==============\\
+
+
+    public boolean isLobbyMaster() {
+        return isLobbyMaster;
+    }
+
+    public void setLobbyMaster(boolean lobbyMaster) {
+        isLobbyMaster = lobbyMaster;
+    }
 }

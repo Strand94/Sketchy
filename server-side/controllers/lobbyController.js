@@ -21,17 +21,23 @@ class LobbyController {
     }
 
     startGame(lobbyId) {
-        if (this.hasLobby(lobbyId)) {
+        if (!this.hasLobby(lobbyId)) {
+            console.log("can't start non-existing lobby with id %s", lobbyId);
+        } else if (this.lobbies[lobbyId].length < 2) {
+            console.log("Lobby %d can't start because there is only one player in it", lobbyId);
+        } else {
             console.log("Starting game in lobby %d", lobbyId);
             this.lobbies[lobbyId].startGame();
             return true;
-        } else {
-            console.log("can't start non-existing lobby with id %s", lobbyId);
         }
     }
 
     joinLobby(lobbyId, playerName, playerAddress) {
-        if (this.hasLobby(lobbyId) && !this.lobbies[lobbyId].isFull()) {
+        if (!this.hasLobby(lobbyId)) {
+            this.communicator.notifyPlayer(playerAddress, "Lobby %d doesn't exist");
+        } else if (this.lobbies[lobbyId].isFull()) {
+            this.communicator.notifyPlayer(playerAddress, "Lobby %d is full");
+        } else {
             const player = new Player(playerName, playerAddress, lobbyId, false);
             this.lobbies[lobbyId].addPlayer(player);
             this.allPlayers[playerAddress] = player;

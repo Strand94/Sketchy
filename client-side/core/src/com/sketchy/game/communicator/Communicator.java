@@ -132,6 +132,12 @@ public class Communicator {
                 onBeginRound(jsonToNotepad(params.getString("notepad")));
             }
         });
+        socket.on(NOTIFY_PLAYER.toString(), new Listener() {
+            @Override
+            protected void call(JSONObject params) throws JSONException {
+                clientController.notifyPlayer(params.getString("message"));
+            }
+        });
 
     }
 
@@ -269,6 +275,18 @@ public class Communicator {
                     .with("notepad", notepadToJson(notepad))
                     .send();
         System.out.format("Sending: {lobbyId: %d, notepad: %s}\n", lobbyId, notepadToJson(notepad));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void rewindShowNext(int lobbyId) {
+        try {
+            Emit
+                    .event(REWIND_SHOW_NEXT)
+                    .to(socket)
+                    .with("lobbyId", lobbyId)
+                    .send();
         } catch (Exception e) {
             e.printStackTrace();
         }
