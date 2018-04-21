@@ -20,6 +20,8 @@ public class LobbyView extends View {
 
     private ClientController controller;
 
+    private boolean isLobbyMaster = false;
+
     private TextButton startGame;
     private Label lobbyIdLabel, numberOfPlayers;
     private Table buttonTable, playerTable;
@@ -41,6 +43,7 @@ public class LobbyView extends View {
 
         // Buttons
         startGame = new TextButton("Start Game", uiSkin);
+        startGame.setVisible(false);
 
         // Labels
         numberOfPlayers = new Label(getNumberOfPlayersText(), uiSkin);
@@ -92,7 +95,6 @@ public class LobbyView extends View {
         System.out.println();
 
         numberOfPlayers.setText(players.size() + "/" + Config.MAX_PLAYERS);
-
     }
 
     private void addPerson(String name) {
@@ -104,6 +106,11 @@ public class LobbyView extends View {
 
     private String getNumberOfPlayersText() {
         return controller.getPlayerCount() + "/" + Integer.toString(Config.MAX_PLAYERS);
+    }
+
+    public void setLobbyMaster() {
+        isLobbyMaster = true;
+        startGame.setVisible(true);
     }
 
     @Override

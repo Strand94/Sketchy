@@ -36,6 +36,7 @@ public class ViewManager {
         joinView = new JoinView(controller);
         loadingView = new LoadingView(controller);
         lobbyView = new LobbyView(controller);
+        lobbyView.setLobbyMaster();  //Todo not everyone can be lobby master
         waitingView = new WaitingView();
         drawView = new DrawView(controller);
         guessView = new GuessView(controller);
