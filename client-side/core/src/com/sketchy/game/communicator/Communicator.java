@@ -171,7 +171,7 @@ public class Communicator {
     }
 
     private void onRewindFinished() {
-        /clientController.rewindFinished();
+        clientController.rewindFinished();
     }
 
     // Send events to server:
