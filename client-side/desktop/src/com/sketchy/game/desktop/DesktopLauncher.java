@@ -19,9 +19,6 @@ public class DesktopLauncher {
         config.width = 720 / 2;
         config.height = 1280 / 2;
 
-        String notepadJson = "[{\"originalWord\":\"lemmen\",\"sheets\":[{\"objectiveWord\":\"hest\",\"drawing\":null,\"playerName\":\"Per\",\"answer\":null}],\"route\":[\"testAddress\"]}]";
-
-
 
     }
 }

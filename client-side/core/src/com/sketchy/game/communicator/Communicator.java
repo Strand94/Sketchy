@@ -132,6 +132,12 @@ public class Communicator {
                 onBeginRound(jsonToNotepad(params.getString("notepad")));
             }
         });
+        socket.on(NOTIFY_PLAYER.toString(), new Listener() {
+            @Override
+            protected void call(JSONObject params) throws JSONException {
+                clientController.notifyPlayer(params.getString("message"));
+            }
+        });
 
     }
 

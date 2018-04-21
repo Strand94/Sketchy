@@ -156,6 +156,12 @@ public class ClientController {
         System.out.println("*goBack:" + to);
     }
 
+    public void notifyPlayer(String message) {
+        if (!viewStack.isEmpty()) {
+            getView().createToast(message);
+        }
+    }
+
     //=========== REWIND ================\\
 
     public void startRewind(List<Notepad> notepads) {
