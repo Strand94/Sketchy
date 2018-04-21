@@ -47,7 +47,7 @@ public class LoginView extends View {
         // Add elements to table
         table.add(imageLogo).expandY().top().padTop(getScreenHeight()*0.2f);
         table.row();
-        table.add(nameLabel).expandY().pad(10.0f).bottom();
+        table.add(nameLabel).top();
         table.row();
         table.add(nameField).width(getScreenWidth()/2).expandY().top();
         table.row();
