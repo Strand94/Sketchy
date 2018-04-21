@@ -69,8 +69,6 @@ public class RewindView extends View {
 
         table.row();
         table.add(next).bottom().padBottom(getScreenHeight()*0.03f);
-
-        table.debug();
     }
 
     public void setLobbyMaster() {
