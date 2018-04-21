@@ -153,11 +153,19 @@ public class ClientController {
 
     //=========== REWIND ================\\
 
+    public void startRewind(List<Notepad> notepads) {
+
+    }
+
     public void rewindShowNext(){
         if (viewStack.peek() instanceof RewindView) {
             RewindView rewindView = (RewindView) viewStack.peek();
             rewindView.showNext();
         }
+    }
+
+    public void rewindFinished() {
+
     }
 
     public void requestRewind(){

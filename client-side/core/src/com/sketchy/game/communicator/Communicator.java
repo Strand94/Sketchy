@@ -159,11 +159,11 @@ public class Communicator {
     }
 
     private void onGetAnswer() {
-
+        // TODO: to be used when timer is implemented
     }
 
     private void onStartRewind(List<Notepad> notepadList) {
-        clientController.showRewind();
+        clientController.startRewind(notepadList);
     }
 
     private void onRewindShowNext() {
@@ -171,7 +171,7 @@ public class Communicator {
     }
 
     private void onRewindFinished() {
-        // TODO: onRewindFinished
+        /clientController.rewindFinished();
     }
 
     // Send events to server:
