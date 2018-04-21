@@ -39,13 +39,13 @@ public class ClientController {
 
     //=========== GAME ==============\\
     public int getPlayerCount() {
-        System.out.println("getPlayerCount() -> " + lobby.playerCount);
+        System.out.format("getPlayerCount() -> %d\n", lobby.playerCount);
         return lobby.playerCount;
     }
 
     public void setPlayerCount(int playerCount) {
         lobby.playerCount = playerCount;
-        System.out.println("setPlayerCount(%d)" + playerCount);
+        System.out.format("setPlayerCount(%d)\n", playerCount);
     }
 
     public void startGame() {
@@ -76,13 +76,10 @@ public class ClientController {
     public SketchyGame getGame() {
         return game;
     }
-
-
     //=========== END GAME ==============\\
 
 
     //=========== LOBBY ==============\\
-
     public void createLobby(String playerName) {
         System.out.format("clientController.createLobby('%s')\n", playerName);
         showLoading();
@@ -114,15 +111,14 @@ public class ClientController {
     }
     //=========== END LOBBY ==============\\
 
-
     //=========== PLAYER ==============\\
     public String getPlayerName() {
-        System.out.println("clientController.getPlayerName() -> " + playerName);
+        System.out.format("clientController.getPlayerName() -> %s\n", playerName);
         return playerName;
     }
 
     public void setPlayer(String playerName) {
-        System.out.println(String.format("clientController.setPlayerName('%s')", playerName));
+        System.out.println(String.format("clientController.setPlayerName('%s')\n", playerName));
         this.playerName = playerName;
     }
     //=========== END PLAYER ==============\\

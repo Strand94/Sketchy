@@ -38,9 +38,9 @@ class Communicator {
 
             socket
                 .on('disconnect', () => {
+                    console.log("Connection closed: %s", socket.id);
                     lobbyController.playerDisconnected(socket.id);
                     delete thiz.connections[socket.id];
-                    console.log("Connection closed: %s", socket.id);
                 })
                 .on(events.JOIN_LOBBY, (obj) => {
                     thiz.connections[socket.id] = socket;
