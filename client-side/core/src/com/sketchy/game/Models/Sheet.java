@@ -40,4 +40,8 @@ public class Sheet {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
+
+    public boolean nextTaskIsDraw() {
+        return base64Drawing == null;
+    }
 }

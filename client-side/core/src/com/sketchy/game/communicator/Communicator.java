@@ -128,6 +128,7 @@ public class Communicator {
         socket.on(BEGIN_ROUND.toString(), new Listener() {
             @Override
             public void call(JSONObject params) throws JSONException {
+                System.out.format("Receiving: %s\n", params);
                 onBeginRound(jsonToNotepad(params.getString("notepad")));
             }
         });
@@ -267,6 +268,7 @@ public class Communicator {
                     .with("lobbyId", lobbyId)
                     .with("notepad", notepadToJson(notepad))
                     .send();
+        System.out.format("Sending: {lobbyId: %d, notepad: %s}\n", lobbyId, notepadToJson(notepad));
         } catch (Exception e) {
             e.printStackTrace();
         }

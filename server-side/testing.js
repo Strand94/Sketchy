@@ -19,7 +19,7 @@ lobbyController.startGame(1);
 const gameController = lobbyController.lobbies[1].gameController;
 
 for (let i = 0; i < 7; i++) {
-    gameController.recieveNotepad(new Notepad(i.toString(), players[i]));
+    gameController.receiveNotepad(new Notepad(i.toString(), players[i]));
 }
 
 var notepad = new Notepad("lemmen", players);

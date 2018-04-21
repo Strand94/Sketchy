@@ -60,14 +60,14 @@ public class ClientController {
     public void beginRound(Notepad notepad) throws Exception {
         System.out.println("clientController.beginRound(<notepad>)");
         this.notepad = notepad;
-        if (notepad.isDrawTask()) showDrawView();
-        else showGuessView();
         Sheet sheet = notepad.getLastSheet();
+        if (sheet.nextTaskIsDraw()) showDrawView();
+        else showGuessView();
         SheetView view = (SheetView) getView();
         view.setSheet(sheet);
     }
 
-    public void submit(Sheet sheet, Class<? extends SheetView> clazz) {
+    public void submit(Sheet sheet) {
         showWaiting();
         notepad.setLastSheet(sheet);
         communicator.sendAnswer(lobby.lobbyId, notepad);

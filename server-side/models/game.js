@@ -26,14 +26,14 @@ class Game {
 
     }
 
-    nextStep() {
+    prepareNextRound() {
         if (this.notepads[0].hasNoSheets()) {   // first round
-            this.firstHandleNotepads();
+            this.createFirstSheet();
             return false;
         } else if (this.notepads[0].routeIsFinished()) {    // game over
             return true;
         } else {
-            this.normalHandleNotepads();
+            this.prepareNextSheet();
             return false;
         }
     }
@@ -48,22 +48,16 @@ class Game {
         return guessWords.pop();
     }
 
-    normalHandleNotepads() {
+    prepareNextSheet() {
         // partly fills inn and pushes new sheet to each notepad
         this.notepads.forEach(notepad => {
-            const previousSheet = notepad.pop();
+            const previousSheet = notepad.peek();
 
-            if (previousSheet.answer === null) {
-                notepad.push(previousSheet);
-            } else {
-                notepad.push(new Sheet(
-                    previousSheet.answer
-                ));
-            }
+            if (previousSheet.answer) notepad.push(new Sheet(previousSheet.answer));
         });
     }
 
-    firstHandleNotepads() {
+    createFirstSheet() {
         this.notepads.forEach(notepad => {
             notepad.push(new Sheet(
                 notepad.originalWord
