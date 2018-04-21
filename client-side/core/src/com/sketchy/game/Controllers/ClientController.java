@@ -25,6 +25,11 @@ public class ClientController {
     private String playerName;
     private Notepad notepad;
 
+    // Used by rewind
+    private List<Notepad> filledNotepads;
+    private int sheetIndex, notepadIndex;
+    private List<Sheet> sheets;
+
     public ClientController(SketchyGame game) {
         this.game = game;
         this.communicator = new Communicator(this);
@@ -154,22 +159,49 @@ public class ClientController {
     //=========== REWIND ================\\
 
     public void startRewind(List<Notepad> notepads) {
+        filledNotepads = notepads;
+        notepadIndex = 0;
+        sheetIndex = 0;
+        sheets = filledNotepads.get(notepadIndex).getSheets();
 
+        showRewind();
+        rewindShowNext();
     }
 
     public void rewindShowNext(){
         if (viewStack.peek() instanceof RewindView) {
             RewindView rewindView = (RewindView) viewStack.peek();
-            rewindView.showNext();
+
+            if (!(sheetIndex < sheets.size())){
+                System.out.print("No more sheets");
+                if (++notepadIndex < filledNotepads.size()) {
+                    System.out.println("New notepad and new sheet");
+                    sheets = filledNotepads.get(notepadIndex).getSheets();
+                    sheetIndex = 0;
+                } else {
+                    System.out.println("No more notepads");
+                    return;
+                }
+            }
+
+            if (sheetIndex == 0) {
+                rewindView.showRewindStep(sheets.get(sheetIndex++), true, true);
+            } else if (sheetIndex % 2 == 1) {
+                rewindView.showRewindStep(sheets.get(sheetIndex++), false, false);
+            } else if (sheetIndex % 2 == 0) {
+                rewindView.showRewindStep(sheets.get(sheetIndex++), true, false);
+            } else {
+                System.out.println("Something wrong");
+            }
         }
     }
 
     public void rewindFinished() {
-
+        showLobby();
     }
 
-    public void requestRewind(){
-        //todo: Send something to communicator
+    public void requestNextRewindStep() {
+        //todo: Ask communicator to broadcast onRewindShowNext to all players
     }
 
     //=========== END REWIND ============\\

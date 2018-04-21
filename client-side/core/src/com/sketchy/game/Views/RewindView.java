@@ -7,11 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
-import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Sheet;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RewindView extends View {
     private final ClientController clientController;
@@ -20,10 +16,6 @@ public class RewindView extends View {
     private TextButton next;
 
     private boolean isLobbyMaster = false;
-    private int advances = 0;
-
-    private Notepad notepad;
-    private List<Sheet> sheets;
 
     RewindView(final ClientController clientController) {
         this.clientController = clientController;
@@ -42,60 +34,12 @@ public class RewindView extends View {
         next.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                clientController.requestRewind();
+                clientController.requestNextRewindStep();
             }
         });
-
-        List<String> route = new ArrayList<>();
-        notepad = new Notepad("Elephant", route);
-
-        List<Sheet> sheets_2 = new ArrayList<>();
-
-        Sheet sheet = new Sheet();
-        sheet.setObjectiveWord(notepad.getOriginalWord());
-        sheet.setAnswer("Chimpanzee");
-        sheet.setBase64Drawing("drawing.png");
-        sheet.setPlayerName("First Player");
-        sheets_2.add(sheet);
-
-        Sheet sheet_2 = new Sheet();
-        sheet_2.setAnswer("Yoda");
-        sheet_2.setBase64Drawing("image.png");
-        sheet_2.setPlayerName("Luke");
-        sheets_2.add(sheet_2);
-
-        notepad.setSheets(sheets_2);
-        sheets = notepad.getSheets();
     }
 
-    public void showNext(){
-
-        if (sheets.size() == 0){
-            System.out.println("No more sheets in notepad to show!");
-            return;
-        }
-
-        // Show objective word
-        if(advances == 0){
-            createRewindStep(sheets.get(0), true, true);
-        }
-        // Show drawing
-        else if(advances % 2 == 1){
-            createRewindStep(sheets.get(0), false, false);
-        }
-
-        // Show guess
-        else if (advances % 2 == 0){
-            createRewindStep(sheets.get(0), true, false);
-
-            // We are now done with 1 sheet and can proceed to the next
-            sheets.remove(0);
-        }
-
-        advances++;
-    }
-
-    private void createRewindStep(Sheet sheet, boolean guess, boolean first){
+    public void showRewindStep(Sheet sheet, boolean guess, boolean first){
         table.reset();
 
         who.setText(sheet.getPlayerName());
