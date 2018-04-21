@@ -54,13 +54,13 @@ public class RewindView extends View {
         Sheet sheet = new Sheet();
         sheet.setObjectiveWord(notepad.getOriginalWord());
         sheet.setAnswer("Chimpanzee");
-        sheet.setDrawing("drawing.png");
+        sheet.setBase64Drawing("drawing.png");
         sheet.setPlayerName("First Player");
         sheets_2.add(sheet);
 
         Sheet sheet_2 = new Sheet();
         sheet_2.setAnswer("Yoda");
-        sheet_2.setDrawing("image.png");
+        sheet_2.setBase64Drawing("image.png");
         sheet_2.setPlayerName("Luke");
         sheets_2.add(sheet_2);
 
@@ -114,7 +114,7 @@ public class RewindView extends View {
             table.row();
             table.add(guessWord);
         } else{
-            image.setText(sheet.getDrawing());
+            image.setText(sheet.getBase64Drawing());
             table.add(imageLabel);
             table.row();
             table.add(image);

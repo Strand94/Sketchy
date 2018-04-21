@@ -4,7 +4,7 @@ public class Sheet {
     public static final Sheet LOADING = new Sheet();
 
     private String objectiveWord;
-    private String drawing;
+    private String base64Drawing;
     private String answer;
     private String playerName;
 
@@ -17,12 +17,12 @@ public class Sheet {
         this.objectiveWord = objectiveWord;
     }
 
-    public String getDrawing() {
-        return drawing;
+    public String getBase64Drawing() {
+        return base64Drawing;
     }
 
-    public void setDrawing(String drawing) {
-        this.drawing = drawing;
+    public void setBase64Drawing(String base64Drawing) {
+        this.base64Drawing = base64Drawing;
     }
 
     public String getPlayerName() {
