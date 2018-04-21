@@ -162,9 +162,7 @@ public class ClientController {
     }
 
     public void notifyPlayer(String message) {
-        if (!viewStack.isEmpty()) {
-            getView().createToast(message);
-        }
+        // TODO: show message to user
     }
 
     //=========== REWIND ================\\
@@ -220,7 +218,7 @@ public class ClientController {
     }
 
     public void requestNextRewindStep() {
-        //todo: Ask communicator to broadcast onRewindShowNext to all players
+        communicator.rewindShowNext(lobby.lobbyId);
     }
 
     //=========== END REWIND ============\\

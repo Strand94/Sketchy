@@ -280,6 +280,18 @@ public class Communicator {
         }
     }
 
+    public void rewindShowNext(int lobbyId) {
+        try {
+            Emit
+                    .event(REWIND_SHOW_NEXT)
+                    .to(socket)
+                    .with("lobbyId", lobbyId)
+                    .send();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void onPing() {
         try {
             System.out.println("ping");
