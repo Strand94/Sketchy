@@ -114,4 +114,9 @@ public class LoginView extends View {
         }
     }
 
+    @Override
+    public void reset() {
+        nameField.clear();
+        warning.setVisible(false);
+    }
 }

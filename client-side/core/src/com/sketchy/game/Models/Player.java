@@ -1,6 +1,8 @@
 package com.sketchy.game.Models;
 
 public class Player {
+    public static final Player NO_PLAYER = new Player("<No player>");
+
     private String name;
     private String address;
     private int points;

@@ -19,8 +19,7 @@ public class JoinView extends View {
 
     Skin skin;
 
-
-    public JoinView(final ClientController controller) {
+    JoinView(final ClientController controller) {
         this.controller = controller;
 
         // Header
@@ -64,8 +63,11 @@ public class JoinView extends View {
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
             controller.goBack();
         }
+    }
 
-
+    @Override
+    public void reset() {
+        lobbyField.clear();
     }
 
     private Boolean validLobbyId(String input) {

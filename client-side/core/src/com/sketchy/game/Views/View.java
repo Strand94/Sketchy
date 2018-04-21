@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class View implements Screen {
+public abstract class View implements Screen {
 
     Stage stage;
     Table table;
@@ -21,9 +21,8 @@ public class View implements Screen {
     protected Label.LabelStyle blueLabel, redLabel, greenLabel;
     protected TextField.TextFieldStyle redTextField;
 
-    public View() {
+    protected View() {
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
 
         loadAssets();
 
@@ -65,6 +64,7 @@ public class View implements Screen {
 
     @Override
     public void resume() {
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -107,5 +107,8 @@ public class View implements Screen {
         greenLabel = uiSkin.get("green", Label.LabelStyle.class);
 
         redTextField = uiSkin.get("red", TextField.TextFieldStyle.class);
+    }
+
+    public void reset() {
     }
 }

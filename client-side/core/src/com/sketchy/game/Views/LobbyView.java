@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class LobbyView extends View {
+    private static final String INITIAL_LOBBY_ID_LABEL_TEXT = "LobbyID: \u2014";
+
     private ClientController controller;
 
     private TextButton startGame;
@@ -25,7 +27,7 @@ public class LobbyView extends View {
     private Timer.Task timer;
     private int counter = Config.START_GAME_TIMER;
 
-    public LobbyView(ClientController controller) {
+    LobbyView(ClientController controller) {
         this.controller = controller;
 
         // Tables
@@ -34,15 +36,14 @@ public class LobbyView extends View {
         stage.addActor(buttonTable);
 
         // Header
-        lobbyIdLabel = new Label("LobbyID: \u2014", uiSkin);
+        lobbyIdLabel = new Label(INITIAL_LOBBY_ID_LABEL_TEXT, uiSkin);
         lobbyIdLabel.setColor(Color.CYAN);
 
         // Buttons
         startGame = new TextButton("Start Game", uiSkin);
 
         // Labels
-        numberOfPlayers = new Label(controller.getPlayerCount() + "/" +
-                                    Integer.toString(Config.MAX_PLAYERS), uiSkin);
+        numberOfPlayers = new Label(getNumberOfPlayersText(), uiSkin);
 
         // Add to table
         table.add(lobbyIdLabel).top().padTop(0.07f * getScreenHeight());
@@ -81,9 +82,12 @@ public class LobbyView extends View {
         playerTable.reset();
 
         System.out.print("Adding players: ");
+        boolean first = true;
         for (String player : players) {
             addPerson(player);
-            System.out.print(player + ",");
+            if (first) first = false;
+            else System.out.print(", ");
+            System.out.print(player);
         }
         System.out.println();
 
@@ -98,6 +102,9 @@ public class LobbyView extends View {
         playerTable.row();
     }
 
+    private String getNumberOfPlayersText() {
+        return controller.getPlayerCount() + "/" + Integer.toString(Config.MAX_PLAYERS);
+    }
 
     @Override
     public void render(float delta) {
@@ -111,6 +118,15 @@ public class LobbyView extends View {
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             startTimer();
         }
+    }
+
+    @Override
+    public void reset() {
+        playerTable.reset();
+        lobbyIdLabel.setText(INITIAL_LOBBY_ID_LABEL_TEXT);
+        numberOfPlayers.setText(getNumberOfPlayersText());
+        timer.cancel();
+        counter = Config.START_GAME_TIMER;
     }
 
     private void onGameStart() {

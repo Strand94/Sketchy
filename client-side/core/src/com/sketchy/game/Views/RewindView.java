@@ -19,16 +19,14 @@ public class RewindView extends View {
     private Label who, guessWord, guessLabel, imageLabel, image;
     private TextButton next;
 
-    private boolean isLobbyMaster;
+    private boolean isLobbyMaster = false;
     private int advances = 0;
 
     private Notepad notepad;
     private List<Sheet> sheets;
 
-    public RewindView(final ClientController clientController, boolean lobbyMaster) {
+    RewindView(final ClientController clientController) {
         this.clientController = clientController;
-        this.isLobbyMaster = lobbyMaster;
-
 
         // Labels
         who = new Label("if you see this something is wrong", blueLabel);
@@ -130,6 +128,11 @@ public class RewindView extends View {
         }
 
         table.debug();
+    }
+
+    public void setLobbyMaster() {
+        isLobbyMaster = true;
+        next.setVisible(true);
     }
 
     @Override

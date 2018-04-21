@@ -1,35 +1,25 @@
 package com.sketchy.game.Controllers;
 
-import com.sketchy.game.Models.Dot;
 import com.sketchy.game.Models.Lobby;
-
 import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Sheet;
 import com.sketchy.game.SketchyGame;
-import com.sketchy.game.Views.DrawView;
-import com.sketchy.game.Views.GuessView;
-import com.sketchy.game.Views.JoinView;
-import com.sketchy.game.Views.LoadingView;
 import com.sketchy.game.Views.LobbyView;
-import com.sketchy.game.Views.LoginView;
 import com.sketchy.game.Views.RewindView;
 import com.sketchy.game.Views.View;
+import com.sketchy.game.Views.ViewManager;
 import com.sketchy.game.communicator.Communicator;
 
-import java.util.Collections;
-import java.util.LinkedList;
-
+import java.util.ArrayDeque;
 import java.util.List;
-import java.util.Stack;
 
 public class ClientController {
 
     private final SketchyGame game;
     private final Communicator communicator;
-    private final Stack<View> viewStack;
-    private final List<View> forDisposal;
+    private final ArrayDeque<View> viewStack;
+    private final ViewManager viewManager;
 
-    private View nextView;
     private Lobby lobby;
     private String playerName;
 
@@ -37,8 +27,11 @@ public class ClientController {
     public ClientController(SketchyGame game) {
         this.game = game;
         this.communicator = new Communicator(this);
-        this.viewStack = new Stack<>();
-        this.forDisposal = Collections.synchronizedList(new LinkedList<View>());
+        this.viewStack = new ArrayDeque<>();
+        this.lobby = Lobby.LOADING;
+
+        ViewManager.init(this);
+        this.viewManager = ViewManager.getInstance();
 
         showLogin();
     }
@@ -56,8 +49,7 @@ public class ClientController {
 
     public void startGame() {
         System.out.println("clientController.startGame()");
-        //TODO: Check if it's okay to change view
-        showDraw(true);
+        showLoading();
     }
 
     public void endGame() {
@@ -81,38 +73,32 @@ public class ClientController {
 
     public void createLobby(String playerName) {
         System.out.format("clientController.createLobby('%s')\n", playerName);
-        communicator.createLobby(playerName);
+        showLoading();
         lobby = Lobby.LOADING;
-
-        loadLobby();
+        communicator.createLobby(playerName);
     }
 
     public void joinLobby(int lobbyId, String playerName) {
         System.out.format("clientController.joinLobby(%s, '%s')\n", lobbyId, playerName);
-        communicator.joinLobby(lobbyId, playerName);
+        showLoading();
         lobby = Lobby.LOADING;
-
-        loadLobby();
+        communicator.joinLobby(lobbyId, playerName);
     }
 
     public void updateLobby(int lobbyId, List<String> names) throws Exception {
-            if (lobby == Lobby.LOADING) lobby = new Lobby(lobbyId);
-            else if (lobbyId != lobby.lobbyId)
-                throw new Exception("Server and client disagree about lobby id");
-
         System.out.format("clientController.updateLobby(%s, players(%d))\n", lobbyId, names.size());
+        if (!(getView() instanceof LobbyView)) showLobby();
+        LobbyView view = (LobbyView) getView();
+
+        if (lobby == Lobby.LOADING) lobby = new Lobby(lobbyId);
+        else if (lobbyId != lobby.lobbyId) {
+            throw new Exception("Server and client disagree about lobby id");
+        }
+
         setPlayerCount(names.size());
 
-        if (nextView instanceof LobbyView) {
-            setView(nextView, true);
-        }
-
-        if (viewStack.peek() instanceof LobbyView) {
-            LobbyView view = (LobbyView) viewStack.peek();
-            view.updatePlayerList(names);
-            view.setLobbyId(lobbyId);
-        }
-
+        view.updatePlayerList(names);
+        view.setLobbyId(lobbyId);
     }
     //=========== END LOBBY ==============\\
 
@@ -131,44 +117,31 @@ public class ClientController {
 
 
     //=========== VIEW ==============\\
+    private View getView() {
+        return viewStack.peek();
+    }
+
     private void setView(View view, boolean replaceCurrent) {
-        if (!viewStack.empty()) {
-            if (replaceCurrent) {
-                synchronized (forDisposal) {
-                    forDisposal.add(viewStack.pop());
-                }
-            } else {
-                viewStack.peek().pause();
-            }
+        if (viewStack.size() > 0) {
+            viewStack.peek().pause();
+            if (replaceCurrent) viewStack.pop().reset();
         }
         this.viewStack.push(view);
-        this.nextView = null;
-
         game.setScreen(view);
+        view.resume();
         System.out.println("*setView:" + view);
     }
 
     public void goBack() {
         if (viewStack.size() <= 1) return;
-        View currentView = viewStack.pop();
-        if (currentView != null) {
-            synchronized (forDisposal) {
-                forDisposal.add(currentView);
-            }
-        }
-        this.nextView = null;
-
-        game.setScreen(viewStack.peek());
-        System.out.println("*goBack:" + viewStack.peek());
+        View from = viewStack.pop();
+        from.pause();
+        from.reset();
+        View to = viewStack.peek();
+        to.resume();
+        game.setScreen(to);
+        System.out.println("*goBack:" + to);
     }
-
-    public void disposeViews() {
-        synchronized (forDisposal) {
-            for (View view : forDisposal) view.dispose();
-            forDisposal.clear();
-        }
-    }
-    //=========== END VIEW ==============\\
 
     //=========== REWIND ================\\
 
@@ -186,28 +159,35 @@ public class ClientController {
     //=========== END REWIND ============\\
 
     public void showLogin() {
-        setView(new LoginView(this), true);
+        setView(viewManager.loginView, true);
     }
 
     public void showJoin() {
-        setView(new JoinView(this), false);
+        setView(viewManager.joinView, false);
     }
 
-    public void loadLobby() {
-        setView(new LoadingView(this), false);
-        nextView = new LobbyView(this);
+    public void showLoading() {
+        setView(viewManager.loadingView, false);
     }
 
     public void showRewind() {
-        //Todo not everyone can be lobby master
-        setView(new RewindView(this, true), true);
+        setView(viewManager.rewindView, true);
     }
 
-    public void showGuess(Stack<Dot> drawing) {
-        setView(new GuessView(this, drawing), true);
+    public void showWaiting() {
+        setView(viewManager.waitingView, true);
     }
 
-    public void showDraw(boolean first) {
-        setView(new DrawView(this), !first);
+    public void showLobby() {
+        setView(viewManager.lobbyView, false);
     }
+
+    public void showGuessView() {
+        setView(viewManager.guessView, true);
+    }
+
+    public void showDrawView() {
+        setView(viewManager.drawView, true);
+    }
+    //=========== END VIEW ==============\\
 }

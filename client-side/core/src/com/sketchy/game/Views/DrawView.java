@@ -17,17 +17,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class DrawView extends View {
-
-    private final ClientController controller;
+public class DrawView extends SheetView {
+    private static final Color INITIAL_COLOR = new Color(224.0f / 256, 224.0f / 256, 224.0f / 256, 1);
+    private static final float INITIAL_RADIUS = 5.0f;
 
     // Rendering
     private ShapeRenderer shapeRenderer;
 
     // Drawing
     private Stack<Dot> drawing;
-    private float currentRadius = 5.0f;
-    private Color currentColor = new Color(224.0f / 256, 224.0f / 256, 224.0f / 256, 1);
+    private float currentRadius = INITIAL_RADIUS;
+    private Color currentColor = INITIAL_COLOR;
 
     private Float lastX = null;
     private Float lastY = null;
@@ -35,10 +35,10 @@ public class DrawView extends View {
     // UI
     private Label drawWordLabel;
     private TextButton submit;
-    List<Color> colors;
+    private List<Color> colors;
 
-    public DrawView(ClientController controller) {
-        this.controller = controller;
+    DrawView(ClientController controller) {
+        super(controller);
 
         // Labels
         drawWordLabel = new Label("Elephant", uiSkin);
@@ -77,10 +77,6 @@ public class DrawView extends View {
         // Drawing initialization
         drawing = new Stack<>();
         shapeRenderer = new ShapeRenderer();
-    }
-
-    private void onSubmit() {
-        controller.showGuess(drawing);
     }
 
     private class ColorButton extends Button{
@@ -146,6 +142,16 @@ public class DrawView extends View {
         draw();
 
         renderDrawing();
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        drawing.clear();
+        currentColor = INITIAL_COLOR;
+        currentRadius = INITIAL_RADIUS;
+        lastX = null;
+        lastY = null;
     }
 
     public List<Dot> getDrawing() {

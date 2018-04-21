@@ -12,8 +12,7 @@ import com.sketchy.game.Models.Dot;
 
 import java.util.Stack;
 
-public class GuessView extends View {
-    private final ClientController controller;
+public class GuessView extends SheetView {
     private Stack<Dot> drawing;
 
     // UI elements
@@ -24,10 +23,8 @@ public class GuessView extends View {
     // Renderer
     private ShapeRenderer shapeRenderer;
 
-    public GuessView(ClientController controller, Stack<Dot> drawing) {
-        this.controller = controller;
-        this.drawing = drawing;
-
+    GuessView(ClientController controller) {
+        super(controller);
         shapeRenderer = new ShapeRenderer();
 
         // Header
@@ -72,6 +69,13 @@ public class GuessView extends View {
             shapeRenderer.circle(dot.getPosX(), getScreenHeight() - dot.getPosY(), dot.getRadius());
             shapeRenderer.end();
         }
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        drawing.clear();
+        guessField.clear();
     }
 
     String getGuess() {

@@ -2,21 +2,17 @@ package com.sketchy.game.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.sketchy.game.Controllers.ClientController;
 
-public class LoadingView extends View {
-    final ClientController controller;
+public class LoadingView extends WaitingView {
+    private static final String DEFAULT_TEXT = "Loading...";
 
-    public LoadingView(final ClientController controller) {
+    private final ClientController controller;
+
+    LoadingView(final ClientController controller) {
+        super();
         this.controller = controller;
-
-        // Loading
-        Label loading = new Label("Loading...", redLabel);
-
-        // Add elements to table
-        table.add(loading).padBottom(45);
+        setText(DEFAULT_TEXT);
     }
 
     @Override
@@ -29,4 +25,8 @@ public class LoadingView extends View {
         }
     }
 
+    @Override
+    public void reset() {
+        setText(DEFAULT_TEXT);
+    }
 }

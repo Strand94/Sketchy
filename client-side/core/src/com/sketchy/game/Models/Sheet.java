@@ -1,6 +1,7 @@
 package com.sketchy.game.Models;
 
 public class Sheet {
+    public static final Sheet LOADING = new Sheet();
 
     private String objectiveWord;
     private String drawing;
