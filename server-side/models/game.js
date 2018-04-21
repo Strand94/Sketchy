@@ -39,11 +39,6 @@ class Game {
     }
 
     addNotepad(newNotepad) {
-        this.notepads.forEach(notepad => {
-            if (notepad.originalWord === newNotepad.originalWord) {
-                notepads = notepads.filter(item => item !== notepad);
-            }
-        });
         this.notepads.push(newNotepad);
     }
 

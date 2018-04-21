@@ -6,6 +6,7 @@ class GameController {
         this.game = null;
         this.communicator = communicator;
         communicator.addGameController(lobby.lobbyId, this);
+        this.notepadBuffer = [];
     }
 
     // "public" functions
@@ -20,8 +21,10 @@ class GameController {
     }
 
     recieveNotepad(notepad) {
-        this.game.addNotepad(notepad);
-        if (this.game.notepads.length === this.lobby.players.length) {
+        this.notepadBuffer.push(notepad);
+        if (this.notepadBuffer.length === this.lobby.players.length) {
+            this.game.notepads = this.notepadBuffer;
+            this.notepadBuffer = [];
             this.continueGame();
         }
     }
