@@ -26,7 +26,7 @@ public class Communicator {
 
         @Override
         public void call(Object... args) {
-            params = (JSONObject) args[0];
+            params = args.length > 0 ? ((JSONObject) args[0]) : new JSONObject();
             try {
                 call(params);
             } catch (JSONException e) {
@@ -284,6 +284,18 @@ public class Communicator {
         try {
             Emit
                     .event(REWIND_SHOW_NEXT)
+                    .to(socket)
+                    .with("lobbyId", lobbyId)
+                    .send();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void rewindFinished(int lobbyId) {
+        try {
+            Emit
+                    .event(REWIND_FINISHED)
                     .to(socket)
                     .with("lobbyId", lobbyId)
                     .send();

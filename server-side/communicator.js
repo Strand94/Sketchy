@@ -67,6 +67,11 @@ class Communicator {
                 .on(events.REWIND_SHOW_NEXT, (obj) => {
                     thiz.gameControllers[obj.lobbyId].rewindShowNext();
                 })
+                .on(events.REWIND_FINISHED, (obj) => {
+                    console.log("Rewind finished!");
+                    thiz.gameControllers[obj.lobbyId].endRewind();
+                    lobbyController.updateLobby(obj.lobbyId);
+                })
         });
     }
 

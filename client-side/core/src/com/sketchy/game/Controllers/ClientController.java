@@ -190,13 +190,16 @@ public class ClientController {
             RewindView rewindView = (RewindView) viewStack.peek();
 
             if (!(sheetIndex < sheets.size())){
-                System.out.print("No more sheets");
+                System.out.println("No more sheets!");
                 if (++notepadIndex < filledNotepads.size()) {
                     System.out.println("New notepad and new sheet");
                     sheets = filledNotepads.get(notepadIndex).getSheets();
                     sheetIndex = 0;
                 } else {
-                    System.out.println("No more notepads");
+                    if (isLobbyMaster) {
+                        communicator.rewindFinished(lobby.lobbyId);
+                        System.out.println("Sent REWIND_FINISHED event");
+                    }
                     return;
                 }
             }
