@@ -10,23 +10,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Dot;
+import com.sketchy.game.Models.Drawing;
 import com.sketchy.game.Models.Sheet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DrawView extends SheetView {
     private static final Color INITIAL_COLOR = new Color(224.0f / 256, 224.0f / 256, 224.0f / 256, 1);
     private static final float INITIAL_RADIUS = 5.0f;
-    private static final int INTERPOLATION_SKIP = 3;
 
     // Rendering
     private ShapeRenderer shapeRenderer;
 
     // Drawing
-    private ArrayList<Dot> drawing;
+    private Drawing drawing;
     private int drawIndex;
     private float currentRadius = INITIAL_RADIUS;
     private Color currentColor = INITIAL_COLOR;
@@ -78,7 +80,7 @@ public class DrawView extends SheetView {
         });
 
         // Drawing initialization
-        drawing = new ArrayList<>();
+        drawing = new Drawing();
         drawIndex = 0;
         shapeRenderer = new ShapeRenderer();
     }
@@ -111,9 +113,9 @@ public class DrawView extends SheetView {
                 int nDots = (int) Math.sqrt(Math.pow(y - lastY, 2) + Math.pow(x - lastX, 2)) - 1;
                 float dX = (x - lastX) / nDots;
                 float dY = (y - lastY) / nDots;
-                for (int i = 0; i < nDots; i += INTERPOLATION_SKIP) {
-                    lastX += INTERPOLATION_SKIP * dX;
-                    lastY += INTERPOLATION_SKIP * dY;
+                for (int i = 0; i < nDots; i += Config.DRAW_COARSENESS) {
+                    lastX += Config.DRAW_COARSENESS * dX;
+                    lastY += Config.DRAW_COARSENESS * dY;
                     drawing.add(new Dot(currentRadius, new Vector2(lastX, lastY), currentColor));
                 }
                 drawing.add(new Dot(currentRadius, new Vector2(x, y), currentColor));
@@ -141,12 +143,10 @@ public class DrawView extends SheetView {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(41.0f / 256, 45.0f / 256, 50.0f / 256, 1);
-        super.render(delta);
-
         draw();
-
+        Gdx.gl.glClearColor(41.0f / 256, 45.0f / 256, 50.0f / 256, 1);
         renderDrawing();
+        super.render(delta);
     }
 
     @Override
@@ -170,6 +170,12 @@ public class DrawView extends SheetView {
 
     @Override
     protected void onSubmit() {
+        try {
+            getSheet().setBase64Drawing(drawing.toBase64());
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO: Show error message
+            throw new RuntimeException(e);
+        }
         getSheet().setDrawer(controller.getPlayerName());
         super.onSubmit();
     }

@@ -9,11 +9,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Dot;
+import com.sketchy.game.Models.Drawing;
+import com.sketchy.game.Models.Sheet;
 
+import java.io.IOException;
 import java.util.Stack;
 
 public class GuessView extends SheetView {
-    private Stack<Dot> drawing;
+    private Drawing drawing;
 
     // UI elements
     private TextField guessField;
@@ -25,7 +28,7 @@ public class GuessView extends SheetView {
 
     GuessView(ClientController controller) {
         super(controller);
-        drawing = new Stack<>();
+        drawing = new Drawing();
         shapeRenderer = new ShapeRenderer();
 
         // Header
@@ -73,6 +76,17 @@ public class GuessView extends SheetView {
         super.reset();
         drawing.clear();
         guessField.clear();
+    }
+
+    @Override
+    public void setSheet(Sheet sheet) throws Exception {
+        super.setSheet(sheet);
+        try {
+            drawing = Drawing.fromBase64(sheet.getBase64Drawing());
+        } catch(IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

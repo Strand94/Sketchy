@@ -57,7 +57,6 @@ class Communicator {
                 })
                 .on(events.SEND_ANSWER, (obj) => {
                     let notepad = Object.assign(new Notepad, JSON.parse(obj.notepad));
-                    notepad.peek().base64Drawing = "Boobop";
                     console.log("Receiving: {lobbyId: %d, notepad: %s}", obj.lobbyId, JSON.stringify(notepad));
                     thiz.gameControllers[obj.lobbyId].receiveNotepad(notepad);
                 })

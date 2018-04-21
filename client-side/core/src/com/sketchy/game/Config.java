@@ -5,5 +5,5 @@ public class Config {
     public static final int MAX_PLAYERS = 8;
     public static final int LOBBIES_CAPACITY = 10000;
     public static final int START_GAME_TIMER = 5;
-
+    public static final int DRAW_COARSENESS = 1;
 }
