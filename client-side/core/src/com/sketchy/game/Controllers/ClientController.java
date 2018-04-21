@@ -29,7 +29,7 @@ public class ClientController {
 
     // Used by rewind
     private List<Notepad> filledNotepads;
-    private int sheetIndex, notepadIndex;
+    private int sheetIndex, notepadIndex, stepIndex;
     private List<Sheet> sheets;
 
     public ClientController(SketchyGame game) {
@@ -172,6 +172,7 @@ public class ClientController {
         filledNotepads = notepads;
         notepadIndex = 0;
         sheetIndex = 0;
+        stepIndex = 0;
         sheets = filledNotepads.get(notepadIndex).getSheets();
 
         showRewind();
@@ -195,6 +196,7 @@ public class ClientController {
                     System.out.println("New notepad and new sheet");
                     sheets = filledNotepads.get(notepadIndex).getSheets();
                     sheetIndex = 0;
+                    stepIndex = 0;
                 } else {
                     if (isLobbyMaster) {
                         communicator.rewindFinished(lobby.lobbyId);
@@ -204,12 +206,13 @@ public class ClientController {
                 }
             }
 
-            if (sheetIndex == 0) {
-                rewindView.showRewindStep(sheets.get(sheetIndex++), true, true);
-            } else if (sheetIndex % 2 == 1) {
-                rewindView.showRewindStep(sheets.get(sheetIndex++), false, false);
-            } else if (sheetIndex % 2 == 0) {
-                rewindView.showRewindStep(sheets.get(sheetIndex++), true, false);
+            if (stepIndex++ == 0) {
+                rewindView.showRewindStep(sheets.get(sheetIndex), true, true);
+            } else if (stepIndex++ % 2 == 1) {
+                rewindView.showRewindStep(sheets.get(sheetIndex), false, false);
+            } else if (stepIndex++ % 2 == 0) {
+                rewindView.showRewindStep(sheets.get(sheetIndex), true, false);
+                sheetIndex++;
             } else {
                 System.out.println("Something wrong");
             }
