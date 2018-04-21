@@ -78,10 +78,6 @@ public abstract class View implements Screen {
 
         stage.act(delta);
         stage.draw();
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
-            showToast("Hurray!");
-        }
     }
 
     @Override
