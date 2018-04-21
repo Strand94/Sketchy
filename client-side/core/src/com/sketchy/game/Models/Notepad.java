@@ -23,6 +23,14 @@ public class Notepad {
         this.originalWord = originalWord;
     }
 
+    public Sheet getLastSheet() {
+        return sheets.get(sheets.size() - 1);
+    }
+
+    public void setLastSheet(Sheet sheet) {
+        sheets.set(sheets.size() - 1, sheet);
+    }
+
     public List<Sheet> getSheets() {
         return sheets;
     }
@@ -37,5 +45,9 @@ public class Notepad {
 
     public void setRoute(List<String> route) {
         this.route = route;
+    }
+
+    public boolean isDrawTask() {
+        return (sheets.size() % 2) == 1;
     }
 }

@@ -6,6 +6,7 @@ import com.sketchy.game.Models.Sheet;
 import com.sketchy.game.SketchyGame;
 import com.sketchy.game.Views.LobbyView;
 import com.sketchy.game.Views.RewindView;
+import com.sketchy.game.Views.SheetView;
 import com.sketchy.game.Views.View;
 import com.sketchy.game.Views.ViewManager;
 import com.sketchy.game.communicator.Communicator;
@@ -22,7 +23,7 @@ public class ClientController {
 
     private Lobby lobby;
     private String playerName;
-
+    private Notepad notepad;
 
     public ClientController(SketchyGame game) {
         this.game = game;
@@ -50,15 +51,26 @@ public class ClientController {
     public void startGame() {
         System.out.println("clientController.startGame()");
         showLoading();
+        communicator.startGame(lobby.lobbyId);
     }
 
     public void endGame() {
     }
 
-    public void beginRound(Sheet sheet) {
+    public void beginRound(Notepad notepad) throws Exception {
+        System.out.println("clientController.beginRound(<notepad>)");
+        this.notepad = notepad;
+        if (notepad.isDrawTask()) showDrawView();
+        else showGuessView();
+        Sheet sheet = notepad.getLastSheet();
+        SheetView view = (SheetView) getView();
+        view.setSheet(sheet);
     }
 
-    public void beginRound(Notepad notepad) {
+    public void submit(Sheet sheet, Class<? extends SheetView> clazz) {
+        showWaiting();
+        notepad.setLastSheet(sheet);
+        communicator.sendAnswer(lobby.lobbyId, notepad);
     }
 
     public SketchyGame getGame() {

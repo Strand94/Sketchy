@@ -151,7 +151,11 @@ public class Communicator {
     }
 
     private void onBeginRound(Notepad notepad) {
-        clientController.beginRound(notepad);
+        try {
+            clientController.beginRound(notepad);
+        } catch (Exception e) {
+            e.printStackTrace();// TODO: Error message
+        }
     }
 
     private void onGetAnswer() {

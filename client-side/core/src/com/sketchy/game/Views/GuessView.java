@@ -48,13 +48,9 @@ public class GuessView extends SheetView {
         submit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                onSend();
+                onSubmit();
             }
         });
-    }
-
-    void onSend() {
-        System.out.println(String.format("You have guessed %s. Nothing more will happen", getGuess()));
     }
 
     @Override

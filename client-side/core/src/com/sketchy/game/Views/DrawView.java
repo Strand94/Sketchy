@@ -41,7 +41,7 @@ public class DrawView extends SheetView {
         super(controller);
 
         // Labels
-        drawWordLabel = new Label("Elephant", uiSkin);
+        drawWordLabel = new Label(getSheet().getObjectiveWord(), uiSkin);
 
         // Buttons
         submit = new TextButton("Submit", uiSkin);

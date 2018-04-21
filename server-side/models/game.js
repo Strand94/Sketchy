@@ -8,7 +8,7 @@ class Game {
         this.notepads = [];
 
         // fills inn notepads with unique routes
-        var playerAddresses = [] 
+        const playerAddresses = [];
         this.players.forEach(player => {
             playerAddresses.push(player.address);
         });
@@ -19,7 +19,7 @@ class Game {
                 new Notepad(this.getWord(), clone)
             );
 
-            // rotate playeraddresses
+            // rotate player addresses
             let tmp = playerAddresses.shift();
             playerAddresses.push(tmp);
         });
@@ -43,7 +43,7 @@ class Game {
             if (notepad.originalWord === newNotepad.originalWord) {
                 notepads = notepads.filter(item => item !== notepad);
             }
-        })
+        });
         this.notepads.push(newNotepad);
     }
 

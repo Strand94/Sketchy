@@ -56,7 +56,7 @@ class GameController {
             if (typeof player === 'undefined') {
                 console.log("no more players on route");
             } else {
-                this.communicator.beginRound(player.address, notepad);
+                this.communicator.beginRound(player, notepad);
             }
         });
     }

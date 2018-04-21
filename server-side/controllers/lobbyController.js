@@ -22,6 +22,7 @@ class LobbyController {
 
     startGame(lobbyId) {
         if (this.hasLobby(lobbyId)) {
+            console.log("Starting game in lobby %d", lobbyId);
             this.lobbies[lobbyId].startGame();
             return true;
         } else {
