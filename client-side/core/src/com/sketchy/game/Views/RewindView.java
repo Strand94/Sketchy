@@ -50,9 +50,12 @@ public class RewindView extends View {
 
             if(first){
                 guessWord.setText(sheet.getObjectiveWord());
+                guessLabel.setText("Got");
             } else {
                 guessWord.setText(sheet.getAnswer());
+                guessLabel.setText("Guessed");
             }
+
             table.add(guessLabel);
             table.row();
             table.add(guessWord);
@@ -61,7 +64,7 @@ public class RewindView extends View {
             table.add(who).top().padTop(getScreenHeight()*0.07f);
             table.row();
 
-            image.setText(sheet.getBase64Drawing());
+            image.setText("todo:render drawing");
             table.add(imageLabel);
             table.row();
             table.add(image);
