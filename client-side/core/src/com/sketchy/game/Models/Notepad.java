@@ -47,7 +47,4 @@ public class Notepad {
         this.route = route;
     }
 
-    public boolean isDrawTask() {
-        return (sheets.size() % 2) == 1;
-    }
 }

@@ -25,6 +25,7 @@ public class GuessView extends SheetView {
 
     GuessView(ClientController controller) {
         super(controller);
+        drawing = new Stack<>();
         shapeRenderer = new ShapeRenderer();
 
         // Header
@@ -74,7 +75,10 @@ public class GuessView extends SheetView {
         guessField.clear();
     }
 
-    String getGuess() {
-        return guessField.getText();
+    @Override
+    protected void onSubmit() {
+        getSheet().setAnswer(guessField.getText());
+        getSheet().setGuesser(controller.getPlayerName());
+        super.onSubmit();
     }
 }

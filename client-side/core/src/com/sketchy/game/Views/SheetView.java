@@ -18,7 +18,7 @@ public abstract class SheetView extends View {
     }
 
     protected void onSubmit() {
-        controller.submit(sheet, getClass());
+        controller.submit(sheet);
     }
 
     public void setSheet(Sheet sheet) throws Exception {

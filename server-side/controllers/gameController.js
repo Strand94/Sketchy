@@ -20,7 +20,7 @@ class GameController {
         this.continueGame();
     }
 
-    recieveNotepad(notepad) {
+    receiveNotepad(notepad) {
         this.notepadBuffer.push(notepad);
         if (this.notepadBuffer.length === this.lobby.players.length) {
             this.game.notepads = this.notepadBuffer;
@@ -45,7 +45,7 @@ class GameController {
     // "private" functions
 
     continueGame() {
-        const gameOver = this.game.nextStep();
+        const gameOver = this.game.prepareNextRound();
         if (gameOver === false) {
             this.sendNotepads();
         } else {
@@ -57,7 +57,7 @@ class GameController {
         this.game.notepads.forEach(notepad => {
             const player = notepad.nextOnRoute();
             if (typeof player === 'undefined') {
-                console.log("no more players on route");
+                console.log("No more players on route");
             } else {
                 this.communicator.beginRound(player, notepad);
             }

@@ -21,12 +21,14 @@ class LobbyController {
     }
 
     startGame(lobbyId) {
-        if (this.hasLobby(lobbyId)) {
+        if (!this.hasLobby(lobbyId)) {
+            console.log("can't start non-existing lobby with id %s", lobbyId);
+        } else if (this.lobbies[lobbyId].length < 2) {
+            console.log("Lobby %d can't start because there is only one player in it", lobbyId);
+        } else {
             console.log("Starting game in lobby %d", lobbyId);
             this.lobbies[lobbyId].startGame();
             return true;
-        } else {
-            console.log("can't start non-existing lobby with id %s", lobbyId);
         }
     }
 

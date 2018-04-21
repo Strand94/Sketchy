@@ -2,6 +2,8 @@ const app = require('express')();
 const server = require('http').createServer(app);
 const io = require("socket.io").listen(server);
 
+const Notepad = require("./models/notepad");
+
 
 const events = {
     START_GAME: "start-game",
@@ -54,7 +56,10 @@ class Communicator {
                     lobbyController.startGame(obj.lobbyId);
                 })
                 .on(events.SEND_ANSWER, (obj) => {
-                    thiz.gameControllers[obj.lobbyId].recieveNotepad(obj.notepad);
+                    let notepad = Object.assign(new Notepad, JSON.parse(obj.notepad));
+                    notepad.peek().base64Drawing = "Boobop";
+                    console.log("Receiving: {lobbyId: %d, notepad: %s}", obj.lobbyId, JSON.stringify(notepad));
+                    thiz.gameControllers[obj.lobbyId].receiveNotepad(notepad);
                 })
                 .on(events.END_GAME, (obj) => {
                     thiz.gameControllers[obj.lobbyId].endGame();
@@ -94,6 +99,7 @@ class Communicator {
     };
 
     beginRound(playerAddress, notepad) {
+        console.log("Sending: %s", JSON.stringify({"notepad": notepad}));
         this.notifyPlayer(playerAddress, events.BEGIN_ROUND, {"notepad": notepad});
     };
 

@@ -9,8 +9,8 @@ class Notepad {
         this.sheets.push(sheet);
     }
 
-    pop() {
-        return this.sheets.pop();
+    peek() {
+        return this.sheets[this.sheets.length - 1];
     }
 
     nextOnRoute() {

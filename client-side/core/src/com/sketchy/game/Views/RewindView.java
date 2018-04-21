@@ -43,7 +43,7 @@ public class RewindView extends View {
     public void showRewindStep(Sheet sheet, boolean guess, boolean first){
         table.reset();
 
-        who.setText(sheet.getPlayerName());
+        who.setText(sheet.getDrawer());
 
         // Add to table
         table.add(who).top().padTop(getScreenHeight()*0.07f);
