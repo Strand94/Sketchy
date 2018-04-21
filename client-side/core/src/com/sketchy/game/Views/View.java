@@ -21,6 +21,9 @@ public abstract class View implements Screen {
     protected Label.LabelStyle blueLabel, redLabel, greenLabel;
     protected TextField.TextFieldStyle redTextField;
 
+    protected boolean clearGl = true;
+    protected boolean hasCleared = false;
+
     protected View() {
         stage = new Stage(new ScreenViewport());
 
@@ -46,7 +49,10 @@ public abstract class View implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if(clearGl || !hasCleared) {
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            hasCleared = true;
+        }
 
         stage.act(delta);
         stage.draw();

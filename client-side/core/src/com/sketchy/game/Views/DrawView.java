@@ -16,17 +16,18 @@ import com.sketchy.game.Models.Sheet;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class DrawView extends SheetView {
     private static final Color INITIAL_COLOR = new Color(224.0f / 256, 224.0f / 256, 224.0f / 256, 1);
     private static final float INITIAL_RADIUS = 5.0f;
+    private static final int INTERPOLATION_SKIP = 3;
 
     // Rendering
     private ShapeRenderer shapeRenderer;
 
     // Drawing
-    private Stack<Dot> drawing;
+    private ArrayList<Dot> drawing;
+    private int drawIndex;
     private float currentRadius = INITIAL_RADIUS;
     private Color currentColor = INITIAL_COLOR;
 
@@ -40,6 +41,7 @@ public class DrawView extends SheetView {
 
     DrawView(ClientController controller) {
         super(controller);
+        clearGl = false;
 
         // Labels
         drawWordLabel = new Label("", uiSkin);
@@ -76,7 +78,8 @@ public class DrawView extends SheetView {
         });
 
         // Drawing initialization
-        drawing = new Stack<>();
+        drawing = new ArrayList<>();
+        drawIndex = 0;
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -108,9 +111,9 @@ public class DrawView extends SheetView {
                 int nDots = (int) Math.sqrt(Math.pow(y - lastY, 2) + Math.pow(x - lastX, 2)) - 1;
                 float dX = (x - lastX) / nDots;
                 float dY = (y - lastY) / nDots;
-                for (int i = 0; i < nDots; i += 3) {
-                    lastX += 3 * dX;
-                    lastY += 3 * dY;
+                for (int i = 0; i < nDots; i += INTERPOLATION_SKIP) {
+                    lastX += INTERPOLATION_SKIP * dX;
+                    lastY += INTERPOLATION_SKIP * dY;
                     drawing.add(new Dot(currentRadius, new Vector2(lastX, lastY), currentColor));
                 }
                 drawing.add(new Dot(currentRadius, new Vector2(x, y), currentColor));
@@ -127,18 +130,19 @@ public class DrawView extends SheetView {
      * Render ALL the Dot!
      */
     private void renderDrawing() {
-        for (Dot dot : drawing) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        while (drawIndex < drawing.size()) {
+            Dot dot = drawing.get(drawIndex++);
             shapeRenderer.setColor(dot.getColor());
             shapeRenderer.circle(dot.getPosX(), getScreenHeight() - dot.getPosY(), dot.getRadius());
-            shapeRenderer.end();
         }
+        shapeRenderer.end();
     }
 
     @Override
     public void render(float delta) {
-        super.render(delta);
         Gdx.gl.glClearColor(41.0f / 256, 45.0f / 256, 50.0f / 256, 1);
+        super.render(delta);
 
         draw();
 
@@ -148,7 +152,9 @@ public class DrawView extends SheetView {
     @Override
     public void reset() {
         super.reset();
+        hasCleared = false;
         drawing.clear();
+        drawIndex = 0;
         drawWordLabel.clear();
         currentColor = INITIAL_COLOR;
         currentRadius = INITIAL_RADIUS;
