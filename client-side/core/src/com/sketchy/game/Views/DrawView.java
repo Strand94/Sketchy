@@ -109,16 +109,8 @@ public class DrawView extends SheetView {
         if (Gdx.input.isTouched()) {
             float x = Gdx.input.getX();
             float y = Gdx.input.getY();
-            if (lastX != null && lastY != null && (x != lastX || y != lastY)) {
-                int nDots = (int) Math.sqrt(Math.pow(y - lastY, 2) + Math.pow(x - lastX, 2)) - 1;
-                float dX = (x - lastX) / nDots;
-                float dY = (y - lastY) / nDots;
-                for (int i = 0; i < nDots; i += Config.DRAW_COARSENESS) {
-                    lastX += Config.DRAW_COARSENESS * dX;
-                    lastY += Config.DRAW_COARSENESS * dY;
-                    drawing.add(new Dot(currentRadius, new Vector2(lastX, lastY), currentColor));
-                }
-                drawing.add(new Dot(currentRadius, new Vector2(x, y), currentColor));
+            if (lastX == null || x != lastX || y != lastY) {
+                drawing.add(new Dot(currentRadius, new Vector2(x, y), currentColor, lastX != null));
             }
             lastX = x;
             lastY = y;
@@ -133,10 +125,25 @@ public class DrawView extends SheetView {
      */
     private void renderDrawing() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        Dot prev = null;
         while (drawIndex < drawing.size()) {
             Dot dot = drawing.get(drawIndex++);
             shapeRenderer.setColor(dot.getColor());
-            shapeRenderer.circle(dot.getPosX(), getScreenHeight() - dot.getPosY(), dot.getRadius());
+            System.out.println(dot);
+            if (prev != null && dot.drawLineFromPrevious) {
+                float deltaX = dot.getX() - prev.getX();
+                float deltaY = dot.getY() - prev.getY();
+                int nDots = (int) Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)) - 1;
+                for (int i = 0; i < nDots; i += Config.DRAW_COARSENESS) {
+                    shapeRenderer.circle(
+                            prev.getX() + (deltaX / nDots) * i,
+                            getScreenHeight() - (prev.getY() + (deltaY / nDots) * i),
+                            dot.getRadius()
+                    );
+                }
+            }
+            shapeRenderer.circle(dot.getX(), getScreenHeight() - dot.getY(), dot.getRadius());
+            prev = dot;
         }
         shapeRenderer.end();
     }

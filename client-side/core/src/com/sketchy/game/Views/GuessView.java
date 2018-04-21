@@ -69,7 +69,7 @@ public class GuessView extends SheetView {
             Dot dot = drawing.get(drawIndex++);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(dot.getColor());
-            shapeRenderer.circle(dot.getPosX(), getScreenHeight() - dot.getPosY(), dot.getRadius());
+            shapeRenderer.circle(dot.getX(), getScreenHeight() - dot.getY(), dot.getRadius());
             shapeRenderer.end();
         }
         super.render(delta);

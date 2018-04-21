@@ -1,40 +1,34 @@
 package com.sketchy.game.Models;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import org.apache.commons.codec.binary.Base64;
 
 public class Drawing extends ArrayList<Dot> {
+    public Drawing() {
+    }
+
+    public Drawing(int initialCapacity) {
+        super(initialCapacity);
+    }
+
     public static Drawing fromBase64(String base64) throws IOException, ClassNotFoundException {
         byte[] bytes = Base64.decodeBase64(base64);
-        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-        ObjectInput in = null;
-        try {
-            in = new ObjectInputStream(bis);
-            Object o = in.readObject();
-            return (Drawing) o;
-        } finally {
-            if (in != null) in.close();
+        int n = bytes.length / Dot.SIZE_BYTES;
+        Drawing drawing = new Drawing(n);
+        for (int i = 0; i < n; i++) {
+            byte[] dotBytes = new byte[Dot.SIZE_BYTES];
+            System.arraycopy(bytes, i * Dot.SIZE_BYTES, dotBytes, 0, Dot.SIZE_BYTES);
+            drawing.add(Dot.fromBytes(dotBytes));
         }
+        return drawing;
     }
 
     public String toBase64() throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutput out;
-        try {
-            out = new ObjectOutputStream(baos);
-            out.writeObject(this);
-            out.flush();
-            byte[] byteArray = baos.toByteArray();
-            return Base64.encodeBase64String(byteArray);
-        } finally {
-            baos.close();
+        byte[] bytes = new byte[size() * Dot.SIZE_BYTES];
+        for (int i = 0; i < size(); i++) {
+            System.arraycopy(get(i).toBytes(), 0, bytes, i * Dot.SIZE_BYTES, Dot.SIZE_BYTES);
         }
+        return Base64.encodeBase64String(bytes);
     }
 }
