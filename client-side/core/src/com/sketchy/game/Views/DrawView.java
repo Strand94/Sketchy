@@ -161,4 +161,10 @@ public class DrawView extends SheetView {
         super.setSheet(sheet);
         drawWordLabel.setText(sheet.getObjectiveWord());
     }
+
+    @Override
+    protected void onSubmit() {
+        getSheet().setDrawer(controller.getPlayerName());
+        super.onSubmit();
+    }
 }
