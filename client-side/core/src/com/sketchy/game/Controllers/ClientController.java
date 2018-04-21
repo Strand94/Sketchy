@@ -161,6 +161,10 @@ public class ClientController {
         System.out.println("*goBack:" + to);
     }
 
+    public void notifyPlayer(String message) {
+        // TODO: show message to user
+    }
+
     //=========== REWIND ================\\
 
     public void startRewind(List<Notepad> notepads) {
@@ -214,7 +218,7 @@ public class ClientController {
     }
 
     public void requestNextRewindStep() {
-        //todo: Ask communicator to broadcast onRewindShowNext to all players
+        communicator.rewindShowNext(lobby.lobbyId);
     }
 
     //=========== END REWIND ============\\

@@ -33,7 +33,11 @@ class LobbyController {
     }
 
     joinLobby(lobbyId, playerName, playerAddress) {
-        if (this.hasLobby(lobbyId) && !this.lobbies[lobbyId].isFull()) {
+        if (!this.hasLobby(lobbyId)) {
+            this.communicator.notifyPlayer(playerAddress, "Lobby %d doesn't exist");
+        } else if (this.lobbies[lobbyId].isFull()) {
+            this.communicator.notifyPlayer(playerAddress, "Lobby %d is full");
+        } else {
             const player = new Player(playerName, playerAddress, lobbyId, false);
             this.lobbies[lobbyId].addPlayer(player);
             this.allPlayers[playerAddress] = player;
