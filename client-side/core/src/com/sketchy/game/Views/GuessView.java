@@ -13,10 +13,10 @@ import com.sketchy.game.Models.Drawing;
 import com.sketchy.game.Models.Sheet;
 
 import java.io.IOException;
-import java.util.Stack;
 
 public class GuessView extends SheetView {
     private Drawing drawing;
+    private int drawIndex;
 
     // UI elements
     private TextField guessField;
@@ -28,7 +28,10 @@ public class GuessView extends SheetView {
 
     GuessView(ClientController controller) {
         super(controller);
+        clearGl = false;
+
         drawing = new Drawing();
+        drawIndex = 0;
         shapeRenderer = new ShapeRenderer();
 
         // Header
@@ -59,23 +62,26 @@ public class GuessView extends SheetView {
 
     @Override
     public void render(float delta) {
-        super.render(delta);
         Gdx.gl.glClearColor(49.0f / 256, 176.0f / 256, 213.0f / 256, 1);
         Gdx.input.setCatchBackKey(true);
 
-        for (Dot dot : drawing) {
+        while (drawIndex < drawing.size()) {
+            Dot dot = drawing.get(drawIndex++);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(dot.getColor());
             shapeRenderer.circle(dot.getPosX(), getScreenHeight() - dot.getPosY(), dot.getRadius());
             shapeRenderer.end();
         }
+        super.render(delta);
     }
 
     @Override
     public void reset() {
         super.reset();
+        clearGlOnce();
         drawing.clear();
-        guessField.clear();
+        drawIndex = 0;
+        guessField.setText("");
     }
 
     @Override
@@ -83,6 +89,7 @@ public class GuessView extends SheetView {
         super.setSheet(sheet);
         try {
             drawing = Drawing.fromBase64(sheet.getBase64Drawing());
+            drawIndex = 0;
         } catch(IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

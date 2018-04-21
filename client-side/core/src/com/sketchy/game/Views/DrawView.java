@@ -152,7 +152,7 @@ public class DrawView extends SheetView {
     @Override
     public void reset() {
         super.reset();
-        hasCleared = false;
+        clearGlOnce();
         drawing.clear();
         drawIndex = 0;
         drawWordLabel.clear();

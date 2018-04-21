@@ -22,7 +22,7 @@ public abstract class View implements Screen {
     protected TextField.TextFieldStyle redTextField;
 
     protected boolean clearGl = true;
-    protected boolean hasCleared = false;
+    private boolean hasCleared = false;
 
     protected View() {
         stage = new Stage(new ScreenViewport());
@@ -116,5 +116,9 @@ public abstract class View implements Screen {
     }
 
     public void reset() {
+    }
+
+    protected void clearGlOnce() {
+        hasCleared = false;
     }
 }
