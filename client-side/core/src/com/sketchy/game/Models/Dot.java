@@ -3,17 +3,28 @@ package com.sketchy.game.Models;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
-import java.io.Serializable;
+import java.nio.ByteBuffer;
 
-public class Dot implements Serializable{
+public class Dot {
+    public static final int SIZE_BYTES = 9;
+
+    private static final Color[] colors = new Color[] {
+            Color.RED, Color.GREEN, Color.BLUE, Color.ORANGE, Color.WHITE
+    };
+
     private float radius;
     private Vector2 position;
-    private float[] color;
+    private byte color;
+    public final boolean drawLineFromPrevious;
 
-    public Dot(float radius, Vector2 position, Color color) {
+    public Dot(float radius, Vector2 position, Color color, boolean drawLineFromPrevious) {
         this.radius = radius;
         this.position = position;
-        this.color = new float[]{color.r, color.g, color.b};
+        this.color = 0;
+        for (byte i = 0; i < colors.length; i++) {
+            if (color.equals(colors[i])) this.color = i;
+        }
+        this.drawLineFromPrevious = drawLineFromPrevious;
     }
 
     public float getRadius() {
@@ -24,15 +35,43 @@ public class Dot implements Serializable{
         return position;
     }
 
-    public float getPosX(){
+    public float getX(){
         return position.x;
     }
 
-    public float getPosY(){
+    public float getY(){
         return position.y;
     }
 
     public Color getColor() {
-        return new Color(color[0], color[1], color[2], 1);
+        return colors[color];
+    }
+
+    @Override
+    public String toString() {
+        return "Dot{" +
+                "radius=" + radius +
+                ", position=" + position +
+                ", color=" + colors[color] +
+                ", drawLineFromPrevious=" + drawLineFromPrevious +
+                '}';
+    }
+
+    public byte[] toBytes() {
+        return ByteBuffer.allocate(SIZE_BYTES)
+                .put((byte)((color << 1) | (drawLineFromPrevious ? 1 : 0)))
+                .putFloat(getX())
+                .putFloat(getY())
+                .array();
+    }
+
+    public static Dot fromBytes(byte[] bytes) {
+        ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
+        return new Dot(
+                5.0f,
+                new Vector2(byteBuffer.getFloat(1), byteBuffer.getFloat(5)),
+                colors[byteBuffer.get(0) >> 1],
+                (byteBuffer.get(0) & 1) != 0
+        );
     }
 }

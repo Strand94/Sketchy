@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Dot;
 import com.sketchy.game.Models.Drawing;
@@ -29,7 +28,6 @@ public class DrawView extends SheetView {
 
     // Drawing
     private Drawing drawing;
-    private int drawIndex;
     private float currentRadius = INITIAL_RADIUS;
     private Color currentColor = INITIAL_COLOR;
 
@@ -81,7 +79,6 @@ public class DrawView extends SheetView {
 
         // Drawing initialization
         drawing = new Drawing();
-        drawIndex = 0;
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -109,16 +106,8 @@ public class DrawView extends SheetView {
         if (Gdx.input.isTouched()) {
             float x = Gdx.input.getX();
             float y = Gdx.input.getY();
-            if (lastX != null && lastY != null && (x != lastX || y != lastY)) {
-                int nDots = (int) Math.sqrt(Math.pow(y - lastY, 2) + Math.pow(x - lastX, 2)) - 1;
-                float dX = (x - lastX) / nDots;
-                float dY = (y - lastY) / nDots;
-                for (int i = 0; i < nDots; i += Config.DRAW_COARSENESS) {
-                    lastX += Config.DRAW_COARSENESS * dX;
-                    lastY += Config.DRAW_COARSENESS * dY;
-                    drawing.add(new Dot(currentRadius, new Vector2(lastX, lastY), currentColor));
-                }
-                drawing.add(new Dot(currentRadius, new Vector2(x, y), currentColor));
+            if (lastX == null || x != lastX || y != lastY) {
+                drawing.add(new Dot(currentRadius, new Vector2(x, y), currentColor, lastX != null));
             }
             lastX = x;
             lastY = y;
@@ -128,24 +117,11 @@ public class DrawView extends SheetView {
         }
     }
 
-    /**
-     * Render ALL the Dot!
-     */
-    private void renderDrawing() {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        while (drawIndex < drawing.size()) {
-            Dot dot = drawing.get(drawIndex++);
-            shapeRenderer.setColor(dot.getColor());
-            shapeRenderer.circle(dot.getPosX(), getScreenHeight() - dot.getPosY(), dot.getRadius());
-        }
-        shapeRenderer.end();
-    }
-
     @Override
     public void render(float delta) {
         draw();
         Gdx.gl.glClearColor(41.0f / 256, 45.0f / 256, 50.0f / 256, 1);
-        renderDrawing();
+        drawing.render(shapeRenderer, getScreenHeight(), 0);
         super.render(delta);
     }
 
@@ -154,7 +130,6 @@ public class DrawView extends SheetView {
         super.reset();
         clearGlOnce();
         drawing.clear();
-        drawIndex = 0;
         drawWordLabel.clear();
         currentColor = INITIAL_COLOR;
         currentRadius = INITIAL_RADIUS;
