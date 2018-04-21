@@ -74,7 +74,10 @@ public abstract class View implements Screen {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             hasCleared = true;
         }
+        renderStage(delta);
+    }
 
+    protected void renderStage(float delta) {
         stage.act(delta);
         stage.draw();
     }

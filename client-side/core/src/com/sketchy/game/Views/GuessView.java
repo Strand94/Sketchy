@@ -65,14 +65,9 @@ public class GuessView extends SheetView {
         Gdx.gl.glClearColor(49.0f / 256, 176.0f / 256, 213.0f / 256, 1);
         Gdx.input.setCatchBackKey(true);
 
-        while (drawIndex < drawing.size()) {
-            Dot dot = drawing.get(drawIndex++);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(dot.getColor());
-            shapeRenderer.circle(dot.getX(), getScreenHeight() - dot.getY(), dot.getRadius());
-            shapeRenderer.end();
-        }
         super.render(delta);
+        drawIndex = drawing.render(shapeRenderer, getScreenHeight(), drawIndex);
+        renderStage(delta);
     }
 
     @Override

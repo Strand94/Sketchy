@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
 import com.sketchy.game.Models.Dot;
 import com.sketchy.game.Models.Drawing;
@@ -29,7 +28,6 @@ public class DrawView extends SheetView {
 
     // Drawing
     private Drawing drawing;
-    private int drawIndex;
     private float currentRadius = INITIAL_RADIUS;
     private Color currentColor = INITIAL_COLOR;
 
@@ -81,7 +79,6 @@ public class DrawView extends SheetView {
 
         // Drawing initialization
         drawing = new Drawing();
-        drawIndex = 0;
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -120,39 +117,11 @@ public class DrawView extends SheetView {
         }
     }
 
-    /**
-     * Render ALL the Dot!
-     */
-    private void renderDrawing() {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        Dot prev = null;
-        while (drawIndex < drawing.size()) {
-            Dot dot = drawing.get(drawIndex++);
-            shapeRenderer.setColor(dot.getColor());
-            System.out.println(dot);
-            if (prev != null && dot.drawLineFromPrevious) {
-                float deltaX = dot.getX() - prev.getX();
-                float deltaY = dot.getY() - prev.getY();
-                int nDots = (int) Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)) - 1;
-                for (int i = 0; i < nDots; i += Config.DRAW_COARSENESS) {
-                    shapeRenderer.circle(
-                            prev.getX() + (deltaX / nDots) * i,
-                            getScreenHeight() - (prev.getY() + (deltaY / nDots) * i),
-                            dot.getRadius()
-                    );
-                }
-            }
-            shapeRenderer.circle(dot.getX(), getScreenHeight() - dot.getY(), dot.getRadius());
-            prev = dot;
-        }
-        shapeRenderer.end();
-    }
-
     @Override
     public void render(float delta) {
         draw();
         Gdx.gl.glClearColor(41.0f / 256, 45.0f / 256, 50.0f / 256, 1);
-        renderDrawing();
+        drawing.render(shapeRenderer, getScreenHeight(), 0);
         super.render(delta);
     }
 
@@ -161,7 +130,6 @@ public class DrawView extends SheetView {
         super.reset();
         clearGlOnce();
         drawing.clear();
-        drawIndex = 0;
         drawWordLabel.clear();
         currentColor = INITIAL_COLOR;
         currentRadius = INITIAL_RADIUS;
