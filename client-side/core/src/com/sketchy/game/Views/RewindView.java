@@ -7,11 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
-import com.sketchy.game.Models.Notepad;
 import com.sketchy.game.Models.Sheet;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RewindView extends View {
     private final ClientController clientController;
@@ -38,7 +34,7 @@ public class RewindView extends View {
         next.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                clientController.requestRewind();
+                clientController.requestNextRewindStep();
             }
         });
     }

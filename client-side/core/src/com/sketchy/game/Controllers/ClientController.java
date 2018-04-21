@@ -200,8 +200,8 @@ public class ClientController {
         showLobby();
     }
 
-    public void requestRewind(){
-        //todo: Send something to communicator
+    public void requestNextRewindStep() {
+        //todo: Ask communicator to broadcast onRewindShowNext to all players
     }
 
     //=========== END REWIND ============\\
