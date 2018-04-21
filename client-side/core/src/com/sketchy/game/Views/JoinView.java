@@ -19,8 +19,7 @@ public class JoinView extends View {
 
     Skin skin;
 
-
-    public JoinView(final ClientController controller) {
+    JoinView(final ClientController controller) {
         this.controller = controller;
 
         // Header
@@ -56,31 +55,19 @@ public class JoinView extends View {
     }
 
     @Override
-    public void show() {
-
-    }
-
-    @Override
     public void render(float delta) {
         super.render(delta);
         Gdx.gl.glClearColor(68.0f / 256, 180.0f / 256, 112.0f / 256, 1);
         Gdx.input.setCatchBackKey(true);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            controller.showLogin();
+            controller.goBack();
         }
-
-
     }
 
     @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
+    public void reset() {
+        lobbyField.clear();
     }
 
     private Boolean validLobbyId(String input) {
@@ -96,7 +83,7 @@ public class JoinView extends View {
     private void onJoin() {
         System.out.println("Join Game");
         if (validLobbyId(lobbyField.getText())) {
-            controller.joinLobby(Integer.parseInt(lobbyField.getText()), controller.getPlayer().getName());
+            controller.joinLobby(Integer.parseInt(lobbyField.getText()), controller.getPlayerName());
         } else {
             //TODO: Add alert box to notify invalid lobby id
             System.out.println("Invalid LobbyID");

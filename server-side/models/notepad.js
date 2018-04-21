@@ -2,15 +2,15 @@ class Notepad {
     constructor(originalWord, route) {
         this.originalWord = originalWord;
         this.sheets = [];
-        this.route = route;
+        this.route = route; // array of playerAdresses
     }
 
     push(sheet) {
         this.sheets.push(sheet);
     }
 
-    pop() {
-        return this.sheets.pop();
+    peek() {
+        return this.sheets[this.sheets.length - 1];
     }
 
     nextOnRoute() {

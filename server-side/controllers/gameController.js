@@ -6,50 +6,68 @@ class GameController {
         this.game = null;
         this.communicator = communicator;
         communicator.addGameController(lobby.lobbyId, this);
+        this.notepadBuffer = [];
     }
 
     // "public" functions
 
     abortGame() {
-        // TODO: implement
+        this.startRewind();
     }
 
     startGame() {
-        this.game = new Game(this.lobby.getPlayers());
+        this.game = new Game(this.lobby.players);
         this.continueGame();
     }
 
-    recieveNotepad(notepad) {
-        this.game.pushNotepad(notepad);
-        if (this.game.getNotepads().length === this.lobby.getPlayers().length) {
+    receiveNotepad(notepad) {
+        this.notepadBuffer.push(notepad);
+        if (this.notepadBuffer.length === this.lobby.players.length) {
+            this.game.notepads = this.notepadBuffer;
+            this.notepadBuffer = [];
             this.continueGame();
         }
+    }
+
+    rewindShowNext() {
+        this.lobby.players.forEach(player => {
+            this.communicator.rewindShowNext(player.address);
+        });
+    }
+
+    endRewind() {
+        this.lobby.players.forEach(player => {
+            this.communicator.endRewind(player.address);
+        });
+        this.game = null;
     }
 
     // "private" functions
 
     continueGame() {
-        const gameOver = this.game.nextStep();
+        const gameOver = this.game.prepareNextRound();
         if (gameOver === false) {
             this.sendNotepads();
         } else {
-            this.endGame();
+            this.startRewind();
         }
     }
 
     sendNotepads() {
-        this.game.getNotepads().forEach(notepad => {
+        this.game.notepads.forEach(notepad => {
             const player = notepad.nextOnRoute();
             if (typeof player === 'undefined') {
-                console.log("no more players on route");
+                console.log("No more players on route");
             } else {
-                this.communicator.beginRound(player.address, notepad);
+                this.communicator.beginRound(player, notepad);
             }
         });
     }
 
-    endGame() {
-        // TODO: implement
+    startRewind() {
+        this.lobby.players.forEach(player => {
+            this.communicator.startRewind(player.address, this.game.notepads);
+        });
     }
 
 }

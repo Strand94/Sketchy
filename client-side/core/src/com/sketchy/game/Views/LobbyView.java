@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Timer;
 import com.sketchy.game.Config;
 import com.sketchy.game.Controllers.ClientController;
 
@@ -15,43 +16,65 @@ import java.util.List;
 import java.util.Locale;
 
 public class LobbyView extends View {
-    ClientController controller;
+    private static final String INITIAL_LOBBY_ID_LABEL_TEXT = "LobbyID: \u2014";
+
+    private ClientController controller;
+
+    private boolean isLobbyMaster = false;
 
     private TextButton startGame;
-    private float remaining = 5;
-    private boolean startGame_r = false;
-    private Label lobbyIdLabel;
-    private Label numberOfPlayers;
-    private Table buttonTable;
-    private Table playerTable = new Table();
+    private Label lobbyIdLabel, numberOfPlayers;
+    private Table buttonTable, playerTable;
 
-    public LobbyView(ClientController controller) {
+    private Timer.Task timer;
+    private int counter = Config.START_GAME_TIMER;
+
+    LobbyView(ClientController controller) {
         this.controller = controller;
 
-        lobbyIdLabel = new Label("LobbyID: \u2014", uiSkin);
-        lobbyIdLabel.setColor(Color.CYAN);
-        startGame = new TextButton("Start Game", uiSkin);
-        numberOfPlayers = new Label(controller.getPlayerCount() + "/" +
-                Integer.toString(Config.MAX_PLAYERS), uiSkin);
-
-        table.add(lobbyIdLabel);
-        table.row();
+        // Tables
+        playerTable = new Table();
         buttonTable = new Table();
-        buttonTable.setPosition(screenWidth / 2, screenHeight * 0.1f);
-
-        table.setFillParent(true);
         stage.addActor(buttonTable);
-        table.add(playerTable);
+
+        // Header
+        lobbyIdLabel = new Label(INITIAL_LOBBY_ID_LABEL_TEXT, uiSkin);
+        lobbyIdLabel.setColor(Color.CYAN);
+
+        // Buttons
+        startGame = new TextButton("Start Game", uiSkin);
+        startGame.setVisible(false);
+
+        // Labels
+        numberOfPlayers = new Label(getNumberOfPlayersText(), uiSkin);
+
+        // Add to table
+        table.add(lobbyIdLabel).top().padTop(0.07f * getScreenHeight());
+        table.row();
+        table.setFillParent(true);
+
+        buttonTable.setPosition(getScreenWidth() / 2, getScreenHeight() * 0.1f);
         buttonTable.add(startGame);
         buttonTable.row();
         buttonTable.add(numberOfPlayers);
 
+        table.add(playerTable).expandY().top().padTop(0.1f * getScreenHeight());
+
+        // Listeners
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 onGameStart();
             }
         });
+
+        // Timer
+        timer = new Timer.Task(){
+            @Override
+            public void run(){
+                countDown();
+            }
+        };
     }
 
     public void setLobbyId(int lobbyId) {
@@ -59,35 +82,35 @@ public class LobbyView extends View {
     }
 
     public void updatePlayerList(List<String> players) {
-        table.removeActor(playerTable);
-        playerTable = new Table();
-        table.add(playerTable);
+        playerTable.reset();
 
         System.out.print("Adding players: ");
+        boolean first = true;
         for (String player : players) {
             addPerson(player);
-            System.out.print(player + ",");
+            if (first) first = false;
+            else System.out.print(", ");
+            System.out.print(player);
         }
         System.out.println();
 
         numberOfPlayers.setText(players.size() + "/" + Config.MAX_PLAYERS);
-
     }
 
     private void addPerson(String name) {
         Label playerName = new Label(name, uiSkin);
         playerName.setColor(Color.CYAN);
-        playerTable.add(playerName);
+        playerTable.add(playerName).colspan(2);
         playerTable.row();
     }
 
-    private void startGameCounter() {
-        startGame_r = true;
+    private String getNumberOfPlayersText() {
+        return controller.getPlayerCount() + "/" + Integer.toString(Config.MAX_PLAYERS);
     }
 
-    @Override
-    public void show() {
-        super.show();
+    public void setLobbyMaster() {
+        isLobbyMaster = true;
+        startGame.setVisible(true);
     }
 
     @Override
@@ -96,29 +119,33 @@ public class LobbyView extends View {
         Gdx.gl.glClearColor(246.0f / 256, 195.0f / 256, 42.0f / 256, 1);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            controller.showLogin();
+            controller.goBack();
         }
 
-        // Countdown. Todo: Move to startGameCounter
-        if (remaining > 0.1 && startGame_r == true) {
-            float deltaTime = Gdx.graphics.getDeltaTime();
-            remaining -= deltaTime;
-            startGame.setText(String.format("Start in %.0fs", remaining));
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            startTimer();
         }
+    }
+
+    @Override
+    public void reset() {
+        playerTable.reset();
+        lobbyIdLabel.setText(INITIAL_LOBBY_ID_LABEL_TEXT);
+        numberOfPlayers.setText(getNumberOfPlayersText());
+        timer.cancel();
+        counter = Config.START_GAME_TIMER;
     }
 
     private void onGameStart() {
         controller.startGame();
     }
 
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-
+    private void countDown(){
+        startGame.setText(String.format(String.format(Locale.GERMAN, "   Starting in %ds   ", counter)));
+        counter--;
     }
 
-    @Override
-    public void dispose() {
-        super.dispose();
+    public void startTimer(){
+        Timer.schedule(timer, 0f, 1f, Config.START_GAME_TIMER);
     }
 }

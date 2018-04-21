@@ -1,154 +1,241 @@
 package com.sketchy.game.Controllers;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.sketchy.game.Models.Lobby;
 import com.sketchy.game.Models.Notepad;
-import com.sketchy.game.Models.Player;
 import com.sketchy.game.Models.Sheet;
 import com.sketchy.game.SketchyGame;
-import com.sketchy.game.Views.DrawView;
-import com.sketchy.game.Views.GuessView;
-import com.sketchy.game.Views.JoinView;
 import com.sketchy.game.Views.LobbyView;
-import com.sketchy.game.Views.LoginView;
+import com.sketchy.game.Views.RewindView;
+import com.sketchy.game.Views.SheetView;
 import com.sketchy.game.Views.View;
+import com.sketchy.game.Views.ViewManager;
 import com.sketchy.game.communicator.Communicator;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.List;
-import java.util.Stack;
 
 public class ClientController {
 
-    private Player player;
-    private View view;
-    private int lobbyId;
-    private Communicator communicator;
-    private SketchyGame game;
-    private int playerCount = 0;
+    private final SketchyGame game;
+    private final Communicator communicator;
+    private final ArrayDeque<View> viewStack;
+    private final ViewManager viewManager;
+
+    private Lobby lobby;
+    private String playerName;
+    private Notepad notepad;
+
+    // Used by rewind
+    private List<Notepad> filledNotepads;
+    private int sheetIndex, notepadIndex;
+    private List<Sheet> sheets;
 
     public ClientController(SketchyGame game) {
         this.game = game;
         this.communicator = new Communicator(this);
+        this.viewStack = new ArrayDeque<>();
+        this.lobby = Lobby.LOADING;
+
+        ViewManager.init(this);
+        this.viewManager = ViewManager.getInstance();
 
         showLogin();
     }
 
     //=========== GAME ==============\\
     public int getPlayerCount() {
-        System.out.println("getPlayerCount() -> " + playerCount);
-        return playerCount;
+        System.out.format("getPlayerCount() -> %d\n", lobby.playerCount);
+        return lobby.playerCount;
     }
 
     public void setPlayerCount(int playerCount) {
-        this.playerCount = playerCount;
-        System.out.println("setPlayerCount() -> " + this.playerCount);
+        lobby.playerCount = playerCount;
+        System.out.format("setPlayerCount(%d)\n", playerCount);
     }
 
     public void startGame() {
-        System.out.println("clientController.startGame() -> ");
-        //TODO: Check if it's okay to change view
-        showDraw();
+        System.out.println("clientController.startGame()");
+        showLoading();
+        communicator.startGame(lobby.lobbyId);
     }
 
     public void endGame() {
     }
 
-    public void beginRound(Sheet sheet) {
+    public void beginRound(Notepad notepad) throws Exception {
+        System.out.println("clientController.beginRound(<notepad>)");
+        this.notepad = notepad;
+        Sheet sheet = notepad.getLastSheet();
+        if (sheet.nextTaskIsDraw()) showDrawView();
+        else showGuessView();
+        SheetView view = (SheetView) getView();
+        view.setSheet(sheet);
     }
 
-    public void beginRound(Notepad notepad) {
+    public void submit(Sheet sheet) {
+        showWaiting();
+        notepad.setLastSheet(sheet);
+        communicator.sendAnswer(lobby.lobbyId, notepad);
     }
 
     public SketchyGame getGame() {
         return game;
     }
-
-
     //=========== END GAME ==============\\
 
 
     //=========== LOBBY ==============\\
-
     public void createLobby(String playerName) {
         System.out.format("clientController.createLobby('%s')\n", playerName);
+        showLoading();
+        lobby = Lobby.LOADING;
         communicator.createLobby(playerName);
-
-        //Todo: Check if it's OK to change view
-        showLobby();
     }
 
     public void joinLobby(int lobbyId, String playerName) {
         System.out.format("clientController.joinLobby(%s, '%s')\n", lobbyId, playerName);
+        showLoading();
+        lobby = Lobby.LOADING;
         communicator.joinLobby(lobbyId, playerName);
-
-        //Todo: Check if it's OK to change view
-        showLobby();
     }
 
-    public void updateLobby(int lobbyId, List<Player> players) {
-        // TODO: adjust to Players
-        this.lobbyId = lobbyId;
+    public void updateLobby(int lobbyId, List<String> names) throws Exception {
+        System.out.format("clientController.updateLobby(%s, players(%d))\n", lobbyId, names.size());
+        if (!(getView() instanceof LobbyView)) showLobby();
+        LobbyView view = (LobbyView) getView();
 
-        System.out.format("clientController.updateLobby(%s, players(%d))\n", lobbyId, players.size());
-        setPlayerCount(players.size());
-
-        List<String> names = new ArrayList<>();
-        for (Player player : players) {
-            names.add(player.getName());
+        if (lobby == Lobby.LOADING) lobby = new Lobby(lobbyId);
+        else if (lobbyId != lobby.lobbyId) {
+            throw new Exception("Server and client disagree about lobby id");
         }
 
-        if (view instanceof LobbyView) {
-            ((LobbyView) view).updatePlayerList(names);
-            ((LobbyView) view).setLobbyId(lobbyId);
-        }
+        setPlayerCount(names.size());
 
+        view.updatePlayerList(names);
+        view.setLobbyId(lobbyId);
     }
     //=========== END LOBBY ==============\\
 
-
     //=========== PLAYER ==============\\
-    public Player getPlayer() {
-        System.out.println("clientController.getPlayer() -> " + player.getName());
-        return player;
+    public String getPlayerName() {
+        System.out.format("clientController.getPlayerName() -> %s\n", playerName);
+        return playerName;
     }
 
-    public void setPlayer(Player player) {
-        System.out.println(String.format("clientController.setPlayer('%s')", player.getName()));
-        this.player = player;
+    public void setPlayer(String playerName) {
+        System.out.println(String.format("clientController.setPlayerName('%s')\n", playerName));
+        this.playerName = playerName;
     }
     //=========== END PLAYER ==============\\
 
 
     //=========== VIEW ==============\\
-    private void setView(View view) {
-        game.setScreen(view);
-
-        if (this.view != null) {
-            this.view.dispose();
-        }
-        this.view = view;
-
-        System.out.println("*SetView:" + view);
+    private View getView() {
+        return viewStack.peek();
     }
-    //=========== END VIEW ==============\\
+
+    private void setView(View view, boolean replaceCurrent) {
+        if (viewStack.size() > 0) {
+            viewStack.peek().pause();
+            if (replaceCurrent) viewStack.pop().reset();
+        }
+        this.viewStack.push(view);
+        game.setScreen(view);
+        view.resume();
+        System.out.println("*setView:" + view);
+    }
+
+    public void goBack() {
+        if (viewStack.size() <= 1) return;
+        View from = viewStack.pop();
+        from.pause();
+        from.reset();
+        View to = viewStack.peek();
+        to.resume();
+        game.setScreen(to);
+        System.out.println("*goBack:" + to);
+    }
+
+    //=========== REWIND ================\\
+
+    public void startRewind(List<Notepad> notepads) {
+        filledNotepads = notepads;
+        notepadIndex = 0;
+        sheetIndex = 0;
+        sheets = filledNotepads.get(notepadIndex).getSheets();
+
+        showRewind();
+        rewindShowNext();
+    }
+
+    public void rewindShowNext(){
+        if (viewStack.peek() instanceof RewindView) {
+            RewindView rewindView = (RewindView) viewStack.peek();
+
+            if (!(sheetIndex < sheets.size())){
+                System.out.print("No more sheets");
+                if (++notepadIndex < filledNotepads.size()) {
+                    System.out.println("New notepad and new sheet");
+                    sheets = filledNotepads.get(notepadIndex).getSheets();
+                    sheetIndex = 0;
+                } else {
+                    System.out.println("No more notepads");
+                    return;
+                }
+            }
+
+            if (sheetIndex == 0) {
+                rewindView.showRewindStep(sheets.get(sheetIndex++), true, true);
+            } else if (sheetIndex % 2 == 1) {
+                rewindView.showRewindStep(sheets.get(sheetIndex++), false, false);
+            } else if (sheetIndex % 2 == 0) {
+                rewindView.showRewindStep(sheets.get(sheetIndex++), true, false);
+            } else {
+                System.out.println("Something wrong");
+            }
+        }
+    }
+
+    public void rewindFinished() {
+        showLobby();
+    }
+
+    public void requestNextRewindStep() {
+        //todo: Ask communicator to broadcast onRewindShowNext to all players
+    }
+
+    //=========== END REWIND ============\\
 
     public void showLogin() {
-        setView(new LoginView(this));
+        setView(viewManager.loginView, true);
     }
 
     public void showJoin() {
-        setView(new JoinView(this));
+        setView(viewManager.joinView, false);
+    }
+
+    public void showLoading() {
+        setView(viewManager.loadingView, false);
+    }
+
+    public void showRewind() {
+        setView(viewManager.rewindView, true);
+    }
+
+    public void showWaiting() {
+        setView(viewManager.waitingView, true);
     }
 
     public void showLobby() {
-        setView(new LobbyView(this));
+        setView(viewManager.lobbyView, false);
     }
 
-    public void showGuess(Stack<DrawView.Dots> drawing) {
-        setView(new GuessView(this, drawing));
+    public void showGuessView() {
+        setView(viewManager.guessView, true);
     }
 
-    private void showDraw() {
-        setView(new DrawView(this));
+    public void showDrawView() {
+        setView(viewManager.drawView, true);
     }
+    //=========== END VIEW ==============\\
 }

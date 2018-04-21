@@ -5,27 +5,26 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class View implements Screen {
-
-    final int screenWidth = Gdx.graphics.getWidth();
-    final int screenHeight = Gdx.graphics.getHeight();
+public abstract class View implements Screen {
 
     Stage stage;
     Table table;
     Skin uiSkin;
 
-    public View() {
-        stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+    // Styles
+    protected Label.LabelStyle blueLabel, redLabel, greenLabel;
+    protected TextField.TextFieldStyle redTextField;
 
-        // UI skin
-        uiSkin = new Skin(Gdx.files.internal("uiSkin.json"));
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("uiSkin.atlas"));
-        uiSkin.addRegions(atlas);
+    protected View() {
+        stage = new Stage(new ScreenViewport());
+
+        loadAssets();
 
         // Table for keeping track of position of UI elements
         table = new Table();
@@ -33,9 +32,16 @@ public class View implements Screen {
         stage.addActor(table);
     }
 
+    float getScreenHeight(){
+        return Gdx.graphics.getHeight();
+    }
+
+    float getScreenWidth(){
+        return Gdx.graphics.getWidth();
+    }
+
     @Override
     public void show() {
-
     }
 
     @Override
@@ -44,31 +50,25 @@ public class View implements Screen {
 
         stage.act(delta);
         stage.draw();
-
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getCamera().viewportWidth = Gdx.graphics.getWidth();
-        stage.getCamera().viewportHeight = Gdx.graphics.getHeight();
+        stage.getCamera().viewportWidth = getScreenWidth();
+        stage.getCamera().viewportHeight = getScreenHeight();
     }
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
-
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -77,4 +77,38 @@ public class View implements Screen {
         stage.dispose();
     }
 
+    private void loadAssets(){
+
+        float density = Gdx.graphics.getDensity();
+        String path, jsonPath, atlasPath;
+
+        if (density <= 1.5){
+            path = "mdpi";
+        } else if (density > 1.5f && density <= 2.0f){
+            path = "hdpi";
+        } else {
+            path = "xhdpi";
+        }
+
+        path += "/";
+        jsonPath = path + "uiSkin.json";
+        atlasPath = path + "uiSkin.atlas";
+
+        System.out.println("Loading assets from " + jsonPath + ", density determined to be " + density);
+
+        // Skin
+        uiSkin = new Skin(Gdx.files.internal(jsonPath));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(atlasPath));
+        uiSkin.addRegions(atlas);
+
+        // Styles
+        blueLabel = uiSkin.get("blue", Label.LabelStyle.class);
+        redLabel = uiSkin.get("red", Label.LabelStyle.class);
+        greenLabel = uiSkin.get("green", Label.LabelStyle.class);
+
+        redTextField = uiSkin.get("red", TextField.TextFieldStyle.class);
+    }
+
+    public void reset() {
+    }
 }

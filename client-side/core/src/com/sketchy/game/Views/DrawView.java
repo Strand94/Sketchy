@@ -2,71 +2,69 @@ package com.sketchy.game.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sketchy.game.Controllers.ClientController;
+import com.sketchy.game.Models.Dot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class DrawView extends View {
-
-    private final ClientController controller;
+public class DrawView extends SheetView {
+    private static final Color INITIAL_COLOR = new Color(224.0f / 256, 224.0f / 256, 224.0f / 256, 1);
+    private static final float INITIAL_RADIUS = 5.0f;
 
     // Rendering
     private ShapeRenderer shapeRenderer;
 
     // Drawing
-    private Stack<Dots> drawing;
-    private float currentRadius = 5.0f;
-    private Color currentColor = new Color(224.0f / 256, 224.0f / 256, 224.0f / 256, 1);
+    private Stack<Dot> drawing;
+    private float currentRadius = INITIAL_RADIUS;
+    private Color currentColor = INITIAL_COLOR;
 
     private Float lastX = null;
     private Float lastY = null;
 
-    /**
-     * A drawing consists of a stack of colored circles (Dots)
-     */
-    public class Dots {
-        float radius;
-        Vector2 position;
-        Color color;
+    // UI
+    private Label drawWordLabel;
+    private TextButton submit;
+    private List<Color> colors;
 
-        /**
-         * Dot constructor. Remember to add it to your Stack of Dots
-         *
-         * @param radius   Dot size
-         * @param position Remember to render at (x, screenHeight - y))
-         * @param color    gdx.Graphics.Color
-         */
-        public Dots(float radius, Vector2 position, Color color) {
-            this.radius = radius;
-            this.position = position;
-            this.color = color;
-        }
-    }
+    DrawView(ClientController controller) {
+        super(controller);
 
-    /**
-     * @param controller
-     */
-    public DrawView(ClientController controller) {
-        this.controller = controller;
-
-        this.loadAssets();
-
-        Label guessWord = new Label("Elephant", uiSkin);
+        // Labels
+        drawWordLabel = new Label(getSheet().getObjectiveWord(), uiSkin);
 
         // Buttons
-        TextButton submit = new TextButton("Submit", uiSkin);
+        submit = new TextButton("Submit", uiSkin);
+
+        colors = new ArrayList<>();
+        colors.add(Color.RED);
+        colors.add(Color.GREEN);
+        colors.add(Color.BLUE);
+        colors.add(Color.ORANGE);
+        colors.add(Color.WHITE);
 
         // Add to table
-        table.add(guessWord).top().expand().padTop(20);
-        table.add(submit).bottom().expandX();
+        table.row().colspan(5);
+        table.add(drawWordLabel).top().expand().pad(20);
+        table.row();
+
+        for (Color color : colors){
+            ColorButton button = new ColorButton(uiSkin, color);
+            table.add(button).size(button.getWidth()*2);
+        }
+
+        table.row();
+        table.add(submit).bottom().expandX().padBottom(0.03f * getScreenHeight()).colspan(5);
 
         // Listeners
         submit.addListener(new ChangeListener() {
@@ -77,17 +75,29 @@ public class DrawView extends View {
         });
 
         // Drawing initialization
-        drawing = new Stack<Dots>();
+        drawing = new Stack<>();
         shapeRenderer = new ShapeRenderer();
     }
 
-    private void onSubmit() {
-        controller.showGuess(drawing);
+    private class ColorButton extends Button{
+
+        public ColorButton(Skin skin, final Color color) {
+            super(skin);
+            this.setColor(color);
+
+            // Listeners
+            this.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    currentColor = color;
+                }
+            });
+        }
     }
 
     /**
      * Add colored Circle (Dot) at position of user input
-     * Drawing consists of lots of Dots.
+     * Drawing consists of lots of Dot.
      */
     private void draw() {
         if (Gdx.input.isTouched()) {
@@ -100,9 +110,9 @@ public class DrawView extends View {
                 for (int i = 0; i < nDots; i += 3) {
                     lastX += 3 * dX;
                     lastY += 3 * dY;
-                    drawing.add(new Dots(currentRadius, new Vector2(lastX, lastY), currentColor));
+                    drawing.add(new Dot(currentRadius, new Vector2(lastX, lastY), currentColor));
                 }
-                drawing.add(new Dots(currentRadius, new Vector2(x, y), currentColor));
+                drawing.add(new Dot(currentRadius, new Vector2(x, y), currentColor));
             }
             lastX = x;
             lastY = y;
@@ -113,20 +123,15 @@ public class DrawView extends View {
     }
 
     /**
-     * Render ALL the Dots!
+     * Render ALL the Dot!
      */
     private void renderDrawing() {
-        for (Dots dot : drawing) {
+        for (Dot dot : drawing) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(dot.color);
-            shapeRenderer.circle(dot.position.x, screenHeight - dot.position.y, dot.radius);
+            shapeRenderer.setColor(dot.getColor());
+            shapeRenderer.circle(dot.getPosX(), getScreenHeight() - dot.getPosY(), dot.getRadius());
             shapeRenderer.end();
         }
-    }
-
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -136,36 +141,20 @@ public class DrawView extends View {
 
         draw();
 
-        SpriteBatch batch = controller.getGame().getSpriteBatch();
-        batch.begin();
         renderDrawing();
-        batch.end();
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void reset() {
+        super.reset();
+        drawing.clear();
+        currentColor = INITIAL_COLOR;
+        currentRadius = INITIAL_RADIUS;
+        lastX = null;
+        lastY = null;
     }
 
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
-    public void dispose() {
-    }
-
-    private void loadAssets() {
-    }
-
-    public List<Dots> getDrawing() {
+    public List<Dot> getDrawing() {
         return drawing;
     }
 }
