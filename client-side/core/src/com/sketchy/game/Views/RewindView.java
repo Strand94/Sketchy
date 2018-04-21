@@ -29,6 +29,7 @@ public class RewindView extends View {
 
         // Buttons
         next = new TextButton("Next", uiSkin);
+        next.setVisible(false);
 
         // Listeners
         next.addListener(new ChangeListener() {
@@ -66,10 +67,6 @@ public class RewindView extends View {
 
         table.row();
         table.add(next).bottom().padBottom(getScreenHeight()*0.03f);
-
-        if(!isLobbyMaster){
-            next.setVisible(false);
-        }
 
         table.debug();
     }
