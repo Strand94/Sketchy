@@ -1,6 +1,7 @@
 package com.sketchy.game.Views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -8,14 +9,21 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.sketchy.game.Config;
 
 public abstract class View implements Screen {
 
     Stage stage;
     Table table;
     Skin uiSkin;
+
+    //Toast
+    private TextButton toast;
+    private Timer.Task toastFadeout;
 
     // Styles
     protected Label.LabelStyle blueLabel, redLabel, greenLabel;
@@ -33,6 +41,20 @@ public abstract class View implements Screen {
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
+
+        // Toast message
+        toast = new TextButton("Toast!", uiSkin);
+        toast.setPosition(getScreenWidth()/2 - toast.getWidth()/2, getScreenHeight() * (1-0.1f));
+        toast.setVisible(false);
+        stage.addActor(toast);
+
+        toastFadeout = new Timer.Task(){
+            @Override
+            public void run(){
+                toast.setVisible(false);
+            }
+        };
+
     }
 
     float getScreenHeight(){
@@ -56,6 +78,10 @@ public abstract class View implements Screen {
 
         stage.act(delta);
         stage.draw();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            showToast("Hurray!");
+        }
     }
 
     @Override
@@ -113,6 +139,17 @@ public abstract class View implements Screen {
         greenLabel = uiSkin.get("green", Label.LabelStyle.class);
 
         redTextField = uiSkin.get("red", TextField.TextFieldStyle.class);
+    }
+
+    public void showToast(String message){
+        if(!toastFadeout.isScheduled()) {
+            toast.setText(message);
+            toast.setVisible(true);
+            Timer.schedule(toastFadeout, Config.TOAST_FADEOUT_TIME);
+        } else {
+            System.out.println("Wait until toast is finished before scheduling again");
+        }
+
     }
 
     public void reset() {
