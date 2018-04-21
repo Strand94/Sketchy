@@ -190,7 +190,7 @@ public class ClientController {
         if (viewStack.peek() instanceof RewindView) {
             RewindView rewindView = (RewindView) viewStack.peek();
 
-            if (!(sheetIndex < sheets.size()*2+1)){
+            if (!(stepIndex < sheets.size()*2+1)){
                 System.out.println("No more sheets!");
                 if (++notepadIndex < filledNotepads.size()) {
                     System.out.println("New notepad and new sheet");
@@ -206,16 +206,19 @@ public class ClientController {
                 }
             }
 
-            if (stepIndex++ == 0) {
+            if (stepIndex == 0) {
                 rewindView.showRewindStep(sheets.get(sheetIndex), true, true);
-            } else if (stepIndex++ % 2 == 1) {
+            } else if (stepIndex % 2 == 1) {
                 rewindView.showRewindStep(sheets.get(sheetIndex), false, false);
-            } else if (stepIndex++ % 2 == 0) {
+            } else if (stepIndex % 2 == 0) {
                 rewindView.showRewindStep(sheets.get(sheetIndex), true, false);
                 sheetIndex++;
             } else {
                 System.out.println("Something wrong");
             }
+
+            stepIndex++;
+
         }
     }
 

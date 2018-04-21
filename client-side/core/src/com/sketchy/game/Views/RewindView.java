@@ -44,18 +44,19 @@ public class RewindView extends View {
         table.reset();
 
         if(guess){
-            who.setText(sheet.getGuesser());
-            table.add(who).top().padTop(getScreenHeight()*0.07f);
-            table.row();
 
             if(first){
+                who.setText(sheet.getDrawer());
                 guessWord.setText(sheet.getObjectiveWord());
                 guessLabel.setText("Got");
             } else {
+                who.setText(sheet.getGuesser());
                 guessWord.setText(sheet.getAnswer());
                 guessLabel.setText("Guessed");
             }
 
+            table.add(who).top().padTop(getScreenHeight()*0.07f);
+            table.row();
             table.add(guessLabel);
             table.row();
             table.add(guessWord);
