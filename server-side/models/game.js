@@ -1,7 +1,5 @@
 const Notepad = require("./notepad");
 const guessWords = require("../guessWords");
-const Drawing = require("./drawing");
-const Guess = require("./guess");
 const Sheet = require("./sheet");   // needed for instanceof.. for some reason
 
 class Game {
