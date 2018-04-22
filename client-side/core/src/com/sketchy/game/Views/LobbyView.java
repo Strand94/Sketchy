@@ -134,6 +134,7 @@ public class LobbyView extends View {
         numberOfPlayers.setText(getNumberOfPlayersText());
         timer.cancel();
         counter = Config.START_GAME_TIMER;
+        isLobbyMaster = false;
     }
 
     private void onGameStart() {
