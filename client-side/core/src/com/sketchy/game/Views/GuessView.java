@@ -28,7 +28,7 @@ public class GuessView extends SheetView {
 
     GuessView(ClientController controller) {
         super(controller);
-        clearGl = false;
+//        clearGl = false;
 
         drawing = new Drawing();
         drawIndex = 0;
@@ -65,6 +65,7 @@ public class GuessView extends SheetView {
         Gdx.input.setCatchBackKey(true);
 
         super.render(delta);
+        drawIndex = 0;
         drawIndex = drawing.render(shapeRenderer, getScreenHeight(), drawIndex);
         renderStage(delta);
     }

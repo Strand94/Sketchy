@@ -41,7 +41,7 @@ public class DrawView extends SheetView {
 
     DrawView(ClientController controller) {
         super(controller);
-        clearGl = false;
+//        clearGl = false;
 
         // Labels
         drawWordLabel = new Label("", uiSkin);
@@ -121,8 +121,9 @@ public class DrawView extends SheetView {
     public void render(float delta) {
         draw();
         Gdx.gl.glClearColor(41.0f / 256, 45.0f / 256, 50.0f / 256, 1);
-        drawing.render(shapeRenderer, getScreenHeight(), 0);
         super.render(delta);
+        drawing.render(shapeRenderer, getScreenHeight(), 0);
+        renderStage(delta);
     }
 
     @Override
