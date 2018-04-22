@@ -7,4 +7,5 @@ public class Config {
     public static final int START_GAME_TIMER = 5;
     public static final int DRAW_COARSENESS = 1;
     public static final float TOAST_FADEOUT_TIME = 2;
+    public static final float TOAST_PADDING = 1.2f;
 }
