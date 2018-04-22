@@ -19,7 +19,7 @@ public class LoginView extends View {
     private final ClientController controller;
 
     private Image imageLogo;
-    private TextField nameField;
+    private MyTextField nameField;
     private Label warning, nameLabel;
     private TextButton create, join;
 
@@ -36,13 +36,10 @@ public class LoginView extends View {
         join = new TextButton("Join Game", uiSkin);
 
         // TextFields
-        nameField = new TextField("", uiSkin);
-        nameField.setMessageText("Your name");
+        nameField = new MyTextField(uiSkin, "Your name");
 
         // Labels
         nameLabel = new Label("Name:", uiSkin);
-        warning = new Label("Please enter a\nvalid username", uiSkin);
-        warning.setVisible(false);
 
         // Add elements to table
         table.add(imageLogo).expandY().top().padTop(getScreenHeight()*0.2f);
@@ -54,8 +51,6 @@ public class LoginView extends View {
         table.add(create).center().padBottom(25);
         table.row();
         table.add(join).center();
-        table.row();
-        table.add(warning);
 
         // Listeners
         join.addListener(new ChangeListener() {
@@ -76,29 +71,23 @@ public class LoginView extends View {
     private void onJoin() {
         System.out.println("Join Game");
 
-        if(nameIsValid()){
-            warning.setVisible(true);
-        } else{
+        if(nameField.isValid()){
             controller.setPlayer(nameField.getText());
             controller.showJoin();
+        } else{
+            showToast("invalid name");
         }
     }
 
     private void onCreate() {
         System.out.println("Create Game");
 
-        if(nameIsValid()){
-            warning.setVisible(true);
-        } else{
+        if(nameField.isValid()){
             controller.setPlayer(nameField.getText());
             controller.createLobby(controller.getPlayerName());
+        } else{
+            showToast("invalid name");
         }
-    }
-
-    private boolean nameIsValid(){
-        return     nameField.getText().equals("Your name")
-                || nameField.getText().equals("")
-                || nameField.getText().equals(" ");
     }
 
     @Override
@@ -115,6 +104,5 @@ public class LoginView extends View {
     @Override
     public void reset() {
         nameField.clear();
-        warning.setVisible(false);
     }
 }

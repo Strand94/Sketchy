@@ -19,7 +19,7 @@ public class GuessView extends SheetView {
     private int drawIndex;
 
     // UI elements
-    private TextField guessField;
+    private MyTextField guessField;
     private Label header;
     private TextButton submit;
 
@@ -38,8 +38,7 @@ public class GuessView extends SheetView {
         header = new Label("Wat is dis?", redLabel);
 
         // TextFields
-        guessField = new TextField("", redTextField);
-        guessField.setMessageText("Your guess");
+        guessField = new MyTextField(redTextField, "Your guess");
 
         // Buttons
         submit = new TextButton("Submit", uiSkin);
@@ -93,8 +92,14 @@ public class GuessView extends SheetView {
 
     @Override
     protected void onSubmit() {
-        getSheet().setAnswer(guessField.getText());
-        getSheet().setGuesser(controller.getPlayerName());
-        super.onSubmit();
+
+        if (guessField.isValid()){
+            getSheet().setAnswer(guessField.getText());
+            getSheet().setGuesser(controller.getPlayerName());
+            super.onSubmit();
+        } else {
+            showToast("invalid guess");
+        }
+
     }
 }
