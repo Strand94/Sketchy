@@ -137,7 +137,13 @@ public class LobbyView extends View {
     }
 
     private void onGameStart() {
-        controller.startGame();
+
+        if(controller.getPlayerCount() > 1){
+            controller.startGame();
+        } else {
+            showToast("Not enough players!");
+        }
+
     }
 
     private void countDown(){
