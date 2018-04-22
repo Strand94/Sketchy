@@ -6,6 +6,11 @@ class Game {
     constructor(players) {
         this.players = players;
         this.notepads = [];
+        this.guessWords = guessWords.slice();
+        for (let i = guessWords.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [guessWords[i], guessWords[j]] = [guessWords[j], guessWords[i]];
+        }
 
         // fills inn notepads with unique routes
         const playerAddresses = [];
@@ -45,7 +50,7 @@ class Game {
     // private functions
 
     getWord() {
-        return guessWords.pop();
+        return this.guessWords.pop();
     }
 
     prepareNextSheet() {
