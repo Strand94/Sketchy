@@ -156,4 +156,22 @@ public abstract class View implements Screen {
     protected void clearGlOnce() {
         hasCleared = false;
     }
+
+    class MyTextField extends TextField{
+
+        public MyTextField(Skin skin, String message){
+            super("", skin);
+            super.setMessageText(message);
+        }
+
+        public MyTextField(TextField.TextFieldStyle skin, String message){
+            super("", skin);
+            super.setMessageText(message);
+        }
+
+        public boolean isValid(){
+            return this.getText().trim().length() > 0;
+        }
+    }
 }
+
