@@ -17,8 +17,6 @@ public class JoinView extends View {
 
     TextField lobbyField;
 
-    Skin skin;
-
     JoinView(final ClientController controller) {
         this.controller = controller;
 
@@ -83,7 +81,7 @@ public class JoinView extends View {
         if (validLobbyId(lobbyField.getText())) {
             controller.joinLobby(Integer.parseInt(lobbyField.getText()), controller.getPlayerName());
         } else {
-            //TODO: Add alert box to notify invalid lobby id
+            showToast("Invalid LobbyID");
             System.out.println("Invalid LobbyID");
         }
     }

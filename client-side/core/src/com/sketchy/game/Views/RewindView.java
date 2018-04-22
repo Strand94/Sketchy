@@ -32,7 +32,6 @@ public class RewindView extends View {
         guessLabel = new Label("Guessed", blueLabel);
         imageLabel = new Label("Drew", blueLabel);
         guessWord = new Label("Chimpanzee", blueLabel);
-        image = new Label("", blueLabel);
 
         // Buttons
         next = new TextButton("Next", uiSkin);
@@ -64,7 +63,7 @@ public class RewindView extends View {
                 guessLabel.setText("Guessed");
             }
 
-            table.add(who).top().padTop(getScreenHeight()*0.07f);
+            table.add(who).padTop(getScreenHeight()*0.07f);
             table.row();
             table.add(guessLabel);
             table.row();
@@ -79,16 +78,12 @@ public class RewindView extends View {
             }
 
             who.setText(sheet.getDrawer());
-            table.add(who).top().padTop(getScreenHeight()*0.07f);
-            table.row();
-
-            table.add(imageLabel);
-            table.row();
-            table.add(image);
+            table.add(who).top().padTop(getScreenHeight()*0.07f).expandY().top();
+            table.add(imageLabel).top().padTop(getScreenHeight()*0.07f).expandY().top();
         }
 
         table.row();
-        table.add(next).bottom().padBottom(getScreenHeight()*0.03f);
+        table.add(next).bottom().padBottom(getScreenHeight()*0.03f).colspan(2);
     }
 
     public void setLobbyMaster() {
