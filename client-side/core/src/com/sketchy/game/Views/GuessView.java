@@ -12,8 +12,6 @@ import com.sketchy.game.Models.Dot;
 import com.sketchy.game.Models.Drawing;
 import com.sketchy.game.Models.Sheet;
 
-import java.io.IOException;
-
 public class GuessView extends SheetView {
     private Drawing drawing;
     private int drawIndex;
@@ -82,13 +80,8 @@ public class GuessView extends SheetView {
     @Override
     public void setSheet(Sheet sheet) throws Exception {
         super.setSheet(sheet);
-        try {
-            drawing = Drawing.fromBase64(sheet.getBase64Drawing());
-            drawIndex = 0;
-        } catch(IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        drawing = Drawing.fromBase64(sheet.getBase64Drawing());
+        drawIndex = 0;
     }
 
     @Override

@@ -69,13 +69,7 @@ public class RewindView extends View {
             table.row();
             table.add(guessWord);
         } else{
-            try {
-                drawing = Drawing.fromBase64(sheet.getBase64Drawing());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            drawing = Drawing.fromBase64(sheet.getBase64Drawing());
 
             who.setText(sheet.getDrawer());
             table.add(who).top().padTop(getScreenHeight()*0.07f).expandY().top();
